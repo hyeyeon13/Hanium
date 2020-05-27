@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PathSetting">
+    tools:context=".PathSetting"
+    android:background="#E1DFDF">
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -15,7 +16,8 @@
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:textSize="30sp"
-        android:textColor="#ff000000"/>
+        android:textColor="#ff000000"
+        android:fontFamily="@font/font3"/>
 
     <View
         android:layout_width="match_parent"
@@ -34,7 +36,9 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="80dp"
             android:text="출발지"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textColor="#ff000000"
+            android:fontFamily="@font/font3"/>
 
         <EditText
             android:id="@+id/editText"
@@ -44,7 +48,9 @@
             android:layout_toRightOf="@+id/textView4"
             android:ems="10"
             android:inputType="textPersonName"
-            android:layout_marginTop="60dp"/>
+            android:layout_marginTop="60dp"
+            android:textColor="#ff000000"
+            android:backgroundTint = "#ff000000"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -58,7 +64,9 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="30dp"
             android:text="도착지"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textColor="#ff000000"
+            android:fontFamily="@font/font3"/>
 
         <EditText
             android:id="@+id/editText2"
@@ -67,7 +75,9 @@
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/textView5"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#ff000000"
+            android:backgroundTint = "#ff000000"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -81,7 +91,9 @@
             android:layout_marginTop="35dp"
             android:text="출발시간"
             android:textSize="20sp"
-            android:layout_marginLeft="40dp" />
+            android:layout_marginLeft="40dp"
+            android:textColor="#ff000000"
+            android:fontFamily="@font/font3"/>
 
         <Button
             android:id="@+id/button10"
@@ -92,16 +104,12 @@
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/textView3"
             android:layout_marginLeft="20dp"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textColor="#ff000000"
+            android:background="#00ff0000"
+            android:fontFamily="@font/font3"/>
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/textView6"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="35dp"
-            android:textSize="20sp"/>
+
     </RelativeLayout>
     <Button
         android:id="@+id/button11"
@@ -110,5 +118,8 @@
         android:text="선택완료"
         android:layout_marginTop="50dp"
         android:layout_gravity="center"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textColor="#ff000000"
+        android:background="#00ff0000"
+        android:fontFamily="@font/font3"/>
 </LinearLayout>
