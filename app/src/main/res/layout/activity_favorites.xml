@@ -104,12 +104,12 @@
         android:id="@+id/button16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="등록"
-        android:layout_marginTop="50dp"
         android:layout_gravity="center"
-        android:textSize="20sp"
-        android:textColor="#ff000000"
+        android:layout_marginTop="50dp"
         android:background="#00ff0000"
-        android:fontFamily="@font/font3" />
+        android:fontFamily="@font/font3"
+        android:text="확인"
+        android:textColor="#ff000000"
+        android:textSize="20sp" />
 
 </LinearLayout>
