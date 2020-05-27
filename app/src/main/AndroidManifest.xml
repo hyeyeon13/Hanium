@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".PathSetting"></activity>
-        <activity android:name=".Favorites"></activity>
+        <activity android:name=".People"></activity>
+        <activity android:name=".PathSetting" />
+        <activity android:name=".Favorites" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
