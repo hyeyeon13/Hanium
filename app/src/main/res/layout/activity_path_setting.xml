@@ -109,6 +109,18 @@
             android:background="#00ff0000"
             android:fontFamily="@font/font3"/>
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/textView6"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="35dp"
+            android:textSize="20sp"
+            android:textColor="#ff000000"
+            android:fontFamily="@font/font3"
+            android:background="@drawable/border"
+            android:gravity="center_horizontal"/>
 
     </RelativeLayout>
     <Button
