@@ -151,37 +151,37 @@ android:layout_marginTop="10dp"/>
 
         <Button
             android:id="@+id/button8"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:text="목적지 등록"
+            android:text="경로 설정"
             android:textSize="20sp"
             android:fontFamily="@font/font1"
             android:background="#00ff0000"/>
 
         <Button
             android:id="@+id/button9"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/button8"
             android:background="#00ff0000"
-            android:text="보호자 설정"
+            android:text="보호자 등록"
             android:textSize="20sp"
             android:fontFamily="@font/font1"/>
 
         <Button
             android:id="@+id/button10"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:background="#00ff0000"
-            android:text="이동경로 설정"
+            android:text="이동경로 입력"
             android:textSize="20sp"
             android:fontFamily="@font/font1"
-            android:layout_toRightOf="@+id/button9"/>
+            android:layout_toRightOf="@+id/button9"
+            android:layout_marginLeft="10dp"/>
 
     </RelativeLayout>
 
