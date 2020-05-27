@@ -99,15 +99,15 @@
             android:id="@+id/button10"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="시간선택"
             android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/textView3"
-            android:layout_marginLeft="20dp"
-            android:textSize="20sp"
-            android:textColor="#ff000000"
             android:background="#00ff0000"
-            android:fontFamily="@font/font3"/>
+            android:fontFamily="@font/font3"
+            android:text="시간선택"
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView3"

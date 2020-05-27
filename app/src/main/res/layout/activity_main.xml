@@ -51,81 +51,51 @@
         android:textSize="25sp"
         android:textColor="#ff000000"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/circle"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/border"
             android:fontFamily="@font/font3"
-            android:text="집"
+            android:gravity="fill|left"
+            android:hint="집"
+            android:textColor="#ff000000"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#ff000000"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/button2"
-            android:background="@drawable/circle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/border"
             android:fontFamily="@font/font3"
-            android:text="학교"
-            android:textSize="20sp"
-            android:textColor="#ff000000"/>
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/button4"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/button3"
-            android:background="@drawable/circle"
-            android:fontFamily="@font/font3"
-            android:text="회사"
-            android:textSize="20sp"
-            android:textColor="#ff000000"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/plus" />
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/border"
+            android:fontFamily="@font/font3"
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/button5"
-            android:background="@drawable/plus" />
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/button6"
-            android:background="@drawable/plus" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -149,31 +119,31 @@
 
         <Button
             android:id="@+id/button8"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
             android:text="경로 설정"
-            android:textSize="20sp"
-            android:textColor="#ff000000"/>
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/button9"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/button8"
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
             android:text="보호자 등록"
-            android:textSize="20sp"
-            android:textColor="#ff000000"/>
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/button10"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
@@ -181,8 +151,8 @@
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
             android:text="이동경로 입력"
-            android:textSize="20sp"
-            android:textColor="#ff000000"/>
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 
