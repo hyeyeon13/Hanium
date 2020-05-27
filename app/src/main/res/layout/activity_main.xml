@@ -25,12 +25,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_toEndOf="@+id/button"
             android:layout_toRightOf="@+id/button"
             android:text="보디가드"
             android:textSize="25sp"
-            android:fontFamily="@font/font3"/>
+            android:fontFamily="@font/font3"
+            android:textColor="#ff000000"/>
     </RelativeLayout>
 
     <View
@@ -47,7 +48,8 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/font3"
         android:text="★즐겨찾기"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#ff000000"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -63,7 +65,8 @@
             android:fontFamily="@font/font3"
             android:text="집"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#ff000000"/>
 
         <Button
             android:id="@+id/button3"
@@ -75,7 +78,8 @@
             android:background="@drawable/circle"
             android:fontFamily="@font/font3"
             android:text="학교"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
 
         <Button
             android:id="@+id/button4"
@@ -87,7 +91,8 @@
             android:background="@drawable/circle"
             android:fontFamily="@font/font3"
             android:text="회사"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
 
     </RelativeLayout>
 
@@ -151,7 +156,8 @@
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
             android:text="경로 설정"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
 
         <Button
             android:id="@+id/button9"
@@ -162,7 +168,8 @@
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
             android:text="보호자 등록"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
 
         <Button
             android:id="@+id/button10"
@@ -174,7 +181,8 @@
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
             android:text="이동경로 입력"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
 
     </RelativeLayout>
 
