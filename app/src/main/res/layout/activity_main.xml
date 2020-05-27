@@ -65,8 +65,7 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/border"
             android:fontFamily="@font/font3"
-            android:gravity="fill|left"
-            android:hint="집"
+            android:gravity="fill"
             android:textColor="#ff000000"
             android:textSize="20sp"
             android:textStyle="bold" />

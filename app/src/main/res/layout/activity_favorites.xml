@@ -64,8 +64,10 @@
             android:layout_marginTop="80dp"
             android:backgroundTint="#ff000000"
             android:ems="10"
+            android:hint="예) 집, 학교"
             android:inputType="textPersonName"
-            android:textColor="#ff000000" />
+            android:textColor="#ff000000"
+            android:textColorHint="#90000000" />
     </LinearLayout>
 
     <LinearLayout
