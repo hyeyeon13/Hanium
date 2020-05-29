@@ -59,14 +59,14 @@
             android:id="@+id/editText4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:layout_weight="1"
+            android:layout_marginTop="20dp"
             android:backgroundTint="#ff000000"
             android:ems="10"
-            android:hint="ex) 집"
+            android:hint="회사"
             android:inputType="textPersonName"
             android:textColorHint="#90000000"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:layout_marginLeft="40dp"/>
 
         <Button
             android:id="@+id/button2"
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
-            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:backgroundTint="#ff000000"/>
@@ -123,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
-            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:backgroundTint="#ff000000"/>

@@ -27,6 +27,14 @@ public class PathSetting extends AppCompatActivity {
                 showDialog(DIALOG_TIME);
             }
         });
+        Button button1=(Button)findViewById(R.id.button11);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),select_path.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -58,4 +66,5 @@ public class PathSetting extends AppCompatActivity {
 
         return super.onCreateDialog(id);
     }
+
 }
