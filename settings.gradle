@@ -1,2 +1,2 @@
 rootProject.name='Hanium'
-include ':app'
+include ':app', ':SDK_release_v2.0.0'
