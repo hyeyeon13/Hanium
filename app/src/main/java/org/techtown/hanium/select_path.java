@@ -3,12 +3,24 @@ package org.techtown.hanium;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.odsay.odsayandroidsdk.API;
+import com.odsay.odsayandroidsdk.ODsayData;
+import com.odsay.odsayandroidsdk.ODsayService;
+import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
+import org.json.JSONException;
+
 import java.util.HashMap;
+import com.odsay.odsayandroidsdk.API;
+import com.odsay.odsayandroidsdk.ODsayData;
+import com.odsay.odsayandroidsdk.ODsayService;
+import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 
 public class select_path extends AppCompatActivity {
 
@@ -16,28 +28,55 @@ public class select_path extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_path);
-
+        EditText editText=(EditText)findViewById(R.id.editText);
         RelativeLayout relativeLayout = new RelativeLayout(this);
-        TMapView tmapview = new TMapView(this);
-        tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
 
-        TMapTapi tMapTapi = new TMapTapi(this);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            // 싱글톤 생성, Key 값을 활용하여 객체 생성
+            ODsayService odsayService = ODsayService.init(Context, {o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI});
+            // 서버 연결 제한 시간(단위(초), default : 5초)
+            odsayService.setReadTimeout(5000);
+            // 데이터 획득 제한 시간(단위(초), default : 5초)
+            odsayService.setConnectionTimeout(5000);
 
-        HashMap pathInfo = new HashMap();
-        pathInfo.put("rGoName", "T타워");
-        pathInfo.put("rGoX", "126.985302");
-        pathInfo.put("rGoY", "37.570841");
+            // 콜백 함수 구현
+            OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
+                // 호출 성공 시 실행
+                @Override
+                public void onSuccess(ODsayData odsayData, API api) {
+                    try {
+                        // API Value 는 API 호출 메소드 명을 따라갑니다.
+                        if (api == API.BUS_STATION_INFO) {
+                            String stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
+                            Log.d("Station name : %s", stationName);
+                        }
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                // 호출 실패 시 실행
+                @Override
+                public void onError(int i, String s, API api) {
+                    if (api == API.BUS_STATION_INFO) {}
+                }
+            };
+            // API 호출
+            odsayService.requestBusStationInfo("107475", onResultCallbackListener());
+        }
 
-        pathInfo.put("rStName", "출발지");
-        pathInfo.put("rStX", "126.926252");
-        pathInfo.put("rStY", "37.557607");
 
-        pathInfo.put("rV1Name", "경유지");
-        pathInfo.put("rV1X", "126.976867");
-        pathInfo.put("rV1Y", "37.576016");
-        tMapTapi.invokeRoute(pathInfo);
+
+
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
+    }
+    OnResultCallbackListener() {
+        @Override
+        public void onSuccess(ODsayData odsayData, API api) {}
+
+        @Override
+        public void onError(int code, String message, API api) {}
     }
     }
 
