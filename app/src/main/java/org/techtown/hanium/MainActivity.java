@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.skt.Tmap.TMapTapi;
+import com.skt.Tmap.TMapView;
 
 import org.w3c.dom.Text;
 
@@ -40,5 +44,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        TMapView tmapview = new TMapView(this);
+        tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
+
+        TMapTapi tMapTapi = new TMapTapi(this);
+        relativeLayout.addView(tmapview);
+        setContentView(relativeLayout);
     }
 }
