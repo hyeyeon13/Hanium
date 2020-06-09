@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         TMapView tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
 
-        TMapTapi tMapTapi = new TMapTapi(this);
-        relativeLayout.addView(tmapview);
-        setContentView(relativeLayout);
+      //  TMapTapi tMapTapi = new TMapTapi(this);
+        //relativeLayout.addView(tmapview);
+      //  setContentView(relativeLayout);
     }
 }
