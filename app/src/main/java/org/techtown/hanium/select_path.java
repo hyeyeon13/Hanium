@@ -11,20 +11,16 @@ import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
 import com.odsay.odsayandroidsdk.OnResultCallbackListener;
-import com.skt.Tmap.TMapTapi;
-import com.skt.Tmap.TMapView;
 
 import org.json.JSONException;
 
-import java.util.HashMap;
-
 public class select_path extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_path);
         EditText editText=(EditText)findViewById(R.id.editText);
+
         RelativeLayout relativeLayout = new RelativeLayout(this);
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
@@ -44,9 +40,9 @@ public class select_path extends AppCompatActivity {
                         String stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
                         String x = odsayData.getJson().getJSONObject("result").getString("x");
                         String y = odsayData.getJson().getJSONObject("result").getString("y");
-                        Log.d("Station name ", stationName);
-                        Log.d("x ", x);
-                        Log.d("y ", y);
+                        Log.d("Station name :",  stationName);
+                        Log.d("x : ", x);
+                        Log.d("y : ", y);
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -73,8 +69,11 @@ public class select_path extends AppCompatActivity {
 
 
         //relativeLayout.addView(tmapview);
-        setContentView(relativeLayout);
+        //setContentView(relativeLayout);
     }
+
+
+
 //    OnResultCallbackListener() {
 //        @Override
 //        public void onSuccess(ODsayData odsayData, API api) {}
@@ -82,5 +81,5 @@ public class select_path extends AppCompatActivity {
 //        @Override
 //        public void onError(int code, String message, API api) {}
 //    }
-    }
+}
 
