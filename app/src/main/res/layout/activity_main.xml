@@ -51,30 +51,32 @@
         android:textSize="25sp"
         android:textColor="#ff000000"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/editText4"
-            android:layout_width="wrap_content"
+            android:layout_width="180sp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="#ff000000"
             android:ems="10"
-            android:hint="회사"
             android:inputType="textPersonName"
             android:textColorHint="#90000000"
-            android:textSize="25sp"
-            android:layout_marginLeft="40dp"/>
+            android:textSize="25sp" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:layout_marginLeft="29dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
+            android:layout_toEndOf="@+id/editText4"
+            android:layout_toRightOf="@+id/editText4"
             android:background="@drawable/border"
             android:fontFamily="@font/font3"
             android:text="수정/등록"
@@ -82,65 +84,69 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/editText6"
-            android:layout_width="wrap_content"
+            android:layout_width="180sp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="20sp"
+            android:backgroundTint="#ff000000"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:backgroundTint="#ff000000"/>
+            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:layout_marginLeft="29dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
+            android:layout_toEndOf="@+id/editText6"
+            android:layout_toRightOf="@+id/editText6"
             android:background="@drawable/border"
             android:fontFamily="@font/font3"
             android:text="수정/등록"
             android:textColor="#ff000000"
             android:textSize="20sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/editText5"
-            android:layout_width="wrap_content"
+            android:layout_width="180sp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="20sp"
+            android:backgroundTint="#ff000000"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:backgroundTint="#ff000000"/>
+            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/button4"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:layout_marginLeft="29dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
+            android:layout_toEndOf="@+id/editText5"
+            android:layout_toRightOf="@+id/editText5"
             android:background="@drawable/border"
             android:fontFamily="@font/font3"
             android:text="수정/등록"
             android:textColor="#ff000000"
             android:textSize="20sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -164,9 +170,12 @@
 
         <Button
             android:id="@+id/button8"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
             android:layout_marginTop="20dp"
             android:background="#00ff0000"
             android:fontFamily="@font/font3"
@@ -176,8 +185,9 @@
 
         <Button
             android:id="@+id/button9"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="80dp"
+            android:layout_marginLeft="13dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/button8"
             android:background="#00ff0000"
@@ -188,7 +198,7 @@
 
         <Button
             android:id="@+id/button10"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
