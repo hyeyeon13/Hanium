@@ -19,7 +19,9 @@ import org.json.JSONException;
 
 public class select_path extends AppCompatActivity {
     String stationName;
-    Double x;
+    Double longitude, latitude;
+    //경도 : longitude 범위 : 127
+    //위도 : latitude 범위 : 37
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +46,12 @@ public class select_path extends AppCompatActivity {
                     // API Value 는 API 호출 메소드 명을 따라갑니다.
                     if (api == API.BUS_STATION_INFO) {
                         String stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
-                        Double x = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("x"));
-                        String y = odsayData.getJson().getJSONObject("result").getString("y");
+                        longitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("x"));
+                        latitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("y"));
+                        //String y = odsayData.getJson().getJSONObject("result").getString("y");
                         Log.d("Station name :",  stationName);
-                        Log.d("x : ", String.valueOf(x));
-                        Log.d("y : ", y);
+                        Log.d("longitude : ", String.valueOf(longitude));
+                        Log.d("latitude : ", String.valueOf(latitude));
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -74,7 +77,8 @@ public class select_path extends AppCompatActivity {
             public void onClick(View v) {
                 odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
                 Intent intent=new Intent(getApplicationContext(),Marker.class);
-               intent.putExtra("x",x);
+                intent.putExtra("longitude",longitude);
+                intent.putExtra("latitude",latitude);
                 startActivity(intent);
             }
         });

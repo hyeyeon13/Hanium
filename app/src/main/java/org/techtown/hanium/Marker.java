@@ -17,8 +17,9 @@ import com.skt.Tmap.TMapView;
 
 public class Marker extends AppCompatActivity {
     TMapView tmapview;
-    Double x;
-    //Double xpoint=37.25;
+    Double longitude, latitude;
+    //경도 : longitude 범위 : 127
+    //위도 : latitude 범위 : 37
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +33,12 @@ public class Marker extends AppCompatActivity {
 
         Intent intent=getIntent();
 
-        x=intent.getExtras().getDouble("x");
+
         TMapMarkerItem markerItem1 = new TMapMarkerItem();
       //  Double.valueOf(x)
-        TMapPoint tMapPoint1 = new TMapPoint(x, 126.985302); // SKT타워
+        longitude=intent.getExtras().getDouble("longitude");
+        latitude=intent.getExtras().getDouble("latitude");
+        TMapPoint tMapPoint1 = new TMapPoint(longitude,latitude); // 마커 놓을 좌표
 
 // 마커 아이콘
         Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
@@ -46,8 +49,9 @@ public class Marker extends AppCompatActivity {
         markerItem1.setName("SKT타워"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("markerItem1", markerItem1); // 지도에 마커 추가
 
-        tmapview.setCenterPoint( 126.985302, x );
-        Log.d("x값 : ", String.valueOf(x));
+        tmapview.setCenterPoint( longitude, latitude ); //지도의 중심지점 좌표
+        Log.d("위도 : ", String.valueOf(latitude));
+        Log.d("경도 : ", String.valueOf(longitude));
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
     }
