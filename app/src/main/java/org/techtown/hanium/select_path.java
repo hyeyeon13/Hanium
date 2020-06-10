@@ -45,7 +45,7 @@ public class select_path extends AppCompatActivity {
                 try {
                     // API Value 는 API 호출 메소드 명을 따라갑니다.
                     if (api == API.BUS_STATION_INFO) {
-                        String stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
+                        stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
                         longitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("x"));
                         latitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("y"));
                         //String y = odsayData.getJson().getJSONObject("result").getString("y");
@@ -77,6 +77,7 @@ public class select_path extends AppCompatActivity {
             public void onClick(View v) {
                 odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
                 Intent intent=new Intent(getApplicationContext(),Marker.class);
+                intent.putExtra("stationName",stationName);
                 intent.putExtra("longitude",longitude);
                 intent.putExtra("latitude",latitude);
                 startActivity(intent);

@@ -18,6 +18,7 @@ import com.skt.Tmap.TMapView;
 public class Marker extends AppCompatActivity {
     TMapView tmapview;
     Double longitude, latitude;
+    String stationName;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     @Override
@@ -35,10 +36,10 @@ public class Marker extends AppCompatActivity {
 
 
         TMapMarkerItem markerItem1 = new TMapMarkerItem();
-      //  Double.valueOf(x)
         longitude=intent.getExtras().getDouble("longitude");
         latitude=intent.getExtras().getDouble("latitude");
-        TMapPoint tMapPoint1 = new TMapPoint(longitude,latitude); // 마커 놓을 좌표
+        stationName=intent.getExtras().getString("stationName");
+        TMapPoint tMapPoint1 = new TMapPoint(latitude,longitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
 // 마커 아이콘
         Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
@@ -46,10 +47,10 @@ public class Marker extends AppCompatActivity {
         markerItem1.setIcon(bitmap); // 마커 아이콘 지정
         markerItem1.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
         markerItem1.setTMapPoint( tMapPoint1 ); // 마커의 좌표 지정
-        markerItem1.setName("SKT타워"); // 마커의 타이틀 지정
+        markerItem1.setName(stationName); // 마커의 타이틀 지정
         tmapview.addMarkerItem("markerItem1", markerItem1); // 지도에 마커 추가
 
-        tmapview.setCenterPoint( longitude, latitude ); //지도의 중심지점 좌표
+        tmapview.setCenterPoint( longitude, latitude ); //지도의 중심지점 좌표 (경도, 위도 순서)
         Log.d("위도 : ", String.valueOf(latitude));
         Log.d("경도 : ", String.valueOf(longitude));
         relativeLayout.addView(tmapview);
