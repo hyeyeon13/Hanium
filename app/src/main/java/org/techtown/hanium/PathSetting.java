@@ -27,7 +27,7 @@ public class PathSetting extends AppCompatActivity {
                 showDialog(DIALOG_TIME);
             }
         });
-        Button button1=(Button)findViewById(R.id.button11);
+        Button button1=(Button)findViewById(R.id.select);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button2 =findViewById(R.id.button2);
+        Button button2 =findViewById(R.id.favorite);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button button8=(Button)findViewById(R.id.button8);
+        Button button8=(Button)findViewById(R.id.pathsetting);
         button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button button9=(Button)findViewById(R.id.button9);
+        Button button9=(Button)findViewById(R.id.guardian);
         button9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -51,6 +51,7 @@
             android:layout_marginTop="60dp"
             android:textColor="#ff000000"
             android:backgroundTint = "#ff000000"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -78,7 +79,6 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:textColor="#ff000000" />
-
         <Button
             android:id="@+id/button5"
             android:layout_width="wrap_content"
@@ -131,7 +131,7 @@
 
     </RelativeLayout>
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="선택완료"
