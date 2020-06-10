@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E1DFDF">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="보디가드"
+        android:layout_toRightOf="@+id/button"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:textColor="#ff000000"
+        android:fontFamily="@font/font3"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="#FF000000"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="출발지를 입력하세요"
+        android:textColorHint="#737373"
+        android:textColor="#FF000000"/>
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="도착지를 입력하세요"
+        android:inputType="textPersonName"
+        android:textColorHint="#737373" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:fontFamily="@font/font3"
+        android:text="Button"
+        android:textColor="#ff000000"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.techtown.hanium">
+    package= "org.techtown.hanium">
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application
@@ -10,15 +10,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="p2lpxwkj10" />
+
 
         <activity android:name=".select_path"></activity>
         <activity android:name=".People" />
         <activity android:name=".PathSetting" />
         <activity android:name=".Favorites" />
+        <activity android:name=".Marker" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

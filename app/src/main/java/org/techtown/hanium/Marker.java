@@ -1,0 +1,56 @@
+package org.techtown.hanium;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+
+import com.skt.Tmap.TMapMarkerItem;
+import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapTapi;
+import com.skt.Tmap.TMapView;
+
+public class Marker extends AppCompatActivity {
+    TMapView tmapview;
+    Double x;
+    //Double xpoint=37.25;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_marker);
+
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        TMapView tmapview = new TMapView(this);
+        tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
+
+        TMapTapi tMapTapi = new TMapTapi(this);
+
+        Intent intent=getIntent();
+
+        x=intent.getExtras().getDouble("x");
+        TMapMarkerItem markerItem1 = new TMapMarkerItem();
+      //  Double.valueOf(x)
+        TMapPoint tMapPoint1 = new TMapPoint(x, 126.985302); // SKT타워
+
+// 마커 아이콘
+        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
+
+        markerItem1.setIcon(bitmap); // 마커 아이콘 지정
+        markerItem1.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
+        markerItem1.setTMapPoint( tMapPoint1 ); // 마커의 좌표 지정
+        markerItem1.setName("SKT타워"); // 마커의 타이틀 지정
+        tmapview.addMarkerItem("markerItem1", markerItem1); // 지도에 마커 추가
+
+        tmapview.setCenterPoint( 126.985302, x );
+        Log.d("x값 : ", String.valueOf(x));
+        relativeLayout.addView(tmapview);
+        setContentView(relativeLayout);
+    }
+
+
+}
