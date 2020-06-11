@@ -117,7 +117,7 @@ public class select_path extends AppCompatActivity {
             showDialogForLocationServiceSetting();
         }
 
-        Button ShowLocationButton = (Button) findViewById(R.id.button);
+        Button ShowLocationButton = (Button) findViewById(R.id.nowlocation);
         ShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -131,7 +131,7 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("stationName", stationName);
                 intent.putExtra("longitude", longitude);
                 intent.putExtra("latitude", latitude);
-                startActivity(intent);
+               // startActivity(intent);
 
                 EditText editText = (EditText) findViewById(R.id.editText1);
                 editText.setText(longitude + "," + latitude);
