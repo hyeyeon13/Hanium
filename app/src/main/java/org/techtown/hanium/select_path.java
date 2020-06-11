@@ -7,9 +7,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.odsay.odsayandroidsdk.API;
@@ -26,12 +32,16 @@ import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.util.List;
+
 public class select_path extends AppCompatActivity {
     String stationName;
     Double longitude, latitude;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     private GpsTracker gpsTracker;
+    Geocoder coder;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -42,9 +52,9 @@ public class select_path extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
-        EditText editText=(EditText)findViewById(R.id.editText);
-        final EditText editText1=(EditText)findViewById(R.id.editText1);
-        EditText editText2=(EditText)findViewById(R.id.editText2);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        final EditText editText1 = (EditText) findViewById(R.id.editText1);
+        final EditText editText2 = (EditText) findViewById(R.id.editText2);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
@@ -65,21 +75,23 @@ public class select_path extends AppCompatActivity {
                         longitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("x"));
                         latitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("y"));
                         //String y = odsayData.getJson().getJSONObject("result").getString("y");
-                        Log.d("Station name :",  stationName);
+                        Log.d("Station name :", stationName);
                         Log.d("longitude : ", String.valueOf(longitude));
                         Log.d("latitude : ", String.valueOf(latitude));
                     }
-                }catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
 
                 }
             }
+
             // 호출 실패 시 실행
             @Override
 
             public void onError(int i, String s, API api) {
 
-                if (api == API.BUS_STATION_INFO) {}
+                if (api == API.BUS_STATION_INFO) {
+                }
             }
         };
         // API 호출
@@ -87,15 +99,15 @@ public class select_path extends AppCompatActivity {
         odsayService.requestBusStationInfo("107474", onResultCallbackListener);
 
 
-        Button button=(Button)findViewById(R.id.button1);
+        Button button = (Button) findViewById(R.id.button1);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
-                Intent intent=new Intent(getApplicationContext(),Marker.class);
-                intent.putExtra("stationName",stationName);
-                intent.putExtra("longitude",longitude);
-                intent.putExtra("latitude",latitude);
+                Intent intent = new Intent(getApplicationContext(), Marker.class);
+                intent.putExtra("stationName", stationName);
+                intent.putExtra("longitude", longitude);
+                intent.putExtra("latitude", latitude);
                 startActivity(intent);
             }
         });
@@ -115,19 +127,67 @@ public class select_path extends AppCompatActivity {
                 latitude = gpsTracker.getLatitude();
                 longitude = gpsTracker.getLongitude();
                 odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
-                Intent intent=new Intent(getApplicationContext(),Marker.class);
-                intent.putExtra("stationName",stationName);
-                intent.putExtra("longitude",longitude);
-                intent.putExtra("latitude",latitude);
+                Intent intent = new Intent(getApplicationContext(), Marker.class);
+                intent.putExtra("stationName", stationName);
+                intent.putExtra("longitude", longitude);
+                intent.putExtra("latitude", latitude);
                 startActivity(intent);
 
-                EditText editText = (EditText)findViewById(R.id.editText1);
-                editText.setText(longitude+","+latitude);
+                EditText editText = (EditText) findViewById(R.id.editText1);
+                editText.setText(longitude + "," + latitude);
 
             }
         });
-    }
+        coder = new Geocoder(this);
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                List<Address> list = null;
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                try {
+                    list = coder.getFromLocation(latitude, longitude, 5);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+
+        };
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+        Button button1 = (Button) findViewById(R.id.button4);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                odsayService.requestBusStationInfo(editText2.getText().toString(), onResultCallbackListener);
+                Intent intent = new Intent(getApplicationContext(), Marker.class);
+                intent.putExtra("stationName", stationName);
+                intent.putExtra("longitude", longitude);
+                intent.putExtra("latitude", latitude);
+                startActivity(intent);
+                EditText editText = (EditText) findViewById(R.id.editText2);
+                editText.setText(longitude + "," + latitude);
+
+            }
+        });
+
+    }
 
     /*
      * ActivityCompat.requestPermissions를 사용한 퍼미션 요청의 결과를 리턴받는 메소드입니다.
