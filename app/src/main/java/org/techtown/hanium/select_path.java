@@ -32,6 +32,9 @@ public class select_path extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
 
+        final EditText editstart=(EditText)findViewById(R.id.editstart);
+        EditText editarrive=(EditText)findViewById(R.id.editarrive);
+
         Button time=(Button)findViewById(R.id.time);
         time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,17 +43,7 @@ public class select_path extends AppCompatActivity {
             }
         });
 
-        Button select=(Button)findViewById(R.id.select);
-        select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Marker.class);
-                startActivity(intent);
-            }
-        });
 
-        final EditText editstart=(EditText)findViewById(R.id.editstart);
-        EditText editarrive=(EditText)findViewById(R.id.editarrive);
     //    RelativeLayout relativeLayout = new RelativeLayout(this);
 
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
