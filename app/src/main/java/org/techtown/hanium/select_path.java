@@ -39,6 +39,7 @@ public class select_path extends AppCompatActivity {
     Double longitude, latitude;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
+    Double destLongitude, destLatitude;
     private GpsTracker gpsTracker;
     Geocoder coder;
 
@@ -54,6 +55,7 @@ public class select_path extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.editText);
         final EditText editText1 = (EditText) findViewById(R.id.editText1);
         final EditText editText2 = (EditText) findViewById(R.id.editText2);
+        final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
@@ -98,16 +100,17 @@ public class select_path extends AppCompatActivity {
         odsayService.requestBusStationInfo("107474", onResultCallbackListener);
 
 
-        Button button = (Button) findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
+        completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
                 Intent intent = new Intent(getApplicationContext(), Marker.class);
-                intent.putExtra("stationName", stationName);
-                intent.putExtra("longitude", longitude);
-                intent.putExtra("latitude", latitude);
+                intent.putExtra("curLongitude", longitude);
+                intent.putExtra("curLatitude", latitude);
+                intent.putExtra("destLongitude", destLongitude);
+                intent.putExtra("destLatitude", destLatitude);
                 startActivity(intent);
+
             }
         });
         if (checkLocationServicesStatus()) {
@@ -133,7 +136,7 @@ public class select_path extends AppCompatActivity {
                // startActivity(intent);
 
                 EditText editText = (EditText) findViewById(R.id.editText1);
-                editText.setText(longitude + "," + latitude);
+                editText.setText(latitude + ", " + longitude);
 
             }
         });
@@ -143,14 +146,8 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
                 List<Address> list = null;
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-                try {
-                    list = coder.getFromLocation(latitude, longitude, 5);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                destLatitude = location.getLatitude();
+                destLongitude = location.getLongitude();
             }
 
             @Override
@@ -170,19 +167,28 @@ public class select_path extends AppCompatActivity {
 
         };
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
-        Button button1 = (Button) findViewById(R.id.button4);
+        Button button1 = (Button) findViewById(R.id.btnSearchDest);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                odsayService.requestBusStationInfo(editText2.getText().toString(), onResultCallbackListener);
-                Intent intent = new Intent(getApplicationContext(), Marker.class);
-                intent.putExtra("stationName", stationName);
-                intent.putExtra("longitude", longitude);
-                intent.putExtra("latitude", latitude);
-                startActivity(intent);
-                EditText editText = (EditText) findViewById(R.id.editText2);
-                editText.setText(longitude + "," + latitude);
-
+                List<Address> list = null;
+                String strDest = dest.getText().toString();
+                try {
+                    list = coder.getFromLocationName(strDest, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("test", "입출력 오류 - 서버에서 주소변환 중 에러 발생");
+                }
+                if (list != null) {
+                    if (list.size() == 0) {
+                        dest.setText("해당되는 주소 정보는 없습니다");
+                    } else {
+                        dest.setText(list.get(0).getLatitude() + ", " + list.get(0).getLongitude());
+                        //          list.get(0).getCountryName();  // 국가명
+                        //          list.get(0).getLatitude();        // 위도
+                        //          list.get(0).getLongitude();    // 경도
+                    }
+                }
             }
         });
 
@@ -279,7 +285,6 @@ public class select_path extends AppCompatActivity {
         }
 
     }
-
 
     //여기부터는 GPS 활성화를 위한 메소드들
     private void showDialogForLocationServiceSetting() {
