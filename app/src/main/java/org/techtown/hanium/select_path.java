@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.odsay.odsayandroidsdk.API;
@@ -117,7 +116,7 @@ public class select_path extends AppCompatActivity {
             showDialogForLocationServiceSetting();
         }
 
-        Button ShowLocationButton = (Button) findViewById(R.id.nowlocation);
+        Button ShowLocationButton = (Button) findViewById(R.id.currentLocation);
         ShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
