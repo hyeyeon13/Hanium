@@ -24,21 +24,21 @@ import org.json.JSONException;
 public class select_path extends AppCompatActivity {
     String stationName;
     Double longitude, latitude;
-    //경도 : longitude 범위 : 127
-    //위도 : latitude 범위 : 37
     final int DIALOG_TIME = 2;
     Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
-        Button button=(Button)findViewById(R.id.button10);
+
+        Button button=(Button)findViewById(R.id.time);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(DIALOG_TIME);
             }
         });
+
         Button button1=(Button)findViewById(R.id.select);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +47,7 @@ public class select_path extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         EditText editText=(EditText)findViewById(R.id.editText);
         final EditText editText1=(EditText)findViewById(R.id.editText1);
         EditText editText2=(EditText)findViewById(R.id.editText2);
@@ -92,8 +93,8 @@ public class select_path extends AppCompatActivity {
         odsayService.requestBusStationInfo("107474", onResultCallbackListener);
 
 
-        Button button=(Button)findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button button2=(Button)findViewById(R.id.button1);
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
@@ -120,9 +121,7 @@ public class select_path extends AppCompatActivity {
                                                           int hourOfDay, int minute) {
                                         TextView textView=(TextView)findViewById(R.id.textView3);
 
-
                                         textView.setText(hourOfDay +"시 " + minute+"분");
-
 
 
                                     }
@@ -133,21 +132,10 @@ public class select_path extends AppCompatActivity {
                 return tpd;
         }
 
-
         return super.onCreateDialog(id);
     }
-
-
-    }
-
-
-
-//    OnResultCallbackListener() {
-//        @Override
-//        public void onSuccess(ODsayData odsayData, API api) {}
-//
-//        @Override
-//        public void onError(int code, String message, API api) {}
-//    }
 }
+
+
+
 

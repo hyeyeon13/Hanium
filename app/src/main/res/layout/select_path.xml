@@ -40,7 +40,49 @@
         android:hint="도착지를 입력하세요"
         android:inputType="textPersonName"
         android:textColorHint="#737373" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="출발시간"
+            android:textSize="20sp"
+            android:layout_marginLeft="40dp"
+            android:textColor="#ff000000"
+            android:fontFamily="@font/font3"/>
+
+        <Button
+            android:id="@+id/time"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/textView3"
+            android:background="#00ff0000"
+            android:fontFamily="@font/font3"
+            android:text="시간선택"
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/textView6"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="35dp"
+            android:textSize="20sp"
+            android:textColor="#ff000000"
+            android:fontFamily="@font/font3"
+            android:background="@drawable/border"
+            android:gravity="center_horizontal"/>
+
+    </RelativeLayout>
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
