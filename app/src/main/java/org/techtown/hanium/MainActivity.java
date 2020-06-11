@@ -28,14 +28,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button button8=(Button)findViewById(R.id.pathsetting);
-        button8.setOnClickListener(new View.OnClickListener() {
+        Button pathsetting=(Button)findViewById(R.id.pathsetting);
+        pathsetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getApplicationContext(),select_path.class);
                 startActivity(intent);
             }
         });
+
         Button button9=(Button)findViewById(R.id.guardian);
         button9.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         RelativeLayout relativeLayout = new RelativeLayout(this);
         TMapView tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");

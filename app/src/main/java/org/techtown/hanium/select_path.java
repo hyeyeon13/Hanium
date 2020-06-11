@@ -26,6 +26,7 @@ public class select_path extends AppCompatActivity {
     Double longitude, latitude;
     final int DIALOG_TIME = 2;
     Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +49,11 @@ public class select_path extends AppCompatActivity {
             }
         });
 
-        EditText editText=(EditText)findViewById(R.id.editText);
+        EditText editstart=(EditText)findViewById(R.id.editstart);
         final EditText editText1=(EditText)findViewById(R.id.editText1);
         EditText editText2=(EditText)findViewById(R.id.editText2);
         RelativeLayout relativeLayout = new RelativeLayout(this);
+
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 서버 연결 제한 시간(단위(초), default : 5초)
@@ -89,7 +91,7 @@ public class select_path extends AppCompatActivity {
             }
         };
         // API 호출
-        odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
+        odsayService.requestBusStationInfo(editstart.getText().toString(), onResultCallbackListener);
         odsayService.requestBusStationInfo("107474", onResultCallbackListener);
 
 
@@ -97,7 +99,7 @@ public class select_path extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
+                odsayService.requestBusStationInfo(editstart.getText().toString(), onResultCallbackListener);
                 Intent intent=new Intent(getApplicationContext(),Marker.class);
                 intent.putExtra("stationName",stationName);
                 intent.putExtra("longitude",longitude);
