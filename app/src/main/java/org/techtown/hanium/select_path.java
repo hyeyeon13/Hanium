@@ -26,7 +26,7 @@ public class select_path extends AppCompatActivity {
     Double longitude, latitude;
     final int DIALOG_TIME = 2;
     Button button;
-
+    EditText editstart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +49,9 @@ public class select_path extends AppCompatActivity {
             }
         });
 
-        EditText editstart=(EditText)findViewById(R.id.editstart);
-        final EditText editText1=(EditText)findViewById(R.id.editText1);
-        EditText editText2=(EditText)findViewById(R.id.editText2);
-        RelativeLayout relativeLayout = new RelativeLayout(this);
+        final EditText editstart=(EditText)findViewById(R.id.editstart);
+        EditText editarrive=(EditText)findViewById(R.id.editarrive);
+    //    RelativeLayout relativeLayout = new RelativeLayout(this);
 
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
@@ -95,8 +94,8 @@ public class select_path extends AppCompatActivity {
         odsayService.requestBusStationInfo("107474", onResultCallbackListener);
 
 
-        Button button2=(Button)findViewById(R.id.button1);
-        button2.setOnClickListener(new View.OnClickListener() {
+        Button pathselect=(Button)findViewById(R.id.pathselect);
+        pathselect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 odsayService.requestBusStationInfo(editstart.getText().toString(), onResultCallbackListener);
