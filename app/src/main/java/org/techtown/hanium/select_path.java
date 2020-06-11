@@ -32,19 +32,19 @@ public class select_path extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
 
-        Button button=(Button)findViewById(R.id.time);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button time=(Button)findViewById(R.id.time);
+        time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(DIALOG_TIME);
             }
         });
 
-        Button button1=(Button)findViewById(R.id.select);
-        button1.setOnClickListener(new View.OnClickListener() {
+        Button select=(Button)findViewById(R.id.select);
+        select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),select_path.class);
+                Intent intent=new Intent(getApplicationContext(),Marker.class);
                 startActivity(intent);
             }
         });
