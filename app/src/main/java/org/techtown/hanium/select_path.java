@@ -2,6 +2,8 @@ package org.techtown.hanium;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
@@ -22,10 +26,27 @@ public class select_path extends AppCompatActivity {
     Double longitude, latitude;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
+    final int DIALOG_TIME = 2;
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
+        Button button=(Button)findViewById(R.id.button10);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DIALOG_TIME);
+            }
+        });
+        Button button1=(Button)findViewById(R.id.select);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),select_path.class);
+                startActivity(intent);
+            }
+        });
         EditText editText=(EditText)findViewById(R.id.editText);
         final EditText editText1=(EditText)findViewById(R.id.editText1);
         EditText editText2=(EditText)findViewById(R.id.editText2);
@@ -83,6 +104,39 @@ public class select_path extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    @Override
+    @Deprecated
+    protected Dialog onCreateDialog(int id) {
+        switch(id){
+            case DIALOG_TIME :
+                TimePickerDialog tpd =
+                        new TimePickerDialog(select_path.this,
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker view,
+                                                          int hourOfDay, int minute) {
+                                        TextView textView=(TextView)findViewById(R.id.textView3);
+
+
+                                        textView.setText(hourOfDay +"시 " + minute+"분");
+
+
+
+                                    }
+                                }, // 값설정시 호출될 리스너 등록
+                                4,19, false); // 기본값 시분 등록
+                // true : 24 시간(0~23) 표시
+                // false : 오전/오후 항목이 생김
+                return tpd;
+        }
+
+
+        return super.onCreateDialog(id);
+    }
+
 
     }
 
