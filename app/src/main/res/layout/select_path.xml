@@ -22,24 +22,49 @@
         android:background="#FF000000"
         android:layout_marginTop="10dp"/>
 
-    <EditText
-        android:id="@+id/editText1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="출발지를 입력하세요"
-        android:textColorHint="#737373"
-        android:textColor="#FF000000"/>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editText2"
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="출발지를 입력하세요"
+            android:inputType="textPersonName"
+            android:textColor="#FF000000"
+            android:textColorHint="#737373" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="현재 위치" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="도착지를 입력하세요"
-        android:inputType="textPersonName"
-        android:textColorHint="#737373" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="도착지를 입력하세요"
+            android:inputType="textPersonName"
+            android:textColorHint="#737373" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="현재 위치" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button1"
