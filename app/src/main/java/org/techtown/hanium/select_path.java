@@ -65,40 +65,6 @@ public class select_path extends AppCompatActivity {
         odsayService.setConnectionTimeout(5000);
 
         // 콜백 함수 구현
-        final OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
-            // 호출 성공 시 실행
-            @Override
-            public void onSuccess(ODsayData odsayData, API api) {
-                try {
-                    // API Value 는 API 호출 메소드 명을 따라갑니다.
-                    if (api == API.BUS_STATION_INFO) {
-                        stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
-                        longitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("x"));
-                        latitude = Double.valueOf(odsayData.getJson().getJSONObject("result").getString("y"));
-                        //String y = odsayData.getJson().getJSONObject("result").getString("y");
-                        Log.d("Station name :", stationName);
-                        Log.d("longitude : ", String.valueOf(longitude));
-                        Log.d("latitude : ", String.valueOf(latitude));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                }
-            }
-
-            // 호출 실패 시 실행
-            @Override
-
-            public void onError(int i, String s, API api) {
-
-                if (api == API.BUS_STATION_INFO) {
-                }
-            }
-        };
-        // API 호출
-        odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
-        odsayService.requestBusStationInfo("107474", onResultCallbackListener);
-
 
         Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
         completeSetPath.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +94,6 @@ public class select_path extends AppCompatActivity {
 
                 latitude = gpsTracker.getLatitude();
                 longitude = gpsTracker.getLongitude();
-                odsayService.requestBusStationInfo(editText1.getText().toString(), onResultCallbackListener);
                 Intent intent = new Intent(getApplicationContext(), Marker.class);
                 intent.putExtra("stationName", stationName);
                 intent.putExtra("longitude", longitude);
@@ -141,32 +106,32 @@ public class select_path extends AppCompatActivity {
             }
         });
         coder = new Geocoder(this);
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                List<Address> list = null;
-                destLatitude = location.getLatitude();
-                destLongitude = location.getLongitude();
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-
-        };
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+//        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//        LocationListener locationListener = new LocationListener() {
+//            @Override
+//            public void onLocationChanged(Location location) {
+//                List<Address> list = null;
+//                destLatitude = location.getLatitude();
+//                destLongitude = location.getLongitude();
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String provider) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String provider) {
+//
+//            }
+//
+//        };
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
         Button button1 = (Button) findViewById(R.id.btnSearchDest);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +152,8 @@ public class select_path extends AppCompatActivity {
                         //          list.get(0).getCountryName();  // 국가명
                         //          list.get(0).getLatitude();        // 위도
                         //          list.get(0).getLongitude();    // 경도
+                        destLatitude = list.get(0).getLatitude();
+                        destLongitude = list.get(0).getLongitude();
                     }
                 }
             }
