@@ -19,7 +19,7 @@
 
         <activity android:name=".select_path"></activity>
         <activity android:name=".People" />
-        //<activity android:name=".Favorites" />
+        <activity android:name=".Favorites" />
         <activity android:name=".Marker" />
         <activity android:name=".MainActivity">
             <intent-filter>
