@@ -52,8 +52,8 @@ public class select_path extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        final EditText editText1 = (EditText) findViewById(R.id.editText1);
+        EditText editText = (EditText) findViewById(R.id.editstart);
+      //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
         final EditText editText2 = (EditText) findViewById(R.id.editText2);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
@@ -100,7 +100,7 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("latitude", latitude);
                // startActivity(intent);
 
-                EditText editText = (EditText) findViewById(R.id.editText1);
+                EditText editText = (EditText) findViewById(R.id.editstart);
                 editText.setText(latitude + ", " + longitude);
 
             }

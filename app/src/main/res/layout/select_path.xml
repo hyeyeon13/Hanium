@@ -28,7 +28,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/editstart"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:ems="10"
