@@ -69,6 +69,7 @@ public class Marker extends AppCompatActivity {
         Log.d("내 경도 : ", String.valueOf(myLongitude));
         Log.d("목적지 위도 : ", String.valueOf(destLatitude));
         Log.d("목적지 경도 : ", String.valueOf(destLongitude));
+
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
     }

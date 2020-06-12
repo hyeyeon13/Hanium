@@ -7,6 +7,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +24,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.odsay.odsayandroidsdk.API;
@@ -47,6 +51,8 @@ public class select_path extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
+    final int DIALOG_TIME = 2;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +164,13 @@ public class select_path extends AppCompatActivity {
                 }
             }
         });
-
+        Button button=(Button)findViewById(R.id.timeselect);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DIALOG_TIME);
+            }
+        });
     }
 
     /*
@@ -310,6 +322,35 @@ public class select_path extends AppCompatActivity {
 
 
 
+    @Override
+    @Deprecated
+    protected Dialog onCreateDialog(int id) {
+        switch(id){
+            case DIALOG_TIME :
+                TimePickerDialog tpd =
+                        new TimePickerDialog(select_path.this,
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker view,
+                                                          int hourOfDay, int minute) {
+                                        TextView textView=(TextView)findViewById(R.id.textView3);
+
+
+                                        textView.setText(hourOfDay +"시 " + minute+"분");
+
+
+
+                                    }
+                                }, // 값설정시 호출될 리스너 등록
+                                4,19, false); // 기본값 시분 등록
+                // true : 24 시간(0~23) 표시
+                // false : 오전/오후 항목이 생김
+                return tpd;
+        }
+
+
+        return super.onCreateDialog(id);
+    }
 
 
 
