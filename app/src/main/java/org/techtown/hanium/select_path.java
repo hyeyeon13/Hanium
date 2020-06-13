@@ -73,9 +73,7 @@ public class select_path extends AppCompatActivity {
         odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
-
         // 콜백 함수 구현
-
         Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
         completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,9 +97,7 @@ public class select_path extends AppCompatActivity {
         ShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
                 gpsTracker = new GpsTracker(select_path.this);
-
                 latitude = gpsTracker.getLatitude();
                 longitude = gpsTracker.getLongitude();
                 Intent intent = new Intent(getApplicationContext(), Marker.class);
@@ -109,10 +105,8 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("longitude", longitude);
                 intent.putExtra("latitude", latitude);
                // startActivity(intent);
-
                 EditText editText = (EditText) findViewById(R.id.editstart);
                 editText.setText(latitude + ", " + longitude);
-
             }
         });
         coder = new Geocoder(this);
@@ -146,7 +140,6 @@ public class select_path extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 List<Address> list = null;
                 String strDest = dest.getText().toString();
                 try {
@@ -187,14 +180,9 @@ public class select_path extends AppCompatActivity {
                                            @NonNull int[] grandResults) {
 
         if (permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
-
             // 요청 코드가 PERMISSIONS_REQUEST_CODE 이고, 요청한 퍼미션 개수만큼 수신되었다면
-
             boolean check_result = true;
-
-
             // 모든 퍼미션을 허용했는지 체크합니다.
-
             for (int result : grandResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     check_result = false;
@@ -202,72 +190,49 @@ public class select_path extends AppCompatActivity {
                 }
             }
 
-
             if (check_result) {
-
                 //위치 값을 가져올 수 있음
                 ;
             } else {
                 // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
-
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[1])) {
-
                     Toast.makeText(select_path.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
                     finish();
-
-
                 } else {
-
                     Toast.makeText(select_path.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
-
                 }
             }
-
         }
     }
 
     void checkRunTimePermission() {
-
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(select_path.this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(select_path.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
-
-
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                 hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
-
             // 2. 이미 퍼미션을 가지고 있다면
             // ( 안드로이드 6.0 이하 버전은 런타임 퍼미션이 필요없기 때문에 이미 허용된 걸로 인식합니다.)
-
-
             // 3.  위치 값을 가져올 수 있음
-
-
         } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
-
             // 3-1. 사용자가 퍼미션 거부를 한 적이 있는 경우에는
             if (ActivityCompat.shouldShowRequestPermissionRationale(select_path.this, REQUIRED_PERMISSIONS[0])) {
-
                 // 3-2. 요청을 진행하기 전에 사용자가에게 퍼미션이 필요한 이유를 설명해줄 필요가 있습니다.
                 Toast.makeText(select_path.this, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show();
                 // 3-3. 사용자게에 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions(select_path.this, REQUIRED_PERMISSIONS,
                         PERMISSIONS_REQUEST_CODE);
-
-
             } else {
                 // 4-1. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
                 // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions(select_path.this, REQUIRED_PERMISSIONS,
                         PERMISSIONS_REQUEST_CODE);
             }
-
         }
-
     }
 
     //여기부터는 GPS 활성화를 위한 메소드들
@@ -294,38 +259,28 @@ public class select_path extends AppCompatActivity {
         });
         builder.create().show();
     }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
-
             case GPS_ENABLE_REQUEST_CODE:
-
                 //사용자가 GPS 활성 시켰는지 검사
                 if (checkLocationServicesStatus()) {
                     if (checkLocationServicesStatus()) {
-
                         Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
                         checkRunTimePermission();
                         return;
                     }
                 }
-
                 break;
         }
     }
 
     public boolean checkLocationServicesStatus() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
-
 
     @Override
     @Deprecated
@@ -339,12 +294,7 @@ public class select_path extends AppCompatActivity {
                                     public void onTimeSet(TimePicker view,
                                                           int hourOfDay, int minute) {
                                         TextView textView=(TextView)findViewById(R.id.textView3);
-
-
                                         textView.setText(hourOfDay +"시 " + minute+"분");
-
-
-
                                     }
                                 }, // 값설정시 호출될 리스너 등록
                                 4,19, false); // 기본값 시분 등록
@@ -352,8 +302,6 @@ public class select_path extends AppCompatActivity {
                 // false : 오전/오후 항목이 생김
                 return tpd;
         }
-
-
         return super.onCreateDialog(id);
     }
 

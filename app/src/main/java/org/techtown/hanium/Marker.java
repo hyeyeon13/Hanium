@@ -11,7 +11,10 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapTapi;
@@ -34,11 +37,9 @@ public class Marker extends AppCompatActivity {
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
-
         TMapTapi tMapTapi = new TMapTapi(this);
 
         Intent intent=getIntent();
-
 
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
@@ -51,8 +52,8 @@ public class Marker extends AppCompatActivity {
         TMapPoint desttMappoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
 // 마커 아이콘
-        Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.stpin);
-        Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.dpin);
+        Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.point);
+        Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.bluepoint);
         tmapview.setTMapPathIcon(Start, dest);
 
         myMarker.setIcon(Start); // 마커 아이콘 지정
@@ -75,6 +76,10 @@ public class Marker extends AppCompatActivity {
         Log.d("내 경도 : ", String.valueOf(myLongitude));
         Log.d("목적지 위도 : ", String.valueOf(destLatitude));
         Log.d("목적지 경도 : ", String.valueOf(destLongitude));
+
+        TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
+        TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
+        tmapview.zoomToTMapPoint(leftTop,rightBottom);
 
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
