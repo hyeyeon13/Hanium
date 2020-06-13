@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapTapi;
@@ -30,6 +32,8 @@ public class Marker extends AppCompatActivity {
         RelativeLayout relativeLayout = new RelativeLayout(this);
         TMapView tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
+        tmapview.setZoomLevel(10);
+        tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
 
         TMapTapi tMapTapi = new TMapTapi(this);
 
@@ -43,19 +47,21 @@ public class Marker extends AppCompatActivity {
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
         //stationName=intent.getExtras().getString("stationName");
-        TMapPoint mytMapPoint = new TMapPoint(myLatitude,myLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
+        TMapPoint mytMapPoint = new TMapPoint(myLatitude,myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
         TMapPoint desttMappoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
 // 마커 아이콘
-        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
+        Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.stpin);
+        Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.dpin);
+        tmapview.setTMapPathIcon(Start, dest);
 
-        myMarker.setIcon(bitmap); // 마커 아이콘 지정
+        myMarker.setIcon(Start); // 마커 아이콘 지정
         myMarker.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
         myMarker.setTMapPoint( mytMapPoint ); // 마커의 좌표 지정
         myMarker.setName("start"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("startPoint", myMarker); // 지도에 마커 추가
 
-        destMarker.setIcon(bitmap);
+        destMarker.setIcon(dest);
         destMarker.setPosition(0.5f, 1.0f);;
         destMarker.setTMapPoint(desttMappoint);;
         destMarker.setName("dest"); // 마커의 타이틀 지정
@@ -73,6 +79,8 @@ public class Marker extends AppCompatActivity {
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
     }
+
+
 
 
 }
