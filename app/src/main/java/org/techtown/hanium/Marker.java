@@ -72,10 +72,10 @@ public class Marker extends AppCompatActivity {
         centerLong = (myLongitude+destLongitude)/2;
         centerLat = (myLatitude+destLatitude)/2;
         tmapview.setCenterPoint( centerLong, centerLat ); //지도의 중심지점 좌표 (경도, 위도 순서)
-        Log.d("내 위도 : ", String.valueOf(myLatitude));
-        Log.d("내 경도 : ", String.valueOf(myLongitude));
-        Log.d("목적지 위도 : ", String.valueOf(destLatitude));
-        Log.d("목적지 경도 : ", String.valueOf(destLongitude));
+        Log.d("내 위도  ", String.valueOf(myLatitude));
+        Log.d("내 경도  ", String.valueOf(myLongitude));
+        Log.d("목적지 위도  ", String.valueOf(destLatitude));
+        Log.d("목적지 경도  ", String.valueOf(destLongitude));
 
         TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
         TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
