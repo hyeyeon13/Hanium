@@ -55,20 +55,20 @@ public class select_path extends AppCompatActivity {
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
+    final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
     final int DIALOG_TIME = 2;
     Button button;
-    private OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
-        // 호출 성공시 데이터 들어옴옴
+
+    private OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
-            Log.d("경로검색 성공", String.valueOf(latitude));
-            JSONObject result = oDsayData.getJson();
+            Log.d("경로탐색 성공: ",String.valueOf(latitude));
+            JSONObject jsonObject = oDsayData.getJson();
         }
-        // 에러 표출시 데이터
+
         @Override
         public void onError(int i, String errorMessage, API api) {
-            Log.i("경로검색 실패",errorMessage);
+            Log.i("경로탐색 실패: ",errorMessage);
         }
     };
 
@@ -82,7 +82,7 @@ public class select_path extends AppCompatActivity {
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
-        final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
+
         // 서버 연결 제한 시간(단위(초), default : 5초)
         odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
@@ -97,9 +97,9 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("curLatitude", latitude);
                 intent.putExtra("destLongitude", destLongitude);
                 intent.putExtra("destLatitude", destLatitude);
-                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
                 startActivity(intent);
 
+                odsayService.requestSearchPubTransPath(longitude.toString(),latitude.toString(),destLongitude.toString(),destLatitude.toString(),"0","0","0",onResultCallbackListener);
             }
         });
         if (checkLocationServicesStatus()) {
@@ -329,8 +329,5 @@ public class select_path extends AppCompatActivity {
 //        @Override
 //        public void onError(int code, String message, API api) {}
 //    }
-
-
 }
-
 
