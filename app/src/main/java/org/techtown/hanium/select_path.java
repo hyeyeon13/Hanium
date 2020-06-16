@@ -38,6 +38,7 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -57,6 +58,19 @@ public class select_path extends AppCompatActivity {
 
     final int DIALOG_TIME = 2;
     Button button;
+    private OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
+        // 호출 성공시 데이터 들어옴옴
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+            Log.d("경로검색 성공", String.valueOf(latitude));
+            JSONObject result = oDsayData.getJson();
+        }
+        // 에러 표출시 데이터
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+            Log.i("경로검색 실패",errorMessage);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +97,7 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("curLatitude", latitude);
                 intent.putExtra("destLongitude", destLongitude);
                 intent.putExtra("destLatitude", destLatitude);
+                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
                 startActivity(intent);
 
             }
@@ -314,5 +329,8 @@ public class select_path extends AppCompatActivity {
 //        @Override
 //        public void onError(int code, String message, API api) {}
 //    }
+
+
 }
+
 
