@@ -33,12 +33,10 @@ import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
 import com.odsay.odsayandroidsdk.OnResultCallbackListener;
-import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,20 +58,31 @@ public class select_path extends AppCompatActivity {
 
     final int DIALOG_TIME = 2;
     Button button;
-    // 싱글톤 생성, Key 값을 활용하여 객체 생성
-    final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
-    JSONObject jsonObject;
+    private OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
+        // 호출 성공시 데이터 들어옴옴
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+            Log.d("경로검색 성공", String.valueOf(latitude));
+            JSONObject result = oDsayData.getJson();
+        }
+        // 에러 표출시 데이터
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+            Log.i("경로검색 실패",errorMessage);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
         EditText editText = (EditText) findViewById(R.id.editstart);
-        //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
+      //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
         final EditText editText2 = (EditText) findViewById(R.id.editText2);
-        final EditText dest = (EditText) findViewById(R.id.editTextDest);sdcsdc
+        final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
-
+        // 싱글톤 생성, Key 값을 활용하여 객체 생성
+        final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 서버 연결 제한 시간(단위(초), default : 5초)
         odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
@@ -88,8 +97,11 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("curLatitude", latitude);
                 intent.putExtra("destLongitude", destLongitude);
                 intent.putExtra("destLatitude", destLatitude);
+                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
                 startActivity(intent);
 
+            }
+        });
         if (checkLocationServicesStatus()) {
             checkRunTimePermission();
         } else {
@@ -107,7 +119,7 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("stationName", stationName);
                 intent.putExtra("longitude", longitude);
                 intent.putExtra("latitude", latitude);
-                // startActivity(intent);
+               // startActivity(intent);
                 EditText editText = (EditText) findViewById(R.id.editstart);
                 editText.setText(latitude + ", " + longitude);
             }
@@ -165,7 +177,7 @@ public class select_path extends AppCompatActivity {
                 }
             }
         });
-        Button button = (Button) findViewById(R.id.timeselect);
+        Button button=(Button)findViewById(R.id.timeselect);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -262,7 +274,6 @@ public class select_path extends AppCompatActivity {
         });
         builder.create().show();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -289,27 +300,37 @@ public class select_path extends AppCompatActivity {
     @Override
     @Deprecated
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DIALOG_TIME:
+        switch(id){
+            case DIALOG_TIME :
                 TimePickerDialog tpd =
                         new TimePickerDialog(select_path.this,
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker view,
                                                           int hourOfDay, int minute) {
-                                        TextView textView = (TextView) findViewById(R.id.textView3);
-                                        textView.setText(hourOfDay + "시 " + minute + "분");
+                                        TextView textView=(TextView)findViewById(R.id.textView3);
+                                        textView.setText(hourOfDay +"시 " + minute+"분");
                                     }
                                 }, // 값설정시 호출될 리스너 등록
-                                4, 19, false); // 기본값 시분 등록
+                                4,19, false); // 기본값 시분 등록
                 // true : 24 시간(0~23) 표시
                 // false : 오전/오후 항목이 생김
                 return tpd;
         }
         return super.onCreateDialog(id);
     }
+
+
+
+//    OnResultCallbackListener() {
+//        @Override
+//        public void onSuccess(ODsayData odsayData, API api) {}
+//
+//        @Override
+//        public void onError(int code, String message, API api) {}
+//    }
+
+
 }
-
-
 
 

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Button button2 =findViewById(R.id.favorite);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button pathsetting=(Button)findViewById(R.id.pathsetting);
-        pathsetting.setOnClickListener(new View.OnClickListener() {
+        Button pathSetting=(Button)findViewById(R.id.pathsetting);
+        pathSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getApplicationContext(),select_path.class);
