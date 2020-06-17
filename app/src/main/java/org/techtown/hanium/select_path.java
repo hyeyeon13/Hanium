@@ -34,11 +34,17 @@ import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
 import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
+import com.skt.Tmap.TMapData;
+import com.skt.Tmap.TMapPoint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,6 +57,8 @@ public class select_path extends AppCompatActivity {
     Double destLongitude, destLatitude;
     private GpsTracker gpsTracker;
     Geocoder coder;
+    TMapData tmapdata = new TMapData();
+
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -98,7 +106,23 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("destLongitude", destLongitude);
                 intent.putExtra("destLatitude", destLatitude);
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
-                startActivity(intent);
+                TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
+                TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
+                tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
+                    @Override
+                    public void onFindPathDataAll(Document document) {
+                        Element root = document.getDocumentElement();
+                        NodeList nodeListPlacemark = root.getElementsByTagName("Placemark");
+                        for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
+                            NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
+                            for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
+                                if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
+                                    Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
+                                }
+                            }
+                        }
+                    }
+                });
 
             }
         });
