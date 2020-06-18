@@ -47,6 +47,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class select_path extends AppCompatActivity {
@@ -58,6 +59,7 @@ public class select_path extends AppCompatActivity {
     private GpsTracker gpsTracker;
     Geocoder coder;
     TMapData tmapdata = new TMapData();
+    ArrayList<String> pathData = new ArrayList<String>();
 
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -100,11 +102,6 @@ public class select_path extends AppCompatActivity {
         completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Marker.class);
-                intent.putExtra("curLongitude", longitude);
-                intent.putExtra("curLatitude", latitude);
-                intent.putExtra("destLongitude", destLongitude);
-                intent.putExtra("destLatitude", destLatitude);
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
@@ -113,24 +110,37 @@ public class select_path extends AppCompatActivity {
                     public void onFindPathDataAll(Document document) {
                         Element root = document.getDocumentElement();
                         NodeList nodeListPlacemark = root.getElementsByTagName("Placemark");
+                        NodeList nodeListCoordinates = root.getElementsByTagName("coordinates");
+                        NodeList nodeListPoint = root.getElementsByTagName("Point");
                         for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
                             NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
-                            NodeList nodeListPointItem = nodeListPlacemark.item(i).getChildNodes();
                             for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
                                 if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
                                     Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
                                 }
                             }
+                        }
+
+                        for( int i=0; i<nodeListPoint.getLength(); i++ ) {
+                            NodeList nodeListPointItem = nodeListPoint.item(i).getChildNodes();
                             for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
-                                if( nodeListPointItem.item(j).getNodeName().equals("Point") ) {
+                                if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
+                                    pathData.add(nodeListPointItem.item(j).getTextContent().trim());
                                     Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
                                 }
                             }
                         }
+                        Intent intent = new Intent(getApplicationContext(), Marker.class);
+                        intent.putExtra("curLongitude", longitude);
+                        intent.putExtra("curLatitude", latitude);
+                        intent.putExtra("destLongitude", destLongitude);
+                        intent.putExtra("destLatitude", destLatitude);
+                        intent.putExtra("pathData", pathData);
+                        startActivity(intent);
                     }
                 });
-
             }
+
         });
         if (checkLocationServicesStatus()) {
             checkRunTimePermission();
