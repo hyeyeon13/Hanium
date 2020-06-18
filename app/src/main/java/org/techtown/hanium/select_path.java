@@ -115,9 +115,15 @@ public class select_path extends AppCompatActivity {
                         NodeList nodeListPlacemark = root.getElementsByTagName("Placemark");
                         for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
                             NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
+                            NodeList nodeListPointItem = nodeListPlacemark.item(i).getChildNodes();
                             for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
                                 if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
                                     Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
+                                }
+                            }
+                            for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
+                                if( nodeListPointItem.item(j).getNodeName().equals("Point") ) {
+                                    Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
                                 }
                             }
                         }
