@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +18,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
+import java.util.ArrayList;
+
 public class Marker extends AppCompatActivity {
-    TMapView tmapview;
     Double myLongitude, myLatitude;
     Double destLongitude, destLatitude;
     String stationName;
@@ -80,6 +83,23 @@ public class Marker extends AppCompatActivity {
         TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
         TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
         tmapview.zoomToTMapPoint(leftTop,rightBottom);
+        TMapPolyLine tpolyline = new TMapPolyLine();
+        tpolyline.setLineColor(Color.BLUE);
+        tpolyline.setLineWidth(2);
+        ArrayList<String> pathData = new ArrayList<String>();
+        pathData = intent.getExtras().getStringArrayList("pathData");
+        for(int i=0;i<pathData.size();i++){
+            double tempLat, tempLong;
+            String tempS;
+            tempS = pathData.get(i);
+            String[] tempA = tempS.split(",");
+            tempLat = Double.valueOf(tempA[1]);
+            tempLong = Double.valueOf(tempA[0]);
+            Log.e("test", tempA[0]);
+            TMapPoint temp = new TMapPoint(tempLat, tempLong);
+            tpolyline.addLinePoint(temp);
+        }
+        tmapview.addTMapPolyLine("path", tpolyline);
 
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
