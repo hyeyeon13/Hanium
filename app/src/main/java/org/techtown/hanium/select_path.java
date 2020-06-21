@@ -79,8 +79,8 @@ public class select_path extends AppCompatActivity {
         // 호출 성공시 데이터 들어옴옴
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
-            Log.d("경로검색 성공", String.valueOf(latitude));
             result = oDsayData.getJson();
+            Log.d("경로검색 성공", String.valueOf(latitude));
         }
         // 에러 표출시 데이터
         @Override
@@ -127,6 +127,7 @@ public class select_path extends AppCompatActivity {
                                 }
                             }
                         }
+                        pathData.clear(); //pathData 초기화
 
                         for( int i=0; i<nodeListPoint.getLength(); i++ ) {
                             nodeListPointItem = nodeListPoint.item(i).getChildNodes();
