@@ -84,7 +84,7 @@ public class select_path extends AppCompatActivity {
     final int DIALOG_TIME = 2;
     Button button;
     private OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
-        // 호출 성공시 데이터 들어옴옴
+        // 호출 성공시 데이터 들어옴
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             result = oDsayData.getJson();
@@ -112,6 +112,13 @@ public class select_path extends AppCompatActivity {
                         intInfo.put("endX", temp.getDouble("endX"));
                         intInfo.put("endY", temp.getDouble("endY"));
                         intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
+                        final ODsayService odsays = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
+                        // 서버 연결 제한 시간(단위(초), default : 5초)
+                        odsays.setReadTimeout(5000);
+                        // 데이터 획득 제한 시간(단위(초), default : 5초)
+                        odsays.setConnectionTimeout(5000);
+                        // 콜백 함수 구현
+                        odsays.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), onResultCallbackListenerBus);
                         //intInfo.put("startID", temp.getInt("startID"));
                         //intInfo.put("endID", temp.getInt("endID"));
                     }
@@ -126,6 +133,19 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onError(int i, String errorMessage, API api) {
             Log.i("경로검색 실패",errorMessage);
+        }
+    };
+
+// 200622 이준민 테스트중
+    private OnResultCallbackListener onResultCallbackListenerBus = new OnResultCallbackListener() {
+        // 호출 성공시 데이터 들어옴
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+
+        }
+        // 에러 표출시 데이터
+        @Override
+        public void onError(int i, String errorMessage, API api) {
         }
     };
 
