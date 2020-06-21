@@ -58,8 +58,15 @@ public class select_path extends AppCompatActivity {
     Double destLongitude, destLatitude;
     private GpsTracker gpsTracker;
     Geocoder coder;
+    JSONObject result;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
+    Element root;
+    NodeList nodeListPlacemark;
+    NodeList nodeListCoordinates;
+    NodeList nodeListPoint;
+    NodeList nodeListPlacemarkItem;
+    NodeList nodeListPointItem;
 
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -73,7 +80,7 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             Log.d("경로검색 성공", String.valueOf(latitude));
-            JSONObject result = oDsayData.getJson();
+            result = oDsayData.getJson();
         }
         // 에러 표출시 데이터
         @Override
@@ -108,12 +115,12 @@ public class select_path extends AppCompatActivity {
                 tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
                     @Override
                     public void onFindPathDataAll(Document document) {
-                        Element root = document.getDocumentElement();
-                        NodeList nodeListPlacemark = root.getElementsByTagName("Placemark");
-                        NodeList nodeListCoordinates = root.getElementsByTagName("coordinates");
-                        NodeList nodeListPoint = root.getElementsByTagName("Point");
+                        root = document.getDocumentElement();
+                        nodeListPlacemark = root.getElementsByTagName("Placemark");
+                        nodeListCoordinates = root.getElementsByTagName("coordinates");
+                        nodeListPoint = root.getElementsByTagName("Point");
                         for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
-                            NodeList nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
+                            nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
                             for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
                                 if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
                                     Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
@@ -122,7 +129,7 @@ public class select_path extends AppCompatActivity {
                         }
 
                         for( int i=0; i<nodeListPoint.getLength(); i++ ) {
-                            NodeList nodeListPointItem = nodeListPoint.item(i).getChildNodes();
+                            nodeListPointItem = nodeListPoint.item(i).getChildNodes();
                             for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
                                 if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
                                     pathData.add(nodeListPointItem.item(j).getTextContent().trim());
@@ -165,32 +172,7 @@ public class select_path extends AppCompatActivity {
             }
         });
         coder = new Geocoder(this);
-//        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        LocationListener locationListener = new LocationListener() {
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                List<Address> list = null;
-//                destLatitude = location.getLatitude();
-//                destLongitude = location.getLongitude();
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String provider) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String provider) {
-//
-//            }
-//
-//        };
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+
         Button button1 = (Button) findViewById(R.id.btnSearchDest);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,17 +341,6 @@ public class select_path extends AppCompatActivity {
         }
         return super.onCreateDialog(id);
     }
-
-
-
-//    OnResultCallbackListener() {
-//        @Override
-//        public void onSuccess(ODsayData odsayData, API api) {}
-//
-//        @Override
-//        public void onError(int code, String message, API api) {}
-//    }
-
 
 }
 
