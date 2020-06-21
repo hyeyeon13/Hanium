@@ -86,7 +86,7 @@ public class Marker extends AppCompatActivity {
         TMapPolyLine tpolyline = new TMapPolyLine();
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
-        ArrayList<String> pathData;
+        ArrayList<String> pathData = new ArrayList<String>();
         pathData = intent.getExtras().getStringArrayList("pathData");
         for(int i=0;i<pathData.size();i++){
             double tempLat, tempLong;

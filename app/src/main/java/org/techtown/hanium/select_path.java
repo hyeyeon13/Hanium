@@ -62,14 +62,19 @@ public class select_path extends AppCompatActivity {
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
+    JSONArray subPath = null;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
+
     Element root;
     NodeList nodeListPlacemark;
     NodeList nodeListCoordinates;
     NodeList nodeListPoint;
     NodeList nodeListPlacemarkItem;
     NodeList nodeListPointItem;
+
+    JSONObject pathInfo = new JSONObject();
+    JSONArray intervalPath = new JSONArray();
 
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -83,13 +88,22 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             result = oDsayData.getJson();
-            JSONArray subPath = null;
             try {
                 subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
                 Log.d("검사횟수", String.valueOf(subPath.length()));
                 for(int k=0;k<subPath.length();k++){
                     JSONObject temp = subPath.getJSONObject(k);
+                    JSONObject intInfo = new JSONObject();
                     int tempTrafficType = temp.getInt(("trafficType"));
+                    if(tempTrafficType==1){
+                        intInfo.put("trafficType", tempTrafficType);
+                        intInfo.put("startX", temp.getInt("startX"));
+                        intInfo.put("startY", temp.getInt("startY"));
+                        intInfo.put("endX", temp.getInt("endX"));
+                        intInfo.put("endY", temp.getInt("endY"));
+                        intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
+                        Log.d("검사횟수", String.valueOf(subPath.length()));
+                    }
                     Log.d("traffic type ", String.valueOf(tempTrafficType));
                 }
             } catch (JSONException e) {
