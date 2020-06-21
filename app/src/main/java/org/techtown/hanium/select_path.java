@@ -95,14 +95,25 @@ public class select_path extends AppCompatActivity {
                     JSONObject temp = subPath.getJSONObject(k);
                     JSONObject intInfo = new JSONObject();
                     int tempTrafficType = temp.getInt(("trafficType"));
-                    if(tempTrafficType==1){
+                    if(tempTrafficType==1) {
                         intInfo.put("trafficType", tempTrafficType);
-                        intInfo.put("startX", temp.getInt("startX"));
-                        intInfo.put("startY", temp.getInt("startY"));
-                        intInfo.put("endX", temp.getInt("endX"));
-                        intInfo.put("endY", temp.getInt("endY"));
+                        intInfo.put("startX", temp.getDouble("startX"));
+                        intInfo.put("startY", temp.getDouble("startY"));
+                        intInfo.put("endX", temp.getDouble("endX"));
+                        intInfo.put("endY", temp.getDouble("endY"));
                         intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
+                        intInfo.put("startID", temp.getInt("startID"));
+                        intInfo.put("endID", temp.getInt("endID"));
                         Log.d("검사횟수", String.valueOf(subPath.length()));
+                    } else if(tempTrafficType==2){
+                        intInfo.put("trafficType", tempTrafficType);
+                        intInfo.put("startX", temp.getDouble("startX"));
+                        intInfo.put("startY", temp.getDouble("startY"));
+                        intInfo.put("endX", temp.getDouble("endX"));
+                        intInfo.put("endY", temp.getDouble("endY"));
+                        intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
+                        //intInfo.put("startID", temp.getInt("startID"));
+                        //intInfo.put("endID", temp.getInt("endID"));
                     }
                     Log.d("traffic type ", String.valueOf(tempTrafficType));
                 }
