@@ -39,8 +39,8 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPoint;
-
 import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -49,6 +49,9 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 public class select_path extends AppCompatActivity {
     String stationName;
@@ -80,7 +83,19 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             result = oDsayData.getJson();
-            Log.d("경로검색 성공", String.valueOf(latitude));
+            JSONArray subPath = null;
+            try {
+                subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                Log.d("검사횟수", String.valueOf(subPath.length()));
+                for(int k=0;k<subPath.length();k++){
+                    JSONObject temp = subPath.getJSONObject(k);
+                    int tempTrafficType = temp.getInt(("trafficType"));
+                    Log.d("traffic type ", String.valueOf(tempTrafficType));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
         // 에러 표출시 데이터
         @Override
@@ -109,26 +124,16 @@ public class select_path extends AppCompatActivity {
         completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
+
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
                 tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
                     @Override
                     public void onFindPathDataAll(Document document) {
                         root = document.getDocumentElement();
-                        nodeListPlacemark = root.getElementsByTagName("Placemark");
-                        nodeListCoordinates = root.getElementsByTagName("coordinates");
                         nodeListPoint = root.getElementsByTagName("Point");
-                        for( int i=0; i<nodeListPlacemark.getLength(); i++ ) {
-                            nodeListPlacemarkItem = nodeListPlacemark.item(i).getChildNodes();
-                            for( int j=0; j<nodeListPlacemarkItem.getLength(); j++ ) {
-                                if( nodeListPlacemarkItem.item(j).getNodeName().equals("description") ) {
-                                    Log.d("debug", nodeListPlacemarkItem.item(j).getTextContent().trim() );
-                                }
-                            }
-                        }
-                        pathData.clear(); //pathData 초기화
-
                         for( int i=0; i<nodeListPoint.getLength(); i++ ) {
                             nodeListPointItem = nodeListPoint.item(i).getChildNodes();
                             for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
