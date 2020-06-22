@@ -62,6 +62,7 @@ public class select_path extends AppCompatActivity {
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
+    JSONObject result1;
     JSONArray subPath = null;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
@@ -112,15 +113,25 @@ public class select_path extends AppCompatActivity {
                         intInfo.put("endX", temp.getDouble("endX"));
                         intInfo.put("endY", temp.getDouble("endY"));
                         intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
+                        int startStnID = temp.getInt("startID");
+                        int endStnID = temp.getInt("endID");
                         final ODsayService odsays = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
                         // 서버 연결 제한 시간(단위(초), default : 5초)
                         odsays.setReadTimeout(5000);
                         // 데이터 획득 제한 시간(단위(초), default : 5초)
                         odsays.setConnectionTimeout(5000);
                         // 콜백 함수 구현
+                        int startID;
+                        int endID;
                         odsays.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), onResultCallbackListenerBus);
                         //intInfo.put("startID", temp.getInt("startID"));
                         //intInfo.put("endID", temp.getInt("endID"));
+                        JSONArray station = result1.getJSONArray("station");
+                        for(int i=0;i<station.length();i++){
+                            if(station.getJSONObject(i).getInt("stationID")==startStnID){
+                                startID = station.getJSONObject(i).getInt("idx");
+                            }
+                        }
                     }
                     Log.d("traffic type ", String.valueOf(tempTrafficType));
                 }
@@ -141,7 +152,8 @@ public class select_path extends AppCompatActivity {
         // 호출 성공시 데이터 들어옴
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
-
+            result1 = oDsayData.getJson();
+            Log.d("traffic type ", String.valueOf(1));
         }
         // 에러 표출시 데이터
         @Override
