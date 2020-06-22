@@ -109,9 +109,9 @@ public class select_path extends AppCompatActivity {
         RelativeLayout relativeLayout = new RelativeLayout(this);
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
-        odsayService.setReadTimeout(1000);
+        odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
-        odsayService.setConnectionTimeout(1000);
+        odsayService.setConnectionTimeout(5000);
         // 서버 연결 제한 시간(단위(초), default : 5초)
 
 
@@ -121,8 +121,12 @@ public class select_path extends AppCompatActivity {
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
+//                onPause();
 //                while(true){
-//                    if(flag==true) break;
+//                    if(flag==true){
+//                        onResume();
+//                        break;
+//                    }
 //                }
 //                try {
 //                    subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
