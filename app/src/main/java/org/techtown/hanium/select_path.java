@@ -62,7 +62,6 @@ public class select_path extends AppCompatActivity {
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
-    JSONObject result1;
     JSONArray subPath = null;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
@@ -76,6 +75,11 @@ public class select_path extends AppCompatActivity {
 
     JSONObject pathInfo = new JSONObject();
     JSONArray intervalPath = new JSONArray();
+    ODsayService odsayService = null;
+    // 서버 연결 제한 시간(단위(초), default : 5초)
+
+
+
 
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -89,75 +93,11 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             result = oDsayData.getJson();
-            try {
-                subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
-                Log.d("검사횟수", String.valueOf(subPath.length()));
-                for(int k=0;k<subPath.length();k++){
-                    JSONObject temp = subPath.getJSONObject(k);
-                    JSONObject intInfo = new JSONObject();
-                    int tempTrafficType = temp.getInt(("trafficType"));
-                    if(tempTrafficType==1) {
-                        intInfo.put("trafficType", tempTrafficType);
-                        intInfo.put("startX", temp.getDouble("startX"));
-                        intInfo.put("startY", temp.getDouble("startY"));
-                        intInfo.put("endX", temp.getDouble("endX"));
-                        intInfo.put("endY", temp.getDouble("endY"));
-                        intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
-                        intInfo.put("startID", temp.getInt("startID"));
-                        intInfo.put("endID", temp.getInt("endID"));
-                        Log.d("검사횟수", String.valueOf(subPath.length()));
-                    } else if(tempTrafficType==2){
-                        intInfo.put("trafficType", tempTrafficType);
-                        intInfo.put("startX", temp.getDouble("startX"));
-                        intInfo.put("startY", temp.getDouble("startY"));
-                        intInfo.put("endX", temp.getDouble("endX"));
-                        intInfo.put("endY", temp.getDouble("endY"));
-                        intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
-                        int startStnID = temp.getInt("startID");
-                        int endStnID = temp.getInt("endID");
-                        final ODsayService odsays = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
-                        // 서버 연결 제한 시간(단위(초), default : 5초)
-                        odsays.setReadTimeout(5000);
-                        // 데이터 획득 제한 시간(단위(초), default : 5초)
-                        odsays.setConnectionTimeout(5000);
-                        // 콜백 함수 구현
-                        int startID;
-                        int endID;
-                        odsays.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), onResultCallbackListenerBus);
-                        //intInfo.put("startID", temp.getInt("startID"));
-                        //intInfo.put("endID", temp.getInt("endID"));
-                        JSONArray station = result1.getJSONArray("station");
-                        for(int i=0;i<station.length();i++){
-                            if(station.getJSONObject(i).getInt("stationID")==startStnID){
-                                startID = station.getJSONObject(i).getInt("idx");
-                            }
-                        }
-                    }
-                    Log.d("traffic type ", String.valueOf(tempTrafficType));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
         }
         // 에러 표출시 데이터
         @Override
         public void onError(int i, String errorMessage, API api) {
             Log.i("경로검색 실패",errorMessage);
-        }
-    };
-
-// 200622 이준민 테스트중
-    private OnResultCallbackListener onResultCallbackListenerBus = new OnResultCallbackListener() {
-        // 호출 성공시 데이터 들어옴
-        @Override
-        public void onSuccess(ODsayData oDsayData, API api) {
-            result1 = oDsayData.getJson();
-            Log.d("traffic type ", String.valueOf(1));
-        }
-        // 에러 표출시 데이터
-        @Override
-        public void onError(int i, String errorMessage, API api) {
         }
     };
 
@@ -170,20 +110,66 @@ public class select_path extends AppCompatActivity {
         final EditText editText2 = (EditText) findViewById(R.id.editText2);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
+        odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
-        final ODsayService odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
-        // 서버 연결 제한 시간(단위(초), default : 5초)
         odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
         // 콜백 함수 구현
+
         Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
         completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
+                try {
+                    subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                    Log.d("검사횟수", String.valueOf(subPath.length()));
+                    for(int k=0;k<subPath.length();k++){
+                        JSONObject temp = subPath.getJSONObject(k);
+                        JSONObject intInfo = new JSONObject();
+                        int tempTrafficType = temp.getInt(("trafficType"));
+                        if(tempTrafficType==1) {
+                            intInfo.put("trafficType", tempTrafficType);
+                            intInfo.put("startX", temp.getDouble("startX"));
+                            intInfo.put("startY", temp.getDouble("startY"));
+                            intInfo.put("endX", temp.getDouble("endX"));
+                            intInfo.put("endY", temp.getDouble("endY"));
+                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
+                            intInfo.put("startID", temp.getInt("startID"));
+                            intInfo.put("endID", temp.getInt("endID"));
+                            Log.d("검사횟수", String.valueOf(subPath.length()));
+                        } else if(tempTrafficType==2){
+                            intInfo.put("trafficType", tempTrafficType);
+                            intInfo.put("startX", temp.getDouble("startX"));
+                            intInfo.put("startY", temp.getDouble("startY"));
+                            intInfo.put("endX", temp.getDouble("endX"));
+                            intInfo.put("endY", temp.getDouble("endY"));
+                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
+                            int startStnID = temp.getInt("startID");
+                            int endStnID = temp.getInt("endID");
+//
+                            int startID=0;
+                            int endID=0;
+                            odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
+                            JSONArray station = result.getJSONArray("station");
+                            for(int i=0;i<station.length();i++){
+                                if(station.getJSONObject(i).getInt("stationID")==startStnID){
+                                    startID = station.getJSONObject(i).getInt("idx");
+                                }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
+                                    startID = station.getJSONObject(i).getInt("idx");
+                                }
 
+                            }
+                            intInfo.put("startID", startID);
+                            intInfo.put("endID", endID);
+                        }
+                        Log.d("traffic type ", String.valueOf(tempTrafficType));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
                 tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
