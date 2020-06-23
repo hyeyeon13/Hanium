@@ -81,6 +81,8 @@ public class select_path extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
+
+    //Thread thread1, thread2, thread3, thread4, thread5;
     Button button;
     // 콜백 함수 구현
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
@@ -107,6 +109,8 @@ public class select_path extends AppCompatActivity {
                             intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
                             intInfo.put("startID", temp.getInt("startID"));
                             intInfo.put("endID", temp.getInt("endID"));
+                            intervalPath.put(intInfo);
+                            intInfo = null;
                             Log.d("검사횟수", String.valueOf(subPath.length()));
                         } else if(tempTrafficType==2){
                             intInfo.put("trafficType", tempTrafficType);
@@ -117,7 +121,10 @@ public class select_path extends AppCompatActivity {
                             intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
                             startStnID = temp.getInt("startID");
                             endStnID = temp.getInt("endID");
-                            odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
+                            requestBusLaneDetail(temp);
+
+                            intervalPath.put(intInfo);
+                            intInfo = null;
                         }
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
@@ -179,7 +186,7 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
-                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
+                requestPubTransPath();
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
                 tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
@@ -301,6 +308,13 @@ public class select_path extends AppCompatActivity {
                 }
             }
         }
+    }
+    synchronized void  requestPubTransPath(){
+        odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
+    }
+
+    synchronized void requestBusLaneDetail(JSONObject temp) throws JSONException {
+        odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
     }
 
     void checkRunTimePermission() {
