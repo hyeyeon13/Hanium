@@ -73,9 +73,10 @@ public class select_path extends AppCompatActivity {
     NodeList nodeListPlacemarkItem;
     NodeList nodeListPointItem;
     JSONObject pathInfo = new JSONObject();
+    JSONObject intInfo;
     JSONArray intervalPath = new JSONArray();
     ODsayService odsayService = null;
-    boolean flag = false;
+    int startStnID, endStnID;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -86,9 +87,66 @@ public class select_path extends AppCompatActivity {
         // 호출 성공시 데이터 들어옴
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
-            Log.d("API 호출 성공", "1");
-            result = oDsayData.getJson();
-            flag=true;
+            if(api == API.SEARCH_PUB_TRANS_PATH){
+                Log.d("API 호출 성공", String.valueOf(api));
+                result = oDsayData.getJson();
+                try {
+                    subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                    //Log.d("검사횟수", String.valueOf(subPath.length()));
+                    for(int k=0;k<subPath.length();k++){
+                        JSONObject temp = subPath.getJSONObject(k);
+                        intInfo = null;
+                        intInfo = new JSONObject();
+                        int tempTrafficType = temp.getInt(("trafficType"));
+                        if(tempTrafficType==1) {
+                            intInfo.put("trafficType", tempTrafficType);
+                            intInfo.put("startX", temp.getDouble("startX"));
+                            intInfo.put("startY", temp.getDouble("startY"));
+                            intInfo.put("endX", temp.getDouble("endX"));
+                            intInfo.put("endY", temp.getDouble("endY"));
+                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
+                            intInfo.put("startID", temp.getInt("startID"));
+                            intInfo.put("endID", temp.getInt("endID"));
+                            Log.d("검사횟수", String.valueOf(subPath.length()));
+                        } else if(tempTrafficType==2){
+                            intInfo.put("trafficType", tempTrafficType);
+                            intInfo.put("startX", temp.getDouble("startX"));
+                            intInfo.put("startY", temp.getDouble("startY"));
+                            intInfo.put("endX", temp.getDouble("endX"));
+                            intInfo.put("endY", temp.getDouble("endY"));
+                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
+                            startStnID = temp.getInt("startID");
+                            endStnID = temp.getInt("endID");
+                            odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
+                        }
+                        Log.d("traffic type ", String.valueOf(tempTrafficType));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if(api==API.BUS_LANE_DETAIL){
+                Log.d("API 호출 성공", String.valueOf(api));
+                result = null;
+                result = oDsayData.getJson();
+                JSONArray station = null;
+                int startID=0;
+                int endID=0;
+                try {
+                    station = result.getJSONObject("result").getJSONArray("station");
+                    Log.d("station 정보 받아옴", String.valueOf(station.length()));
+                    for(int i=0;i<station.length();i++){
+                        if(station.getJSONObject(i).getInt("stationID")==startStnID){
+                            startID = station.getJSONObject(i).getInt("idx");
+                        }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
+                            endID = station.getJSONObject(i).getInt("idx");
+                        }
+                    }
+                    intInfo.put("startID", startID);
+                    intInfo.put("endID", endID);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         // 에러 표출시 데이터
         @Override
@@ -97,6 +155,7 @@ public class select_path extends AppCompatActivity {
             Log.i("경로검색 실패",errorMessage);
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,58 +180,6 @@ public class select_path extends AppCompatActivity {
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
-//                onPause();
-//                while(true){
-//                    if(flag==true){
-//                        onResume();
-//                        break;
-//                    }
-//                }
-//                try {
-//                    subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
-//                    //Log.d("검사횟수", String.valueOf(subPath.length()));
-//                    for(int k=0;k<subPath.length();k++){
-//                        JSONObject temp = subPath.getJSONObject(k);
-//                        JSONObject intInfo = new JSONObject();
-//                        int tempTrafficType = temp.getInt(("trafficType"));
-//                        if(tempTrafficType==1) {
-//                            intInfo.put("trafficType", tempTrafficType);
-//                            intInfo.put("startX", temp.getDouble("startX"));
-//                            intInfo.put("startY", temp.getDouble("startY"));
-//                            intInfo.put("endX", temp.getDouble("endX"));
-//                            intInfo.put("endY", temp.getDouble("endY"));
-//                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
-//                            intInfo.put("startID", temp.getInt("startID"));
-//                            intInfo.put("endID", temp.getInt("endID"));
-//                            Log.d("검사횟수", String.valueOf(subPath.length()));
-//                        } else if(tempTrafficType==2){
-//                            intInfo.put("trafficType", tempTrafficType);
-//                            intInfo.put("startX", temp.getDouble("startX"));
-//                            intInfo.put("startY", temp.getDouble("startY"));
-//                            intInfo.put("endX", temp.getDouble("endX"));
-//                            intInfo.put("endY", temp.getDouble("endY"));
-//                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
-//                            int startStnID = temp.getInt("startID");
-//                            int endStnID = temp.getInt("endID");
-//                            int startID=0;
-//                            int endID=0;
-//                            odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
-//                            JSONArray station = result.getJSONArray("station");
-//                            for(int i=0;i<station.length();i++){
-//                                if(station.getJSONObject(i).getInt("stationID")==startStnID){
-//                                    startID = station.getJSONObject(i).getInt("idx");
-//                                }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
-//                                    startID = station.getJSONObject(i).getInt("idx");
-//                                }
-//                            }
-//                            intInfo.put("startID", startID);
-//                            intInfo.put("endID", endID);
-//                        }
-//                        Log.d("traffic type ", String.valueOf(tempTrafficType));
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
                 tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
@@ -198,6 +205,7 @@ public class select_path extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
             }
 
         });
