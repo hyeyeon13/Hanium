@@ -81,8 +81,6 @@ public class select_path extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
-
-    //Thread thread1, thread2, thread3, thread4, thread5;
     Button button;
     // 콜백 함수 구현
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
@@ -107,30 +105,26 @@ public class select_path extends AppCompatActivity {
                         if(tempTrafficType==1) {
                             //지하철
                             intInfo.put("trafficType", tempTrafficType);
-                            intInfo.put("startX", temp.getDouble("startX"));
-                            intInfo.put("startY", temp.getDouble("startY"));
-                            intInfo.put("endX", temp.getDouble("endX"));
-                            intInfo.put("endY", temp.getDouble("endY"));
-                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));
-                            intInfo.put("startID", temp.getInt("startID"));
-                            intInfo.put("endID", temp.getInt("endID"));
-                            intervalPath.put(intInfo);
-                            intInfo = null;
+                            intInfo.put("startX", temp.getDouble("startX"));//시작점 경도(출발역)
+                            intInfo.put("startY", temp.getDouble("startY"));//시작점 위도(출발역)
+                            intInfo.put("endX", temp.getDouble("endX"));//도착점 경도(도착역)
+                            intInfo.put("endY", temp.getDouble("endY"));//도착점 위도(도착역)
+                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));//노선번호
+                            intInfo.put("startID", temp.getInt("startID"));//출발역 ID
+                            intInfo.put("endID", temp.getInt("endID"));//도착역 ID
                             Log.d("검사횟수", String.valueOf(subPath.length()));
                         } else if(tempTrafficType==2){
                             //버스
                             intInfo.put("trafficType", tempTrafficType);
-                            intInfo.put("startX", temp.getDouble("startX"));
-                            intInfo.put("startY", temp.getDouble("startY"));
-                            intInfo.put("endX", temp.getDouble("endX"));
-                            intInfo.put("endY", temp.getDouble("endY"));
-                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));
-                            startStnID = temp.getInt("startID");
-                            endStnID = temp.getInt("endID");
-                            requestBusLaneDetail(temp);
-
-                            intervalPath.put(intInfo);
-                            intInfo = null;
+                            intInfo.put("startX", temp.getDouble("startX"));//출발정류장 경도
+                            intInfo.put("startY", temp.getDouble("startY"));//출발정류장 위도
+                            intInfo.put("endX", temp.getDouble("endX"));//도착정류장 경도
+                            intInfo.put("endY", temp.getDouble("endY"));//도착정류장 위도
+                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
+                            startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
+                            endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
+                            odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
+                            //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
                         }
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
@@ -198,7 +192,6 @@ public class select_path extends AppCompatActivity {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
                 //출발지부터 목적지까지의 대중교통 경로 요청
-                requestPubTransPath();
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
                 //바로아래라인은 출발지부터 목적지까지의 도보경로를 리턴. trafficeType==3일 때 아래 api 사용하여 경로 좌표 쌍 받아낼 예정
@@ -322,13 +315,6 @@ public class select_path extends AppCompatActivity {
                 }
             }
         }
-    }
-    synchronized void  requestPubTransPath(){
-        odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
-    }
-
-    synchronized void requestBusLaneDetail(JSONObject temp) throws JSONException {
-        odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
     }
 
     void checkRunTimePermission() {
