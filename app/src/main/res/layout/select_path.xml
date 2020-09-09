@@ -41,8 +41,7 @@
             android:id="@+id/currentLocation"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:text="현재 위치"
-            />
+            android:text="현재 위치" />
 
         <Button
             android:id="@+id/button3"

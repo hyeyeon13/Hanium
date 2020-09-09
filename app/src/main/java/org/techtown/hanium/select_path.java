@@ -196,7 +196,8 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
-                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
+                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
+                        "0", "0", "0", OnResultCallbackListener);
                 //출발지부터 목적지까지의 대중교통 경로 요청
                 requestPubTransPath();
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
