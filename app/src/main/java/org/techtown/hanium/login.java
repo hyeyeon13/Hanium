@@ -48,9 +48,9 @@ public class login extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        idInput = (EditText) findViewById(R.id.idInput);
-        pwInput = (EditText) findViewById(R.id.pwInput);
-        loginok = (Button) findViewById(R.id.loginok);
+        idInput = (EditText) findViewById(R.id.email);
+        pwInput = (EditText) findViewById(R.id.passwd);
+        loginok = (Button) findViewById(R.id.join);
 
         loginok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +59,14 @@ public class login extends AppCompatActivity{
                 pw_input_value = pwInput.getText().toString();
 
                 if (id_input_value.length() > 0 || pw_input_value.length() > 0) login_action();
+            }
+        });
+        Button signUp = (Button)findViewById(R.id.btn_signup);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),Signup.class);
+                startActivity(intent);
             }
         });
     }
@@ -226,5 +234,6 @@ public class login extends AppCompatActivity{
         public String server_network_check (String host){
             return "1";
         }
+
 }
 
