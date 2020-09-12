@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,9 +47,9 @@ public class login extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        idInput = (EditText) findViewById(R.id.email);
-        pwInput = (EditText) findViewById(R.id.passwd);
-        loginok = (Button) findViewById(R.id.join);
+        idInput = (EditText) findViewById(R.id.idInput);
+        pwInput = (EditText) findViewById(R.id.pwInput);
+        loginok = (Button) findViewById(R.id.loginok);
 
         loginok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +64,7 @@ public class login extends AppCompatActivity{
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Signup.class);
+                Intent intent=new Intent(getApplicationContext(),signup.class);
                 startActivity(intent);
             }
         });
@@ -132,14 +131,6 @@ public class login extends AppCompatActivity{
             alert_ex.setNegativeButton("확인", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (str.indexOf("UPDATE") > 0) {
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.scsolution.leakmaster")));
-                        } catch (android.content.ActivityNotFoundException anfe) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.scsolution.leakmaster")));
-                        }
-                        finish();
-                    }
                 }
             });
             alert_ex.setCancelable(false);
@@ -234,6 +225,5 @@ public class login extends AppCompatActivity{
         public String server_network_check (String host){
             return "1";
         }
-
 }
 

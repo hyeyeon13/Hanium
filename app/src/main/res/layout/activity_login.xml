@@ -36,12 +36,12 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="80dp"
             android:fontFamily="@font/font3"
-            android:text="이메일"
+            android:text="아이디"
             android:textColor="#ff000000"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/idInput"
             android:layout_width="216dp"
             android:layout_height="43dp"
             android:layout_alignParentEnd="true"
@@ -76,7 +76,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/passwd"
+            android:id="@+id/pwInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -100,7 +100,7 @@
         android:layout_marginBottom="30sp">
 
         <Button
-            android:id="@+id/join"
+            android:id="@+id/loginok"
             android:layout_width="300sp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="false"
