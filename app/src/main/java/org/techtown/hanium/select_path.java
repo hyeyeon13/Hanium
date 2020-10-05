@@ -53,6 +53,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Thread.sleep;
+
 
 public class select_path extends AppCompatActivity {
     String stationName;
@@ -60,6 +62,7 @@ public class select_path extends AppCompatActivity {
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     Double destLongitude, destLatitude;
+    boolean flag1 = false;
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
@@ -99,6 +102,7 @@ public class select_path extends AppCompatActivity {
                 //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
                 try {
                     subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                    flag1=true;
                     //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
                     //result에서 데이터 받아와 파싱 후 subPath에 저장
                     //Log.d("검사횟수", String.valueOf(subPath.length()));
@@ -202,7 +206,7 @@ public class select_path extends AppCompatActivity {
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService.setReadTimeout(5000);
-        // 데이터 획득 제한 시간(단위(초fgh), default : 5초)
+        // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
         // 서버 연결 제한 시간(단위(초), default : 5초)
 
@@ -214,9 +218,14 @@ public class select_path extends AppCompatActivity {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
-                Log.d("callback 실행 끝", String.valueOf(pathData));
+                while(true){
+                    if(flag1==true) {
+                        break;
+                    } else Log.d("API 호출 중", String.valueOf(result));
+                }
+                Log.d("callback 호출 끝", String.valueOf(result));
                 //출발지부터 목적지까지의 대중교통 경로 요청
-                requestPubTransPath();
+                //requestPubTransPath();
                 TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
                 TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
                 //바로아래라인은 출발지부터 목적지까지의 도보경로를 리턴. trafficeType==3일 때 아래 api 사용하여 경로 좌표 쌍 받아낼 예정
