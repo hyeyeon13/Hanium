@@ -61,13 +61,13 @@ public class login extends AppCompatActivity{
             }
         });
         Button signUp = (Button)findViewById(R.id.btn_signup);
-//        signUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(getApplicationContext(),signup.class);
-//                startActivity(intent);
-//            }
-//        });
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),Signup.class);
+                startActivity(intent);
+            }
+        });
     }
 
         private class phpdo extends AsyncTask<String, Void, String> {

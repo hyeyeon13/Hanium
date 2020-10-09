@@ -218,11 +218,11 @@ public class select_path extends AppCompatActivity {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
-                while(true){
-                    if(flag1==true) {
-                        break;
-                    } else Log.d("API 호출 중", String.valueOf(result));
-                }
+//               while(true){
+//                    if(flag1==true) {
+//                        break;
+//                    } else Log.d("API 호출 중", String.valueOf(result));
+//                }
                 Log.d("callback 호출 끝", String.valueOf(result));
                 //출발지부터 목적지까지의 대중교통 경로 요청
                 //requestPubTransPath();
