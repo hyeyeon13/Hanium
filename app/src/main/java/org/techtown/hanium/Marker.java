@@ -112,29 +112,22 @@ public class Marker extends AppCompatActivity {
             locationB.setLongitude(tempLong);
 
             distance = Double.valueOf(locationA.distanceTo(locationB));
-            Log.d(i+"번째 distance 거리",String.valueOf(distance)+"m");
+//            Log.d(i+"번째 distance 거리",String.valueOf(distance)+"m");
             dist = new String[pathData.size()];
             dist[i] = String.valueOf(distance);
-            Log.d(i+"번째 dist 거리",String.valueOf(dist[i])+"m");
-//            min=dist[0];
-//            Log.d("min거리",String.valueOf(min)+"m");
+//            Log.d(i+"번째 dist 거리",String.valueOf(dist[i])+"m");
+            if(i==0){
+                min=dist[0];
+            }
+            if(Double.valueOf(min)>Double.valueOf(dist[i])) {
+                min=dist[i];
+            }
         }
-        for(int i=0; i<pathData.size(); i++){
-            Log.d("dist 거리",String.valueOf(dist[i])+"m");
-        }
-//        for(int i=0; i<dist.length; i++){
-//            if(min>dist[i]){
-//                min=dist[i];
-//        }
-
-//        Log.d("내위치 사이 거리: ",min+"m");
+        Log.d("내위치 사이 거리: ",min+"m");
         tmapview.addTMapPolyLine("path", tpolyline);
+
 
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
     }
-
-
-
-
 }
