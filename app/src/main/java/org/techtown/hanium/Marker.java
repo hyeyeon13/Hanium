@@ -1,5 +1,6 @@
 package org.techtown.hanium;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -29,6 +30,7 @@ public class Marker extends AppCompatActivity {
     Double myLongitude, myLatitude;
     Double destLongitude, destLatitude;
     String min;
+    Double num_min;
     Double distance;
     String[] dist;
     String stationName;
@@ -88,6 +90,7 @@ public class Marker extends AppCompatActivity {
         TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
         TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
         tmapview.zoomToTMapPoint(leftTop,rightBottom);
+
         TMapPolyLine tpolyline = new TMapPolyLine();
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
@@ -126,8 +129,21 @@ public class Marker extends AppCompatActivity {
         Log.d("내위치 사이 거리: ",min+"m");
         tmapview.addTMapPolyLine("path", tpolyline);
 
+        num_min= Double.valueOf(min);
 
+        if(num_min>50)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            Log.d("경로이탈감지: ",min+"m");
+            builder.setTitle("경로이탈감지!").setMessage("경로를 벗어났습니다");
+
+            AlertDialog alertDialog = builder.create();
+
+            alertDialog.show();
+        }
         relativeLayout.addView(tmapview);
+
         setContentView(relativeLayout);
     }
 }
