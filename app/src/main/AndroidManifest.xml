@@ -26,6 +26,7 @@
         <activity android:name=".Marker" />
         <activity android:name=".MainActivity"/>
         <activity android:name=".Signup" />
+        <activity android:name=".Map"></activity>
         <activity android:name=".login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

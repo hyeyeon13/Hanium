@@ -203,11 +203,12 @@ public class select_path extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
+        final TMapView tmapview = new TMapView(this);
 
         EditText editText = (EditText) findViewById(R.id.editstart);
       //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
-        RelativeLayout relativeLayout = new RelativeLayout(this);
+        final RelativeLayout relativeLayout = new RelativeLayout(this);
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService.setReadTimeout(5000);
@@ -312,17 +313,21 @@ public class select_path extends AppCompatActivity {
                 }
             }
         });
-//        Button btnDestMap = (Button) findViewById(R.id.btnSearchDest);
-//        button1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
-//                Intent intent = new Intent(getApplicationContext(), Marker.class);
-//                intent.putExtra("destLongitude", destLongitude);
-//                intent.putExtra("destLatitude", destLatitude);
-//                startActivity(intent);
-//            }
-//        });
+        Button btnDestMap = (Button) findViewById(R.id.btndestmap);
+        btnDestMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Map.class);
+            }
+        });
+        Button btnSearchMap = (Button) findViewById(R.id.btnstartmap);
+        btnSearchMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Map.class);
+                startActivity(intent);
+            }
+        });
         Button button=(Button)findViewById(R.id.timeselect);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
