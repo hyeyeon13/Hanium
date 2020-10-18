@@ -36,11 +36,11 @@ public class People extends AppCompatActivity {
     public String ret_return_val;
     public String login_id;
 
-    public String NotConnMsg = "³×Æ®¿öÅ© Á¢¼ÓÀÌ ¿øÈ°ÇÏÁö ¾Ê½À´Ï´Ù. È®ÀÎ ÈÄ ´Ù½Ã ½Ãµµ ÇØÁÖ½Ê½Ã¿ä";
-    public String NotEmptyMsg = "Á¤º¸¸¦ ÀüºÎ ÀÔ·ÂÇÏ½Å ÈÄ ´Ù½Ã ½Ãµµ ÇØÁÖ½Ê½Ã¿ä";
-    public String NotServerMsg = "¼­¹ö Á¢¼ÓÀÌ ¿øÈ°ÇÏÁö ¾Ê½À´Ï´Ù. È®ÀÎ ÈÄ ´Ù½Ã ½Ãµµ ÇØÁÖ½Ê½Ã¿ä";
-    public String OverlapId = "ÀÌ¹Ì µî·ÏµÈ ¾ÆÀÌµğÀÔ´Ï´Ù.";
-    public String NotRegister = "¾ÆÀÌµğ µî·Ï¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.";
+    public String NotConnMsg = "ë„¤íŠ¸ì›Œí¬ ì ‘ì†ì´ ì›í™œí•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. í™•ì¸ í›„ ë‹¤ì‹œ ì‹œë„ í•´ì£¼ì‹­ì‹œìš”";
+    public String NotEmptyMsg = "ì •ë³´ë¥¼ ì „ë¶€ ì…ë ¥í•˜ì‹  í›„ ë‹¤ì‹œ ì‹œë„ í•´ì£¼ì‹­ì‹œìš”";
+    public String NotServerMsg = "ì„œë²„ ì ‘ì†ì´ ì›í™œí•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. í™•ì¸ í›„ ë‹¤ì‹œ ì‹œë„ í•´ì£¼ì‹­ì‹œìš”";
+    public String OverlapId = "ì´ë¯¸ ë“±ë¡ëœ ì•„ì´ë””ì…ë‹ˆë‹¤.";
+    public String NotRegister = "ì•„ì´ë”” ë“±ë¡ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.";
 
     public int isConnected;
 
@@ -92,8 +92,8 @@ public class People extends AppCompatActivity {
                 urlConn = (HttpURLConnection) url.openConnection();
                 urlConn.setConnectTimeout(1000);
 
-                urlConn.setRequestMethod("POST"); // URL ¿äÃ»¿¡ ´ëÇÑ ¸Ş¼Òµå ¼³Á¤ : POST.
-                urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset ¼³Á¤.
+                urlConn.setRequestMethod("POST"); // URL ìš”ì²­ì— ëŒ€í•œ ë©”ì†Œë“œ ì„¤ì • : POST.
+                urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset ì„¤ì •.
                 urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
 
                 if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
@@ -115,11 +115,11 @@ public class People extends AppCompatActivity {
                 if (urlConn != null) urlConn.disconnect();
                 //  if(Integer.parseInt(sb.toString());
                 if (sb.toString().equals("2"))
-                    Log.i("check", "ÀÌ¹Ì µî·ÏµÈ º¸È£ÀÚ Á¤º¸ÀÔ´Ï´Ù.");
+                    Log.i("check", "ì´ë¯¸ ë“±ë¡ëœ ë³´í˜¸ì ì •ë³´ì…ë‹ˆë‹¤.");
                 if (sb.toString().equals("1"))
-                    Log.i("check", "º¸È£ÀÚ°¡ µî·ÏµÇ¾ú½À´Ï´Ù.");
+                    Log.i("check", "ë³´í˜¸ìê°€ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
                 if (sb.toString().equals("0"))
-                    Log.i("check", "º¸È£ÀÚµî·Ï¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù. ´Ù½ÃÇÑ¹ø ½Ãµµ ÇØÁÖ½Ê½Ã¿ä.");
+                    Log.i("check", "ë³´í˜¸ìë“±ë¡ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¤ì‹œí•œë²ˆ ì‹œë„ í•´ì£¼ì‹­ì‹œìš”.");
                 Log.i("HTTP", "GET STRING:" + sb.toString());
                 return sb.toString();
 
@@ -135,11 +135,11 @@ public class People extends AppCompatActivity {
     }
 
 
-    //°¢Á¾ È®ÀÎ ¸Ş¼¼Áö
+    //ê°ì¢… í™•ì¸ ë©”ì„¸ì§€
     public void Alert_message(final String str) {
         AlertDialog.Builder alert_ex = new AlertDialog.Builder(People.this);
         alert_ex.setMessage(str);
-        alert_ex.setNegativeButton("È®ÀÎ", new DialogInterface.OnClickListener() {
+        alert_ex.setNegativeButton("í™•ì¸", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
@@ -168,18 +168,18 @@ public class People extends AppCompatActivity {
     }
 
     private void register_action() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); //Å°º¸µåÃ¢ ¸Å´ÏÀú. ¿Ã¸®°í ³»¸®°í ¼³Á¤ °¡´É.
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); //í‚¤ë³´ë“œì°½ ë§¤ë‹ˆì €. ì˜¬ë¦¬ê³  ë‚´ë¦¬ê³  ì„¤ì • ê°€ëŠ¥.
 
 
-        //³×Æ®¿öÅ© ´ÙÀÌ¾ó·Î±× Ã¢
+        //ë„¤íŠ¸ì›Œí¬ ë‹¤ì´ì–¼ë¡œê·¸ ì°½
         Context context = getApplicationContext();
         isConnected = Connection_Check(context);
 
-        //¹öÀü Ã¼Å©ÇØ¼­ ÀÚµ¿À¸·Î °ª ÀÔ·ÂÇØÁÜ.
+        //ë²„ì „ ì²´í¬í•´ì„œ ìë™ìœ¼ë¡œ ê°’ ì…ë ¥í•´ì¤Œ.
         if (isConnected != 0) {
             //           if(version_check() ==-1) return;
         } else {
-            Toast.makeText(getApplicationContext(), "³×Æ®¿öÅ©°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "ë„¤íŠ¸ì›Œí¬ê°€ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -197,10 +197,10 @@ public class People extends AppCompatActivity {
             Alert_message(NotEmptyMsg);
             return;
         } else {
-            task = new People.phpdo(); //·Î±×ÀÎ Á¤º¸¸¦ ´ëÁ¶ÇÒ php °´Ã¼ »ı¼º
+            task = new People.phpdo(); //ë¡œê·¸ì¸ ì •ë³´ë¥¼ ëŒ€ì¡°í•  php ê°ì²´ ìƒì„±
 
             try {
-                ret_return_val = task.execute(name_input_value, phone_input_value).get(); // id, pw°ª ´ëÁ¶ ÈÄ ¸®ÅÏ°ª º¸³¿. 2ÀÏ¶§ Á¢±Ù Çã°¡
+                ret_return_val = task.execute(name_input_value, phone_input_value).get(); // id, pwê°’ ëŒ€ì¡° í›„ ë¦¬í„´ê°’ ë³´ëƒ„. 2ì¼ë•Œ ì ‘ê·¼ í—ˆê°€
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -229,7 +229,7 @@ public class People extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 //            intent.putExtra("signup_id", signup_id);
-            Toast.makeText(getApplicationContext(), people_name + " ´ÔÀÌ º¸È£ÀÚ·Î µî·ÏµÇ¾ú½À´Ï´Ù", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), people_name + " ë‹˜ì´ ë³´í˜¸ìë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤", Toast.LENGTH_SHORT).show();
             startActivity(intent);
 //                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             finish();
