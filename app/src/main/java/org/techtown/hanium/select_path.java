@@ -24,10 +24,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.odsay.odsayandroidsdk.API;
@@ -58,10 +60,12 @@ import static java.lang.Thread.sleep;
 
 public class select_path extends AppCompatActivity {
     String stationName;
-    Double longitude, latitude;
+    Double longitude, latitude, altitude;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
-    Double destLongitude, destLatitude;
+    Double destLongitude, destLatitude, destaltitude;
+    TextView tv;
+    ToggleButton tb;
     boolean flag1 = false;
     private GpsTracker gpsTracker;
     Geocoder coder;
@@ -84,6 +88,7 @@ public class select_path extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
+
     //Thread thread1, thread2, thread3, thread4, thread5;
     Button button;
     // 콜백 함수 구현
@@ -198,6 +203,7 @@ public class select_path extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
+
         EditText editText = (EditText) findViewById(R.id.editstart);
       //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
