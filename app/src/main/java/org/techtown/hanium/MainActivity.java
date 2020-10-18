@@ -3,6 +3,7 @@ package org.techtown.hanium;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -15,10 +16,16 @@ import android.widget.TextView;
 import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
     public String login_id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView1.setClickable(false);
         textView1.setFocusable(false);
-        TextView textView2 = findViewById(R.id.textView6);
+        TextView textView2 = findViewById(R.id.editText6);
         textView2.setClickable(false);
         textView2.setFocusable(false);
         TextView textView3 = findViewById(R.id.editText5);
