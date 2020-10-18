@@ -63,7 +63,6 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="#ff000000"
             android:ems="10"
-            android:inputType="textPersonName"
             android:textColorHint="#90000000"
             android:textSize="25sp" />
 
@@ -97,8 +96,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20sp"
             android:backgroundTint="#ff000000"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:ems="10" />
 
         <Button
             android:id="@+id/btnFavorite2"
@@ -128,8 +126,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20sp"
             android:backgroundTint="#ff000000"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:ems="10" />
 
         <Button
             android:id="@+id/btnFavorite3"
@@ -212,7 +209,43 @@
             android:textSize="20sp" />
 
     </RelativeLayout>
-    
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/font3"
+            android:text="▶보호자 목록"
+            android:textColor="#ff000000"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/editTextPerson2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextPerson1"
+            android:layout_marginLeft="30sp"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="#ff000000"
+            android:ems="10" />
+
+        <EditText
+            android:id="@+id/editTextPerson1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView12"
+            android:layout_marginLeft="30sp"
+            android:layout_marginTop="17dp"
+            android:backgroundTint="#ff000000"
+            android:ems="10" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

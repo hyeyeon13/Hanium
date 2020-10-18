@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,6 +49,22 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout relativeLayout = new RelativeLayout(this);
         TMapView tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
+
+        EditText editText4 = findViewById(R.id.editText4);
+        editText4.setClickable(false);
+        editText4.setFocusable(false);
+        EditText editText6 = findViewById(R.id.editText6);
+        editText6.setClickable(false);
+        editText6.setFocusable(false);
+        EditText editText5 = findViewById(R.id.editText5);
+        editText5.setClickable(false);
+        editText5.setFocusable(false);
+        EditText editTextPerson2 = findViewById(R.id.editTextPerson2);
+        editTextPerson2.setClickable(false);
+        editTextPerson2.setFocusable(false);
+        EditText editTextPerson1 = findViewById(R.id.editTextPerson1);
+        editTextPerson1.setClickable(false);
+        editTextPerson1.setFocusable(false);
       //  TMapTapi tMapTapi = new TMapTapi(this);
         //relativeLayout.addView(tmapview);
       //  setContentView(relativeLayout);
