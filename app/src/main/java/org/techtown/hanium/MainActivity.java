@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
         TMapView tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
 
-        EditText editText4 = findViewById(R.id.editText4);
-        editText4.setClickable(false);
-        editText4.setFocusable(false);
+        TextView textView = findViewById(R.id.textView4);
+        textView.setClickable(false);
+        textView.setFocusable(false);
         EditText editText6 = findViewById(R.id.editText6);
         editText6.setClickable(false);
         editText6.setFocusable(false);

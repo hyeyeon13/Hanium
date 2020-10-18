@@ -200,7 +200,6 @@ public class select_path extends AppCompatActivity {
         setContentView(R.layout.select_path);
         EditText editText = (EditText) findViewById(R.id.editstart);
       //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
-        final EditText editText2 = (EditText) findViewById(R.id.editText2);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
@@ -307,6 +306,17 @@ public class select_path extends AppCompatActivity {
                 }
             }
         });
+//        Button btnDestMap = (Button) findViewById(R.id.btnSearchDest);
+//        button1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
+//                Intent intent = new Intent(getApplicationContext(), Marker.class);
+//                intent.putExtra("destLongitude", destLongitude);
+//                intent.putExtra("destLatitude", destLatitude);
+//                startActivity(intent);
+//            }
+//        });
         Button button=(Button)findViewById(R.id.timeselect);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

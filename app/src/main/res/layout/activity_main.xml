@@ -55,27 +55,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="180sp"
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#ff000000"
-            android:ems="10"
-            android:textColorHint="#90000000"
-            android:textSize="25sp" />
+            android:layout_marginLeft="40sp"
+            android:layout_marginTop="20sp"
+            android:background="@drawable/line"
+
+            android:text="TextView" />
 
         <Button
             android:id="@+id/favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            android:layout_marginLeft="29dp"
+            android:layout_marginStart="54dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
-            android:layout_toEndOf="@+id/editText4"
-            android:layout_toRightOf="@+id/editText4"
+            android:layout_toEndOf="@+id/textView4"
+            android:layout_toRightOf="@+id/textView4"
             android:background="@drawable/border"
             android:fontFamily="@font/font3"
             android:text="수정/등록"

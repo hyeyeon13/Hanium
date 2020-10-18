@@ -44,11 +44,11 @@
             android:text="현재 위치" />
 
         <Button
-            android:id="@+id/btnSearchStart"
+            android:id="@+id/btnstartmap"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:text="검색"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="지도" />
     </LinearLayout>
 
     <LinearLayout
@@ -67,17 +67,18 @@
             android:textColor="#FF000000"/>
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:text="현재 위치" />
-
-        <Button
             android:id="@+id/btnSearchDest"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:text="검색"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="검색" />
+
+        <Button
+            android:id="@+id/btndestmap"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10sp"
+            android:text="지도" />
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
