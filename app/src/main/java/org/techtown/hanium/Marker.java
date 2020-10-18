@@ -35,6 +35,8 @@ public class Marker extends AppCompatActivity {
     Double distance;
     String[] dist;
     String stationName;
+    double latitude = 0;
+    double longitude = 0;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
 
@@ -151,33 +153,41 @@ public class Marker extends AppCompatActivity {
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                double latitude = 0;
-                double longitude = 0;
-
-                if (location != null) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                }
-
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+//                if (location != null) {
+//                    latitude = location.getLatitude();
+//                    longitude = location.getLongitude();
+//                }
                 TMapPoint  tp= new TMapPoint(latitude,longitude);
-
                 Log.d("테스트", tp.toString() );
 
 
+                Double desDist;
+                Location locationA = new Location("point a");
+                locationA.setLatitude(latitude);
+                locationA.setLongitude(longitude);
+                Location locationB = new Location("point b");
+                locationB.setLatitude(destLatitude);
+                locationB.setLongitude(destLongitude);
 
+                desDist = Double.valueOf(locationA.distanceTo(locationB));
+                if(desDist<=15){
+                    Log.d("목적지 도착",desDist.toString());
+                }
+                else{
+                    Log.d("목적지 미도착",desDist.toString());
+                }
             }
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
             }
             @Override
             public void onProviderEnabled(String provider) {
-
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
             }
         };
 
@@ -195,4 +205,5 @@ public class Marker extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
 
     }
+
 }
