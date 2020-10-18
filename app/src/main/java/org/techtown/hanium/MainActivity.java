@@ -16,10 +16,14 @@ import com.skt.Tmap.TMapView;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
+    public String login_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        login_id = intent.getExtras().getString("log_ok_id");
 
 
         Button button2 =findViewById(R.id.favorite);
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getApplicationContext(),People.class);
+                intent.putExtra("log_ok_id", login_id);
                 startActivity(intent);
             }
         });

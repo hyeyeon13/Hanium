@@ -19,7 +19,7 @@
             android:value="p2lpxwkj10" />
 
 
-        <activity android:name=".select_path"></activity>
+        <activity android:name=".select_path" />
         <activity android:name=".People" />
         <activity android:name=".Favorites" />
         <activity android:name=".Marker" />

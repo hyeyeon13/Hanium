@@ -39,7 +39,8 @@ public class Signup extends AppCompatActivity {
     public String NotConnMsg = "네트워크 접속이 원활하지 않습니다. 확인 후 다시 시도 해주십시요";
     public String NotEmptyMsg = "정보를 전부 입력하신 후 다시 시도 해주십시요";
     public String NotServerMsg = "서버 접속이 원활하지 않습니다. 확인 후 다시 시도 해주십시요";
-//    public String NotServerMsg = "이미 등록된 아이디입니다.";
+    public String OverlapId = "이미 등록된 아이디입니다.";
+    public String NotRegister = "아이디 등록에 실패하였습니다.";
 
     public int isConnected;
 
@@ -56,12 +57,13 @@ public class Signup extends AppCompatActivity {
         signupok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name_input_value = idInput.getText().toString();
+                name_input_value = nameInput.getText().toString();
                 id_input_value = idInput.getText().toString();
                 pw_input_value = pwInput.getText().toString();
 
-                if (name_input_value.length() > 0 || id_input_value.length() > 0 || pw_input_value.length() > 0)
-                    signup_action();
+//                if (name_input_value.length() > 0 || id_input_value.length() > 0 || pw_input_value.length() > 0)
+//                    signup_action();
+                signup_action();
             }
         });
     }
@@ -187,7 +189,7 @@ public class Signup extends AppCompatActivity {
         id_input_value = idInput.getText().toString();
         pw_input_value = pwInput.getText().toString();
 
-        if (name_input_value.length() < 1 || id_input_value.length() < 1 || pw_input_value.length() < 1) {
+        if (name_input_value.length() == 0 || id_input_value.length() == 0 || pw_input_value.length() == 0) {
             Alert_message(NotEmptyMsg);
             return;
         } else {
@@ -209,23 +211,24 @@ public class Signup extends AppCompatActivity {
                 return;
             }
             if (Integer.parseInt(ret_return_val) == 0) {
-                Alert_message(NotEmptyMsg);
+                Alert_message(NotRegister);
                 nameInput.setText("");
+                idInput.setText("");
+                pwInput.setText("");
                 return;
             }
-            if (Integer.parseInt(ret_return_val) == 1) {
-                Alert_message(NotEmptyMsg);
+            if (Integer.parseInt(ret_return_val) == 2) {
+                Alert_message(OverlapId);
                 idInput.setText("");
                 return;
             }
-
 
             signup_name = name_input_value;
             signup_id = id_input_value;
             signup_pw = pw_input_value;
 
             Intent intent = new Intent(getApplicationContext(), login.class);
-            intent.putExtra("signup_id", signup_id);
+//            intent.putExtra("signup_id", signup_id);
             Toast.makeText(getApplicationContext(), signup_name + " 님 가입되었습니다", Toast.LENGTH_SHORT).show();
             startActivity(intent);
 //                overridePendingTransition(R.anim.right_in, R.anim.left_out);
