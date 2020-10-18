@@ -40,8 +40,8 @@
         android:background="#AEACAC" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="410dp"
+        android:layout_height="670dp"
         android:id="@+id/map_view">
 
     </RelativeLayout>

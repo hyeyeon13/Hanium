@@ -1,5 +1,6 @@
 package org.techtown.hanium;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -36,6 +37,7 @@ public class Marker extends AppCompatActivity {
     String min;
     Double distance;
     String[] dist;
+    double num_min;
     String stationName;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
@@ -134,6 +136,19 @@ public class Marker extends AppCompatActivity {
         Log.d("내위치 사이 거리: ",min+"m");
         tmapview.addTMapPolyLine("path", tpolyline);
 
+        num_min= Double.valueOf(min);
+
+        if(num_min>50)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            Log.d("경로이탈감지: ",min+"m");
+            builder.setTitle("경로이탈감지!").setMessage("경로를 벗어났습니다");
+
+            AlertDialog alertDialog = builder.create();
+
+            alertDialog.show();
+        }
 
         relativeLayout.addView(tmapview);
         setContentView(relativeLayout);
