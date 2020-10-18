@@ -44,6 +44,7 @@ import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPoint;
 import org.json.JSONException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -93,142 +94,73 @@ public class select_path extends AppCompatActivity {
     Button button;
     // 콜백 함수 구현
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
-        //200924 ODSay API의 콜백함수
-        // 호출 성공시 데이터 들어옴
-        //requestPubTransPath와 requestBusLaneDetail이 같은 리스너(콜백)사용
-        @Override
-        public void onSuccess(ODsayData oDsayData, API api) {
-            //200924 API 호출 성공 시
-            //api 호출 성공 시 if문을 통해 api 확인하여 분기
-            if(api == API.SEARCH_PUB_TRANS_PATH){
-                //200924 호출한 메서드가 requestPubTransPathSearch 일 때
-                Log.d("API 호출 성공", String.valueOf(api));
-                result = oDsayData.getJson();
-                //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
-                try {
-                    subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
-                    flag1=true;
-                    //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
-                    //result에서 데이터 받아와 파싱 후 subPath에 저장
-                    //Log.d("검사횟수", String.valueOf(subPath.length()));
-                    for(int k=0;k<subPath.length();k++){
-                        //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
-                        //200924 예를들면 도보(1) - 버스(2) - 지하철(3) - 버스(4) - 도보(5) - 지하철(6) 이면
-                        //200924 subPath.length()의 값은 6이 된다
-                        JSONObject temp = subPath.getJSONObject(k);
-                        //200924 또 temp라는 JSONObject를 선언해서 subPath의 수 만큼 데이터를 받아오는듯?
-                        intInfo = null;
-                        intInfo = new JSONObject();
-                        int tempTrafficType = temp.getInt(("trafficType"));
-                        //trafficType 1:지하철 2:버스 3:도보
-                        if(tempTrafficType==1) {
-                            //200924 subPath가 여러개인데 구분하는 기준은 위에 있어 1은 지하철 2는 버스 3은 도보
-                            //200924 이경우는 type=1인 경우 (지하철)
-                            //지하철
-                            intInfo.put("trafficType", tempTrafficType);
-                            intInfo.put("startX", temp.getDouble("startX"));//시작점 경도(출발역)
-                            intInfo.put("startY", temp.getDouble("startY"));//시작점 위도(출발역)
-                            intInfo.put("endX", temp.getDouble("endX"));//도착점 경도(도착역)
-                            intInfo.put("endY", temp.getDouble("endY"));//도착점 위도(도착역)
-                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));//노선번호
-                            intInfo.put("startID", temp.getInt("startID"));//출발역 ID
-                            intInfo.put("endID", temp.getInt("endID"));//도착역 ID
-                            intervalPath.put(intInfo);
-                            //200924 위에 전역변수에 보면 intervelPath라는 JSONArray를 선언함. 나중에 교통수단별로 다시 ODSay에 넣어서 상세정보 받아야 하니까.
-                            intInfo = null;
-                            Log.d("검사횟수", String.valueOf(subPath.length()));
-                        } else if(tempTrafficType==2){
-                            //버스
-                            intInfo.put("trafficType", tempTrafficType);
-                            intInfo.put("startX", temp.getDouble("startX"));//출발정류장 경도
-                            intInfo.put("startY", temp.getDouble("startY"));//출발정류장 위도
-                            intInfo.put("endX", temp.getDouble("endX"));//도착정류장 경도
-                            intInfo.put("endY", temp.getDouble("endY"));//도착정류장 위도
-                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
-                            startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
-                            endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
-                            requestBusLaneDetail(temp);
-                            //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
-                            intervalPath.put(intInfo);
-                            intInfo = null;
-
-                        }
-                        Log.d("traffic type ", String.valueOf(tempTrafficType));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if(api==API.BUS_LANE_DETAIL){
-                //200924 여기가 문제인 부분임. 어제인가 이혜연이 지적했던 것처럼 95 라인에 if만 있었어 근데 내가 그냥 else if 만든거. 왜냐면
-                //200924 ODSay API를 여러번 호출해. 인스턴스는 78라인에 한번만 선언하는데 여러번 쓰는거지. 원래 이래도 되나싶다.
-                //200924 하여간 이부분은 추후에 수정해야함
-                //200924 이거는 결론적으로 141라인이 성공적으로 수행되면 콜백으로 들어가는 부분임.
-               Log.d("API 호출 성공", String.valueOf(api));
-                result = null;
-                result = oDsayData.getJson();
-                JSONArray station = null;
-                int startID=0;
-                int endID=0;
-                try {
-                    station = result.getJSONObject("result").getJSONArray("station");
-                    //해당 버스의 전체 경로
-                    Log.d("station 정보 받아옴", String.valueOf(station.length()));
-                    for(int i=0;i<station.length();i++){
-                        if(station.getJSONObject(i).getInt("stationID")==startStnID){
-                            //stationID가 startStnID와 같으면 idx 받아옴
-                            startID = station.getJSONObject(i).getInt("idx");
-                        }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
-                            //stationID가 endStnID와 같으면 idx 받아옴
-                            endID = station.getJSONObject(i).getInt("idx");
-                        }
-                    }
-                    intInfo.put("startID", startID);
-                    intInfo.put("endID", endID);
-                    //trafficType==2일 때 와 연동하여 같은 JSON에 값 입력
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        // 에러 표출시 데이터
-        @Override
-        public void onError(int i, String errorMessage, API api) {
-
-            Log.i("경로검색 실패",errorMessage);
-        }
-    };
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_path);
-        final TMapView tmapview = new TMapView(this);
-
-        EditText editText = (EditText) findViewById(R.id.editstart);
-      //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
-        final EditText dest = (EditText)findViewById(R.id.editTextDest);
-        final RelativeLayout relativeLayout = new RelativeLayout(this);
-        odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
-        // 싱글톤 생성, Key 값을 활용하여 객체 생성
-        odsayService.setReadTimeout(5000);
-        // 데이터 획득 제한 시간(단위(초), default : 5초)
-        odsayService.setConnectionTimeout(5000);
-        // 서버 연결 제한 시간(단위(초), default : 5초)
-
-
-        Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
-        completeSetPath.setOnClickListener(new View.OnClickListener() {
+            //200924 ODSay API의 콜백함수
+            // 호출 성공시 데이터 들어옴
+            //requestPubTransPath와 requestBusLaneDetail이 같은 리스너(콜백)사용
             @Override
-            public void onClick(View v) {
-                pathData.clear(); //pathData 초기화
-                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
-                        "0", "0", "0", OnResultCallbackListener);
-//               while(true){
-//                    if(flag1==true) {
-//                        break;
-//                    } else Log.d("API 호출 중", String.valueOf(result));
-//                }
+            public void onSuccess(ODsayData oDsayData, API api) {
+                //200924 API 호출 성공 시
+                //api 호출 성공 시 if문을 통해 api 확인하여 분기
+                if(api == API.SEARCH_PUB_TRANS_PATH){
+                    //200924 호출한 메서드가 requestPubTransPathSearch 일 때
+                    Log.d("API 호출 성공", String.valueOf(api));
+                    result = oDsayData.getJson();
+                    //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
+                    try {
+                        subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                        flag1=true;
+                        //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
+                        //result에서 데이터 받아와 파싱 후 subPath에 저장
+                        //Log.d("검사횟수", String.valueOf(subPath.length()));
+                        for(int k=0;k<subPath.length();k++){
+                            //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
+                            //200924 예를들면 도보(1) - 버스(2) - 지하철(3) - 버스(4) - 도보(5) - 지하철(6) 이면
+                            //200924 subPath.length()의 값은 6이 된다
+                            JSONObject temp = subPath.getJSONObject(k);
+                            //200924 또 temp라는 JSONObject를 선언해서 subPath의 수 만큼 데이터를 받아오는듯?
+                            intInfo = null;
+                            intInfo = new JSONObject();
+                            int tempTrafficType = temp.getInt(("trafficType"));
+                            //trafficType 1:지하철 2:버스 3:도보
+                            if(tempTrafficType==1) {
+                                //200924 subPath가 여러개인데 구분하는 기준은 위에 있어 1은 지하철 2는 버스 3은 도보
+                                //200924 이경우는 type=1인 경우 (지하철)
+                                //지하철
+                                intInfo.put("trafficType", tempTrafficType);
+                                intInfo.put("startX", temp.getDouble("startX"));//시작점 경도(출발역)
+                                intInfo.put("startY", temp.getDouble("startY"));//시작점 위도(출발역)
+                                intInfo.put("endX", temp.getDouble("endX"));//도착점 경도(도착역)
+                                intInfo.put("endY", temp.getDouble("endY"));//도착점 위도(도착역)
+                                intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode"));//노선번호
+                                intInfo.put("startID", temp.getInt("startID"));//출발역 ID
+                                intInfo.put("endID", temp.getInt("endID"));//도착역 ID
+                                intervalPath.put(intInfo);
+                                //200924 위에 전역변수에 보면 intervelPath라는 JSONArray를 선언함. 나중에 교통수단별로 다시 ODSay에 넣어서 상세정보 받아야 하니까.
+                                intInfo = null;
+                                Log.d("검사횟수", String.valueOf(subPath.length()));
+                            } else if(tempTrafficType==2){
+                                //버스
+                                intInfo.put("trafficType", tempTrafficType);
+                                intInfo.put("startX", temp.getDouble("startX"));//출발정류장 경도
+                                intInfo.put("startY", temp.getDouble("startY"));//출발정류장 위도
+                                intInfo.put("endX", temp.getDouble("endX"));//도착정류장 경도
+                                intInfo.put("endY", temp.getDouble("endY"));//도착정류장 위도
+                                intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
+                                startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
+                                endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
+                                requestBusLaneDetail(temp);
+                                //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
+                                intervalPath.put(intInfo);
+                                intInfo = null;
+
+                            }
+                            Log.d("traffic type ", String.valueOf(tempTrafficType));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Log.d("callback 호출 끝", String.valueOf(result));
                 //출발지부터 목적지까지의 대중교통 경로 요청
                 //requestPubTransPath();
@@ -259,6 +191,112 @@ public class select_path extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+            }
+        // 에러 표출시 데이터
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+
+            Log.i("경로검색 실패",errorMessage);
+        }
+    };
+
+    public OnResultCallbackListener busline = new OnResultCallbackListener() {
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+            Log.d("API 호출 성공", String.valueOf(api));
+            result = null;
+            result = oDsayData.getJson();
+            JSONArray station = null;
+            int startID=0;
+            int endID=0;
+            try {
+                station = result.getJSONObject("result").getJSONArray("station");
+                //해당 버스의 전체 경로
+                Log.d("station 정보 받아옴", String.valueOf(station.length()));
+                for(int i=0;i<station.length();i++){
+                    if(station.getJSONObject(i).getInt("stationID")==startStnID){
+                        //stationID가 startStnID와 같으면 idx 받아옴
+                        startID = station.getJSONObject(i).getInt("idx");
+                    }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
+                        //stationID가 endStnID와 같으면 idx 받아옴
+                        endID = station.getJSONObject(i).getInt("idx");
+                    }
+                }
+                intInfo.put("startID", startID);
+                intInfo.put("endID", endID);
+                //trafficType==2일 때 와 연동하여 같은 JSON에 값 입력
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(int i, String s, API api) {
+
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.select_path);
+		final TMapView tmapview = new TMapView(this);
+        EditText editText = (EditText) findViewById(R.id.editstart);
+      //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
+//        final EditText editText2 = (EditText) findViewById(R.id.editText2);
+        final EditText dest = (EditText)findViewById(R.id.editTextDest);
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
+        // 싱글톤 생성, Key 값을 활용하여 객체 생성
+        odsayService.setReadTimeout(5000);
+        // 데이터 획득 제한 시간(단위(초), default : 5초)
+        odsayService.setConnectionTimeout(5000);
+        // 서버 연결 제한 시간(단위(초), default : 5초)
+
+
+        Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
+        completeSetPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pathData.clear(); //pathData 초기화
+                odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
+                        "0", "0", "0", OnResultCallbackListener);
+//               while(true){
+//                    if(flag1==true) {
+//                        break;
+//                    } else Log.d("API 호출 중", String.valueOf(result));
+//                }
+//                Log.d("callback 호출 끝", String.valueOf(result));
+//                //출발지부터 목적지까지의 대중교통 경로 요청
+//                //requestPubTransPath();
+//                TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
+//                TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
+//                //바로아래라인은 출발지부터 목적지까지의 도보경로를 리턴. trafficeType==3일 때 아래 api 사용하여 경로 좌표 쌍 받아낼 예정
+//                tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
+//                    @Override
+//                    public void onFindPathDataAll(Document document) {
+//                        root = document.getDocumentElement();
+//                        nodeListPoint = root.getElementsByTagName("Point");
+//                        for( int i=0; i<nodeListPoint.getLength(); i++ ) {
+//                            nodeListPointItem = nodeListPoint.item(i).getChildNodes();
+//                            for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
+//                                if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
+//                                    pathData.add(nodeListPointItem.item(j).getTextContent().trim());
+//                                    Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
+//                                }
+//                            }
+//                        }
+//                        Intent intent = new Intent(getApplicationContext(), Marker.class);
+//                        intent.putExtra("curLongitude", longitude);
+//                        intent.putExtra("curLatitude", latitude);
+//                        intent.putExtra("destLongitude", destLongitude);
+//                        intent.putExtra("destLatitude", destLatitude);
+//                        intent.putExtra("pathData", pathData);
+//                        //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
+//                        startActivity(intent);
+//                    }
+//                });
 
             }
 
@@ -318,6 +356,7 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Map.class);
+                startActivity(intent);
             }
         });
         Button btnSearchMap = (Button) findViewById(R.id.btnstartmap);
@@ -376,7 +415,7 @@ public class select_path extends AppCompatActivity {
     }
 
     synchronized void requestBusLaneDetail(JSONObject temp) throws JSONException {
-        odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), OnResultCallbackListener);
+        odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), busline);
     }
     void checkRunTimePermission() {
         //런타임 퍼미션 처리
