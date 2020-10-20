@@ -242,7 +242,8 @@ public class select_path extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
 		final TMapView tmapview = new TMapView(this);
-        EditText editText = (EditText) findViewById(R.id.editstart);
+
+        final EditText editStart = (EditText) findViewById(R.id.editstart);
       //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
 //        final EditText editText2 = (EditText) findViewById(R.id.editText2);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
@@ -319,8 +320,7 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("longitude", longitude);
                 intent.putExtra("latitude", latitude);
                // startActivity(intent);
-                EditText editText = (EditText) findViewById(R.id.editstart);
-                editText.setText(latitude + ", " + longitude);
+                editStart.setText(latitude + ", " + longitude);
             }
         });
         coder = new Geocoder(this);
@@ -356,7 +356,7 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Map.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1102);
             }
         });
         Button btnSearchMap = (Button) findViewById(R.id.btnstartmap);
@@ -364,7 +364,7 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Map.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1101);
             }
         });
         Button button=(Button)findViewById(R.id.timeselect);
@@ -473,17 +473,39 @@ public class select_path extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case GPS_ENABLE_REQUEST_CODE:
-                //사용자가 GPS 활성 시켰는지 검사
-                if (checkLocationServicesStatus()) {
+        if(requestCode==1101){
+            if (resultCode==RESULT_OK) {
+                getIntent();
+                latitude = data.getExtras().getDouble("latitude");
+                longitude = data.getExtras().getDouble("longitude");
+                EditText editStart = (EditText) findViewById(R.id.editstart);
+                editStart.setText(latitude + ", " + longitude);
+            }else{
+            }
+        }
+        else if(requestCode==1102){
+            if (resultCode==RESULT_OK) {
+                getIntent();
+                destLatitude = data.getExtras().getDouble("latitude");
+                destLongitude = data.getExtras().getDouble("longitude");
+                EditText editDest = (EditText) findViewById(R.id.editTextDest);
+                editDest.setText(destLatitude + ", " + destLongitude);
+            }else{
+            }
+        }
+        else{
+            switch (requestCode) {
+                case GPS_ENABLE_REQUEST_CODE:
+                    //사용자가 GPS 활성 시켰는지 검사
                     if (checkLocationServicesStatus()) {
-                        Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
-                        checkRunTimePermission();
-                        return;
+                        if (checkLocationServicesStatus()) {
+                            Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
+                            checkRunTimePermission();
+                            return;
+                        }
                     }
-                }
-                break;
+                    break;
+            }
         }
     }
 
