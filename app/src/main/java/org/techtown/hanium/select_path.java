@@ -62,8 +62,8 @@ import static java.lang.Thread.sleep;
 public class select_path extends AppCompatActivity {
     String stationName;
     Double longitude, latitude, altitude;
-    //경도 : longitude 범위 : 127
-    //위도 : latitude 범위 : 37
+    //경도 : longitude 범위 : 127 < 1st argument
+    //위도 : latitude 범위 : 37 < 2nd argument (path arrayList에 들어가는 순서)
     Double destLongitude, destLatitude, destaltitude;
     TextView tv;
     ToggleButton tb;
@@ -138,6 +138,7 @@ public class select_path extends AppCompatActivity {
                                 //200924 위에 전역변수에 보면 intervelPath라는 JSONArray를 선언함. 나중에 교통수단별로 다시 ODSay에 넣어서 상세정보 받아야 하니까.
                                 intInfo = null;
                                 Log.d("검사횟수", String.valueOf(subPath.length()));
+                                //odsayService.requestLoadLane();
                             } else if(tempTrafficType==2){
                                 //버스
                                 intInfo.put("trafficType", tempTrafficType);
@@ -237,6 +238,42 @@ public class select_path extends AppCompatActivity {
         }
     };
 
+    public OnResultCallbackListener subwayLine = new OnResultCallbackListener() {
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+            Log.d("API 호출 성공", String.valueOf(api));
+//            result = null;
+//            result = oDsayData.getJson();
+//            JSONArray station = null;
+//            int startID=0;
+//            int endID=0;
+//            try {
+//                station = result.getJSONObject("result").getJSONArray("station");
+//                //해당 버스의 전체 경로
+//                Log.d("station 정보 받아옴", String.valueOf(station.length()));
+//                for(int i=0;i<station.length();i++){
+//                    if(station.getJSONObject(i).getInt("stationID")==startStnID){
+//                        //stationID가 startStnID와 같으면 idx 받아옴
+//                        startID = station.getJSONObject(i).getInt("idx");
+//                    }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
+//                        //stationID가 endStnID와 같으면 idx 받아옴
+//                        endID = station.getJSONObject(i).getInt("idx");
+//                    }
+//                }
+//                intInfo.put("startID", startID);
+//                intInfo.put("endID", endID);
+//                //trafficType==2일 때 와 연동하여 같은 JSON에 값 입력
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+        }
+
+        @Override
+        public void onError(int i, String s, API api) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,8 +281,6 @@ public class select_path extends AppCompatActivity {
 		final TMapView tmapview = new TMapView(this);
 
         final EditText editStart = (EditText) findViewById(R.id.editstart);
-      //  final EditText editText1 = (EditText) findViewById(R.id.editText1);
-//        final EditText editText2 = (EditText) findViewById(R.id.editText2);
         final EditText dest = (EditText)findViewById(R.id.editTextDest);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
@@ -263,42 +298,6 @@ public class select_path extends AppCompatActivity {
                 pathData.clear(); //pathData 초기화
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
-//               while(true){
-//                    if(flag1==true) {
-//                        break;
-//                    } else Log.d("API 호출 중", String.valueOf(result));
-//                }
-//                Log.d("callback 호출 끝", String.valueOf(result));
-//                //출발지부터 목적지까지의 대중교통 경로 요청
-//                //requestPubTransPath();
-//                TMapPoint startPoint = new TMapPoint(latitude,longitude);// 마커 놓을 좌표 (위도, 경도 순서)
-//                TMapPoint destPoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
-//                //바로아래라인은 출발지부터 목적지까지의 도보경로를 리턴. trafficeType==3일 때 아래 api 사용하여 경로 좌표 쌍 받아낼 예정
-//                tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
-//                    @Override
-//                    public void onFindPathDataAll(Document document) {
-//                        root = document.getDocumentElement();
-//                        nodeListPoint = root.getElementsByTagName("Point");
-//                        for( int i=0; i<nodeListPoint.getLength(); i++ ) {
-//                            nodeListPointItem = nodeListPoint.item(i).getChildNodes();
-//                            for( int j=0; j<nodeListPointItem.getLength(); j++ ) {
-//                                if( nodeListPointItem.item(j).getNodeName().equals("coordinates") ) {
-//                                    pathData.add(nodeListPointItem.item(j).getTextContent().trim());
-//                                    Log.d("debug", nodeListPointItem.item(j).getTextContent().trim() );
-//                                }
-//                            }
-//                        }
-//                        Intent intent = new Intent(getApplicationContext(), Marker.class);
-//                        intent.putExtra("curLongitude", longitude);
-//                        intent.putExtra("curLatitude", latitude);
-//                        intent.putExtra("destLongitude", destLongitude);
-//                        intent.putExtra("destLatitude", destLatitude);
-//                        intent.putExtra("pathData", pathData);
-//                        //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
-//                        startActivity(intent);
-//                    }
-//                });
-
             }
 
         });
@@ -342,9 +341,6 @@ public class select_path extends AppCompatActivity {
                         dest.setText("해당되는 주소 정보는 없습니다");
                     } else {
                         dest.setText(list.get(0).getLatitude() + ", " + list.get(0).getLongitude());
-                        //          list.get(0).getCountryName();  // 국가명
-                        //          list.get(0).getLatitude();        // 위도
-                        //          list.get(0).getLongitude();    // 경도
                         destLatitude = list.get(0).getLatitude();
                         destLongitude = list.get(0).getLongitude();
                     }

@@ -189,10 +189,6 @@ public class Marker extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-//                if (location != null) {
-//                    latitude = location.getLatitude();
-//                    longitude = location.getLongitude();
-//                }
                 TMapPoint  tp= new TMapPoint(latitude,longitude);
                 Log.d("테스트", tp.toString() );
                 double altitude = location.getAltitude();
