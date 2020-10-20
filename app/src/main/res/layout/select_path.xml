@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
-            android:text="출발시간"
+            android:text="도착시간"
             android:textSize="20sp"
             android:layout_marginLeft="40dp"
             android:textColor="#ff000000"

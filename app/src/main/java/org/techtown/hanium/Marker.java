@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
+import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
@@ -26,7 +27,7 @@ import com.skt.Tmap.TMapView;
 
 import java.util.ArrayList;
 
-public class Marker extends AppCompatActivity {
+public class Marker extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
     ArrayList<String> pathData = new ArrayList<String>();
     Double myLongitude, myLatitude, myAltitude;
     Double destLongitude, destLatitude;
@@ -38,8 +39,19 @@ public class Marker extends AppCompatActivity {
     double latitude = 0;
     double longitude = 0;
     double altitude = 0;
+    private boolean m_bTrackingMode = true;
+    private TMapGpsManager tmapgps=null;
+    TMapView tmapview;
+
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
+    @Override
+    public void onLocationChange(Location location) {
+        if (m_bTrackingMode) {
+            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
+        }
+    }
+
 
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
@@ -78,11 +90,21 @@ public class Marker extends AppCompatActivity {
         setContentView(R.layout.activity_marker);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
-        TMapView tmapview = new TMapView(this);
+        tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
         TMapTapi tMapTapi = new TMapTapi(this);
+
+        tmapview.setCompassMode(true);
+        tmapview.setIconVisibility(true);
+        tmapgps = new TMapGpsManager(this);
+        tmapgps.setMinTime(1000);
+        tmapgps.setProvider(tmapgps.NETWORK_PROVIDER);
+        tmapgps.OpenGps();
+        tmapview.setTrackingMode(true);
+        tmapview.setSightVisible(true);
+
 
         Intent intent=getIntent();
 
