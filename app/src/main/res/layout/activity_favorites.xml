@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:background="#00ff0000"
+        android:background="@drawable/border"
         android:fontFamily="@font/font3"
         android:text="확인"
         android:textColor="#ff000000"

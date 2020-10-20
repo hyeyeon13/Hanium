@@ -40,9 +40,9 @@
         android:background="#AEACAC" />
 
     <RelativeLayout
+        android:id="@+id/map_view"
         android:layout_width="410dp"
-        android:layout_height="670dp"
-        android:id="@+id/map_view">
+        android:layout_height="672dp">
 
     </RelativeLayout>
 </LinearLayout>
