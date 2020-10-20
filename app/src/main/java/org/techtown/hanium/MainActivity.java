@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
                 URL url = new URL(link);
                 urlConn = (HttpURLConnection) url.openConnection();
                 urlConn.setConnectTimeout(1000);
-                urlConn.setRequestMethod("POST"); // URL ¿äÃ»¿¡ ´ëÇÑ ¸Þ¼Òµå ¼³Á¤ : POST.
-                urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset ¼³Á¤.
+                urlConn.setRequestMethod("POST"); // URL ìš”ì²­ì— ëŒ€í•œ ë©”ì†Œë“œ ì„¤ì • : POST.
+                urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset ì„¤ì •.
                 urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
 
 
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 reader.close();
                 if (urlConn != null) urlConn.disconnect();
 
-                Log.d("¶óÀÎ°ª", sb.toString());
+                Log.d("ë¼ì¸ê°’", sb.toString());
 
                 return sb.toString();
             } catch (Exception e) {
@@ -160,14 +160,14 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Log.d("getpeople", "°¡Á®¿À±â");
+        Log.d("getpeople", "ê°€ì ¸ì˜¤ê¸°");
 
-        if(people_r.equals("0") == true) Log.d("º¸È£ÀÚ¾øÀ½", "µî·ÏµÈ º¸È£ÀÚ°¡ ¾ø½À´Ï´Ù.");
-        else if(people_r.equals("-2") == true) Log.d("³×Æ®¿öÅ©", "³×Æ®¿öÅ©¿¡·¯ÀÓ");
+        if(people_r.equals("0") == true) Log.d("ë³´í˜¸ìžì—†ìŒ", "ë“±ë¡ëœ ë³´í˜¸ìžê°€ ì—†ìŠµë‹ˆë‹¤.");
+        else if(people_r.equals("-2") == true) Log.d("ë„¤íŠ¸ì›Œí¬", "ë„¤íŠ¸ì›Œí¬ì—ëŸ¬ìž„");
         else
         {
             people_array = people_r.split("@");
-            Log.d("³×Æ®¿öÅ©2", people_r);
+            Log.d("ë„¤íŠ¸ì›Œí¬2", people_r);
             if(people_array.length > 0) people1.setText(people_array[0]);
             if(people_array.length > 1) people2.setText(people_array[1]);
         }
