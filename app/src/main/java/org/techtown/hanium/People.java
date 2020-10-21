@@ -58,7 +58,6 @@ public class People extends AppCompatActivity {
         Log.d("login_id", "" + login_id);
 
 
-
         people_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,8 +95,7 @@ public class People extends AppCompatActivity {
                 urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
                 urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
 
-                if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
-                {
+                if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     Log.d("retret2", "" + ret);
                     return "-2";
                 }
@@ -236,7 +234,7 @@ public class People extends AppCompatActivity {
         }
     }
 
-    public String server_network_check (String host){
+    public String server_network_check(String host) {
         return "1";
     }
 }

@@ -151,14 +151,14 @@ public class select_path extends AppCompatActivity {
 //                                odsayService.requestLoadLane("0:0@"+mapobj, subwayLine);
                         } else if (tempTrafficType == 2) {
                             //버스
-                            intInfo.put("trafficType", tempTrafficType);
-                            intInfo.put("startX", temp.getDouble("startX"));//출발정류장 경도
-                            intInfo.put("startY", temp.getDouble("startY"));//출발정류장 위도
-                            intInfo.put("endX", temp.getDouble("endX"));//도착정류장 경도
-                            intInfo.put("endY", temp.getDouble("endY"));//도착정류장 위도
-                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
-                            startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
-                            endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
+//                            intInfo.put("trafficType", tempTrafficType);
+//                            intInfo.put("startX", temp.getDouble("startX"));//출발정류장 경도
+//                            intInfo.put("startY", temp.getDouble("startY"));//출발정류장 위도
+//                            intInfo.put("endX", temp.getDouble("endX"));//도착정류장 경도
+//                            intInfo.put("endY", temp.getDouble("endY"));//도착정류장 위도
+//                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
+//                            startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
+//                            endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
                             int startIdx = 0;
                             int endIdx = 0;
                             JSONArray stopList = temp.getJSONObject("passStopList").getJSONArray("stations");
@@ -230,19 +230,19 @@ public class select_path extends AppCompatActivity {
                         }
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
-                    Intent intent = new Intent(getApplicationContext(), Marker.class);
-                    intent.putExtra("curLongitude", longitude);
-                    intent.putExtra("curLatitude", latitude);
-                    intent.putExtra("destLongitude", destLongitude);
-                    intent.putExtra("destLatitude", destLatitude);
-                    intent.putExtra("pathData", pathData2);
-                    //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
-                    startActivity(intent);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
+            Intent intent = new Intent(getApplicationContext(), Marker.class);
+            intent.putExtra("curLongitude", longitude);
+            intent.putExtra("curLatitude", latitude);
+            intent.putExtra("destLongitude", destLongitude);
+            intent.putExtra("destLatitude", destLatitude);
+            intent.putExtra("pathData", pathData2);
+            //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
+            startActivity(intent);
             Log.d("callback 호출 끝", String.valueOf(result));
         }
 

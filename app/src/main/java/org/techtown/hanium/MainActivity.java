@@ -21,7 +21,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import org.w3c.dom.Text;
+
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,34 +38,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        people1 = (TextView)findViewById(R.id.people1);
-        people2 = (TextView)findViewById(R.id.people2);
+        people1 = (TextView) findViewById(R.id.people1);
+        people2 = (TextView) findViewById(R.id.people2);
 
         Intent intent = getIntent();
         login_id = intent.getExtras().getString("log_ok_id");
 
 
-        Button button2 =findViewById(R.id.favorite);
+        Button button2 = findViewById(R.id.favorite);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Favorites.class);
+                Intent intent = new Intent(getApplicationContext(), Favorites.class);
                 startActivity(intent);
             }
         });
-        Button pathSetting=(Button)findViewById(R.id.pathsetting);
+        Button pathSetting = (Button) findViewById(R.id.pathsetting);
         pathSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),select_path.class);
+                Intent intent = new Intent(getApplicationContext(), select_path.class);
                 startActivity(intent);
             }
         });
-        Button button9=(Button)findViewById(R.id.guardian);
+        Button button9 = (Button) findViewById(R.id.guardian);
         button9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),People.class);
+                Intent intent = new Intent(getApplicationContext(), People.class);
                 intent.putExtra("log_ok_id", login_id);
                 startActivity(intent);
             }
@@ -76,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView1 = findViewById(R.id.textview4);
         SpannableString content = new SpannableString("Content");
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0); textView1.setText(content);
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        textView1.setText(content);
 
         textView1.setClickable(false);
         textView1.setFocusable(false);
@@ -87,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         textView3.setClickable(false);
         textView3.setFocusable(false);
 
-      //  TMapTapi tMapTapi = new TMapTapi(this);
+        //  TMapTapi tMapTapi = new TMapTapi(this);
         //relativeLayout.addView(tmapview);
-      //  setContentView(relativeLayout);
+        //  setContentView(relativeLayout);
     }
 
     private class people_list extends AsyncTask<String, Void, String> {
@@ -146,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getpeople_list()
-    {
+    private void getpeople_list() {
         String people_r = null;
         String[] people_array;
 
@@ -162,19 +164,18 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("getpeople", "가져오기");
 
-        if(people_r.equals("0") == true) Log.d("보호자없음", "등록된 보호자가 없습니다.");
-        else if(people_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
-        else
-        {
+        if (people_r.equals("0") == true) Log.d("보호자없음", "등록된 보호자가 없습니다.");
+        else if (people_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
+        else {
             people_array = people_r.split("@");
             Log.d("네트워크2", people_r);
-            if(people_array.length > 0) people1.setText(people_array[0]);
-            if(people_array.length > 1) people2.setText(people_array[1]);
+            if (people_array.length > 0) people1.setText(people_array[0]);
+            if (people_array.length > 1) people2.setText(people_array[1]);
         }
 
     }
 
-    public String server_network_check (String host){
+    public String server_network_check(String host) {
         return "1";
     }
 }

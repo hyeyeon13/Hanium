@@ -236,7 +236,7 @@ public class Signup extends AppCompatActivity {
         }
     }
 
-    public String server_network_check (String host){
+    public String server_network_check(String host) {
         return "1";
     }
 }
