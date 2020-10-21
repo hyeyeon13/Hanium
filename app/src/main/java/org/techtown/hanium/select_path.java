@@ -74,6 +74,7 @@ public class select_path extends AppCompatActivity {
     JSONArray subPath = null;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
+    ArrayList<String> pathData2 = new ArrayList<String>();
     Element root;
     NodeList nodeListPlacemark;
     NodeList nodeListCoordinates;
@@ -138,7 +139,9 @@ public class select_path extends AppCompatActivity {
                                 //200924 위에 전역변수에 보면 intervelPath라는 JSONArray를 선언함. 나중에 교통수단별로 다시 ODSay에 넣어서 상세정보 받아야 하니까.
                                 intInfo = null;
                                 Log.d("검사횟수", String.valueOf(subPath.length()));
-                                //odsayService.requestLoadLane();
+                                String mapobj = new String();
+                                mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode")+":2:"+temp.getInt("startID")+":"+temp.getInt("endID");
+                                odsayService.requestLoadLane("0:0@"+mapobj, subwayLine);
                             } else if(tempTrafficType==2){
                                 //버스
                                 intInfo.put("trafficType", tempTrafficType);
@@ -153,6 +156,9 @@ public class select_path extends AppCompatActivity {
                                 //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
                                 intervalPath.put(intInfo);
                                 intInfo = null;
+
+                            }
+                            else if(tempTrafficType==3){
 
                             }
                             Log.d("traffic type ", String.valueOf(tempTrafficType));
@@ -242,30 +248,10 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             Log.d("API 호출 성공", String.valueOf(api));
-//            result = null;
-//            result = oDsayData.getJson();
-//            JSONArray station = null;
-//            int startID=0;
-//            int endID=0;
-//            try {
-//                station = result.getJSONObject("result").getJSONArray("station");
-//                //해당 버스의 전체 경로
-//                Log.d("station 정보 받아옴", String.valueOf(station.length()));
-//                for(int i=0;i<station.length();i++){
-//                    if(station.getJSONObject(i).getInt("stationID")==startStnID){
-//                        //stationID가 startStnID와 같으면 idx 받아옴
-//                        startID = station.getJSONObject(i).getInt("idx");
-//                    }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
-//                        //stationID가 endStnID와 같으면 idx 받아옴
-//                        endID = station.getJSONObject(i).getInt("idx");
-//                    }
-//                }
-//                intInfo.put("startID", startID);
-//                intInfo.put("endID", endID);
-//                //trafficType==2일 때 와 연동하여 같은 JSON에 값 입력
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            result = null;
+            result = oDsayData.getJson();
+            //해당 버스의 전체 경로
+            Log.d("station 정보 받아옴", String.valueOf(result.length()));
         }
 
         @Override

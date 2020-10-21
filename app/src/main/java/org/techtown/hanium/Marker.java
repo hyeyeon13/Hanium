@@ -31,6 +31,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     ArrayList<String> pathData = new ArrayList<String>();
     Double myLongitude, myLatitude, myAltitude;
     Double destLongitude, destLatitude;
+    Double realtimeLongitude, realtimeLatitude;
     String min;
     Double num_min;
     Double distance;
@@ -59,8 +60,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
 
             Log.d("test", "onLocationChanged, location:" + location);
-            double longitude = location.getLongitude(); //경도
-            double latitude = location.getLatitude();   //위도
+            realtimeLongitude = location.getLongitude(); //경도
+            realtimeLatitude = location.getLatitude();   //위도
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
@@ -139,8 +140,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         centerLong = (myLongitude+destLongitude)/2;
         centerLat = (myLatitude+destLatitude)/2;
         tmapview.setCenterPoint( centerLong, centerLat ); //지도의 중심지점 좌표 (경도, 위도 순서)
-        Log.d("내 위도  ", String.valueOf(myLatitude));
-        Log.d("내 경도  ", String.valueOf(myLongitude));
+        Log.d("내 위도  ", String.valueOf(realtimeLatitude));
+        Log.d("내 경도  ", String.valueOf(realtimeLongitude));
         Log.d("내 고도  ", String.valueOf(myAltitude));
         Log.d("목적지 위도  ", String.valueOf(destLatitude));
         Log.d("목적지 경도  ", String.valueOf(destLongitude));
