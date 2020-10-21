@@ -157,7 +157,7 @@ public class select_path extends AppCompatActivity {
                                 int endIdx=0;
                                 JSONArray stopList = temp.getJSONObject("passStopList").getJSONArray("stations");
                                 int stopListsize = stopList.length();
-                                Toast.makeText(getApplicationContext(), "길이 : "+stopListsize, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "길이 : "+stopListsize, Toast.LENGTH_SHORT).show();
                                 for(int i=0;i<stopList.length();i++){
                                     JSONObject busStn = stopList.getJSONObject(i);
                                     int stnIdx = busStn.getInt("stationID");
@@ -170,12 +170,9 @@ public class select_path extends AppCompatActivity {
                                 String mapobj = new String();
                                 mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("busID")+":1:"+startIdx+":"+endIdx;
                                 //requestBusLaneDetail(temp, startStnID);
-                                odsayService.requestLoadLane("0:0@"+mapobj, busline);
-                                busDetail.getJSONArray("station");
+                                //odsayService.requestLoadLane("0:0@"+mapobj, busline);
+                                //busDetail.getJSONArray("station");
                                 //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
-                                intervalPath.put(intInfo);
-                                intInfo = null;
-
                             }
                             else if(tempTrafficType==3){
 
@@ -234,7 +231,14 @@ public class select_path extends AppCompatActivity {
             Log.d("API 호출 성공", String.valueOf(api));
             result = null;
             result = oDsayData.getJson();
+            JSONArray busLaneData=null;
             //해당 버스의 전체 경로
+            try {
+                busLaneData = result.getJSONObject("result").getJSONArray("lane").getJSONObject(0).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
+                int length = busLaneData.length();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Log.d("station 정보 받아옴", String.valueOf(result.length()));
         }
 
@@ -250,7 +254,14 @@ public class select_path extends AppCompatActivity {
             Log.d("API 호출 성공", String.valueOf(api));
             result = null;
             result = oDsayData.getJson();
+            JSONArray subwayLaneData=null;
             //해당 지하철의 전체 경로
+            try {
+                subwayLaneData = result.getJSONObject("result").getJSONArray("lane").getJSONObject(0).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
+                int length = subwayLaneData.length();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Log.d("station 정보 받아옴", String.valueOf(result.length()));
         }
 
