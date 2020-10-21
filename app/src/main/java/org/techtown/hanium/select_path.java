@@ -71,6 +71,7 @@ public class select_path extends AppCompatActivity {
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
+    JSONObject busDetail;
     JSONArray subPath = null;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
@@ -152,7 +153,19 @@ public class select_path extends AppCompatActivity {
                                 intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
                                 startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                                 endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
-                                //int startIdx = requestBusLaneDetail(temp, startStnID);
+                                int startIdx, endIdx;
+                                JSONArray stopList = temp.getJSONObject("passStopList").getJSONArray("stations");
+                                int stopListsize = stopList.length();
+                                Toast.makeText(getApplicationContext(), "길이 : "+stopListsize, Toast.LENGTH_SHORT).show();
+                                for(int i=0;i<stopList.length();i++){
+                                    JSONObject busStn = stopList.getJSONObject(i);
+                                    int stnIdx = busStn.getInt("stationID");
+                                    if(stnIdx == startStnID){
+                                        startIdx = busStn.getInt("index");
+                                    }
+                                }
+                                requestBusLaneDetail(temp, startStnID);
+                                busDetail.getJSONArray("station");
                                 //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
                                 intervalPath.put(intInfo);
                                 intInfo = null;
@@ -208,35 +221,15 @@ public class select_path extends AppCompatActivity {
         }
     };
 
-    public OnResultCallbackListener busline = new OnResultCallbackListener(
-    ) {
+    public OnResultCallbackListener busline = new OnResultCallbackListener() {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
+
+
+            busDetail = oDsayData.getJson();
             Log.d("API 호출 성공", String.valueOf(api));
-            result = null;
-            result = oDsayData.getJson();
-            JSONArray station = null;
-            int startID=0;
-            int endID=0;
-            try {
-                station = result.getJSONObject("result").getJSONArray("station");
-                //해당 버스의 전체 경로
-                Log.d("station 정보 받아옴", String.valueOf(station.length()));
-                for(int i=0;i<station.length();i++){
-                    if(station.getJSONObject(i).getInt("stationID")==startStnID){
-                        //stationID가 startStnID와 같으면 idx 받아옴
-                        startID = station.getJSONObject(i).getInt("idx");
-                    }else if(station.getJSONObject(i).getInt("stationID")==endStnID){
-                        //stationID가 endStnID와 같으면 idx 받아옴
-                        endID = station.getJSONObject(i).getInt("idx");
-                    }
-                }
-                intInfo.put("startID", startID);
-                intInfo.put("endID", endID);
-                //trafficType==2일 때 와 연동하여 같은 JSON에 값 입력
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+
         }
 
         @Override
@@ -399,6 +392,7 @@ public class select_path extends AppCompatActivity {
 
     synchronized void requestBusLaneDetail(JSONObject temp, int stnID) throws JSONException {
         odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), busline);
+
     }
     void checkRunTimePermission() {
         //런타임 퍼미션 처리
