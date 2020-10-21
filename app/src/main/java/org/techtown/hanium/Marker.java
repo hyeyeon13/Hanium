@@ -108,7 +108,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
         Intent intent=getIntent();
-
+        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
+        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude=intent.getExtras().getDouble("curLongitude");

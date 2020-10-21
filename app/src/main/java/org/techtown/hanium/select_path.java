@@ -152,7 +152,7 @@ public class select_path extends AppCompatActivity {
                                 intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
                                 startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                                 endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
-                                requestBusLaneDetail(temp);
+                                //int startIdx = requestBusLaneDetail(temp, startStnID);
                                 //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
                                 intervalPath.put(intInfo);
                                 intInfo = null;
@@ -208,7 +208,8 @@ public class select_path extends AppCompatActivity {
         }
     };
 
-    public OnResultCallbackListener busline = new OnResultCallbackListener() {
+    public OnResultCallbackListener busline = new OnResultCallbackListener(
+    ) {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
             Log.d("API 호출 성공", String.valueOf(api));
@@ -396,7 +397,7 @@ public class select_path extends AppCompatActivity {
         odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(), "0", "0", "0", OnResultCallbackListener);
     }
 
-    synchronized void requestBusLaneDetail(JSONObject temp) throws JSONException {
+    synchronized void requestBusLaneDetail(JSONObject temp, int stnID) throws JSONException {
         odsayService.requestBusLaneDetail(String.valueOf(temp.getJSONArray("lane").getJSONObject(0).getInt("busID")), busline);
     }
     void checkRunTimePermission() {
