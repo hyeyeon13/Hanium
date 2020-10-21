@@ -41,7 +41,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     double longitude = 0;
     double altitude = 0;
     private boolean m_bTrackingMode = true;
-    private TMapGpsManager tmapgps=null;
+    private TMapGpsManager tmapgps = null;
     TMapView tmapview;
 
     //경도 : longitude 범위 : 127
@@ -69,6 +69,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
         }
+
         public void onProviderDisabled(String provider) {
             // Disabled시
             Log.d("test", "onProviderDisabled, provider:" + provider);
@@ -107,40 +108,42 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tmapview.setSightVisible(true);
 
 
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         realtimeLatitude = intent.getExtras().getDouble("curLatitude");
         realtimeLongitude = intent.getExtras().getDouble("curLongitude");
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
-        myLongitude=intent.getExtras().getDouble("curLongitude");
-        myLatitude=intent.getExtras().getDouble("curLatitude");
+        myLongitude = intent.getExtras().getDouble("curLongitude");
+        myLatitude = intent.getExtras().getDouble("curLatitude");
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
         //stationName=intent.getExtras().getString("stationName");
-        TMapPoint mytMapPoint = new TMapPoint(myLatitude,myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
-        TMapPoint desttMappoint = new TMapPoint(destLatitude,destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
+        TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
+        TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
 // 마커 아이콘
-        Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.point);
-        Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.bluepoint);
+        Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
+        Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.bluepoint);
         tmapview.setTMapPathIcon(Start, dest);
 
         myMarker.setIcon(Start); // 마커 아이콘 지정
         myMarker.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
-        myMarker.setTMapPoint( mytMapPoint ); // 마커의 좌표 지정
+        myMarker.setTMapPoint(mytMapPoint); // 마커의 좌표 지정
         myMarker.setName("start"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("startPoint", myMarker); // 지도에 마커 추가
 
         destMarker.setIcon(dest);
-        destMarker.setPosition(0.5f, 1.0f);;
-        destMarker.setTMapPoint(desttMappoint);;
+        destMarker.setPosition(0.5f, 1.0f);
+        ;
+        destMarker.setTMapPoint(desttMappoint);
+        ;
         destMarker.setName("dest"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("destPoint", destMarker);
 
         double centerLong, centerLat;
-        centerLong = (myLongitude+destLongitude)/2;
-        centerLat = (myLatitude+destLatitude)/2;
-        tmapview.setCenterPoint( centerLong, centerLat ); //지도의 중심지점 좌표 (경도, 위도 순서)
+        centerLong = (myLongitude + destLongitude) / 2;
+        centerLat = (myLatitude + destLatitude) / 2;
+        tmapview.setCenterPoint(centerLong, centerLat); //지도의 중심지점 좌표 (경도, 위도 순서)
         Log.d("내 위도  ", String.valueOf(realtimeLatitude));
         Log.d("내 경도  ", String.valueOf(realtimeLongitude));
         Log.d("내 고도  ", String.valueOf(myAltitude));
@@ -149,14 +152,14 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
         TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
-        tmapview.zoomToTMapPoint(leftTop,rightBottom);
+        tmapview.zoomToTMapPoint(leftTop, rightBottom);
 
         TMapPolyLine tpolyline = new TMapPolyLine();
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
 
         pathData = intent.getExtras().getStringArrayList("pathData");
-        for(int i=0;i<pathData.size();i++){
+        for (int i = 0; i < pathData.size(); i++) {
             double tempLat, tempLong;
             String tempS;
             tempS = pathData.get(i);
@@ -179,23 +182,22 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             dist = new String[pathData.size()];
             dist[i] = String.valueOf(distance);
 //            Log.d(i+"번째 dist 거리",String.valueOf(dist[i])+"m");
-            if(i==0){
-                min=dist[0];
+            if (i == 0) {
+                min = dist[0];
             }
-            if(Double.valueOf(min)>Double.valueOf(dist[i])) {
-                min=dist[i];
+            if (Double.valueOf(min) > Double.valueOf(dist[i])) {
+                min = dist[i];
             }
         }
-        Log.d("내위치 사이 거리: ",min+"m");
+        Log.d("내위치 사이 거리: ", min + "m");
         tmapview.addTMapPolyLine("path", tpolyline);
 
-        num_min= Double.valueOf(min);
+        num_min = Double.valueOf(min);
 
-        if(num_min>50)
-        {
+        if (num_min > 50) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            Log.d("경로이탈감지: ",min+"m");
+            Log.d("경로이탈감지: ", min + "m");
             builder.setTitle("경로이탈감지!").setMessage("경로를 벗어났습니다");
 
             AlertDialog alertDialog = builder.create();
@@ -213,10 +215,9 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             public void onLocationChanged(Location location) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-                TMapPoint  tp= new TMapPoint(latitude,longitude);
-                Log.d("테스트", tp.toString() );
+                TMapPoint tp = new TMapPoint(latitude, longitude);
+                Log.d("테스트", tp.toString());
                 double altitude = location.getAltitude();
-
 
 
                 Double desDist;
@@ -228,16 +229,17 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 locationB.setLongitude(destLongitude);
 
                 desDist = Double.valueOf(locationA.distanceTo(locationB));
-                if(desDist<=15){
-                    Log.d("목적지 도착",desDist.toString());
-                }
-                else{
-                    Log.d("목적지 미도착",desDist.toString());
+                if (desDist <= 15) {
+                    Log.d("목적지 도착", desDist.toString());
+                } else {
+                    Log.d("목적지 미도착", desDist.toString());
                 }
             }
+
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
             }
+
             @Override
             public void onProviderEnabled(String provider) {
             }

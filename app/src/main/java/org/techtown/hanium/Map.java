@@ -27,14 +27,14 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class Map extends AppCompatActivity {
-    Double Lon,Lat;
+    Double Lon, Lat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById (R.id.map_view);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.map_view);
         final TMapView tmapview = new TMapView(this);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
@@ -50,22 +50,24 @@ public class Map extends AppCompatActivity {
                 TMapPoint point = tmapview.getLocationPoint();
                 TMapData tmapdata = new TMapData();
                 TMapMarkerItem destMarker = new TMapMarkerItem();
-                TMapPoint desttMappoint = new TMapPoint(tMapPoint.getLatitude(),tMapPoint.getLongitude()); // 마커 놓을 좌표 (위도, 경도 순서)
-                Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.bluepoint);
+                TMapPoint desttMappoint = new TMapPoint(tMapPoint.getLatitude(), tMapPoint.getLongitude()); // 마커 놓을 좌표 (위도, 경도 순서)
+                Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.bluepoint);
                 destMarker.setIcon(dest);
-                destMarker.setPosition(0.5f, 1.0f);;
-                destMarker.setTMapPoint(desttMappoint);;
+                destMarker.setPosition(0.5f, 1.0f);
+                ;
+                destMarker.setTMapPoint(desttMappoint);
+                ;
                 destMarker.setName("dest"); // 마커의 타이틀 지정
                 tmapview.addMarkerItem("destPoint", destMarker);
-                Log.d("현재위치",desttMappoint.toString());
-                latitude.setText("위도 : "+tMapPoint.getLatitude());
-                longitude.setText("경도 : "+tMapPoint.getLongitude());
+                Log.d("현재위치", desttMappoint.toString());
+                latitude.setText("위도 : " + tMapPoint.getLatitude());
+                longitude.setText("경도 : " + tMapPoint.getLongitude());
                 Lat = tMapPoint.getLatitude();
                 Lon = tMapPoint.getLongitude();
             }
 
         });
-        setLocation.setOnClickListener(new View.OnClickListener(){
+        setLocation.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -76,7 +78,6 @@ public class Map extends AppCompatActivity {
                 finish();
             }
         });
-
 
 
         relativeLayout.addView(tmapview);
