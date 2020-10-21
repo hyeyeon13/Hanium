@@ -153,7 +153,8 @@ public class select_path extends AppCompatActivity {
                                 intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
                                 startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                                 endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
-                                int startIdx, endIdx;
+                                int startIdx=0;
+                                int endIdx=0;
                                 JSONArray stopList = temp.getJSONObject("passStopList").getJSONArray("stations");
                                 int stopListsize = stopList.length();
                                 Toast.makeText(getApplicationContext(), "길이 : "+stopListsize, Toast.LENGTH_SHORT).show();
@@ -162,9 +163,14 @@ public class select_path extends AppCompatActivity {
                                     int stnIdx = busStn.getInt("stationID");
                                     if(stnIdx == startStnID){
                                         startIdx = busStn.getInt("index");
+                                    }else if(stnIdx == endStnID){
+                                        endIdx = busStn.getInt("index");
                                     }
                                 }
-                                requestBusLaneDetail(temp, startStnID);
+                                String mapobj = new String();
+                                mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("busID")+":1:"+startIdx+":"+endIdx;
+                                //requestBusLaneDetail(temp, startStnID);
+                                odsayService.requestLoadLane("0:0@"+mapobj, busline);
                                 busDetail.getJSONArray("station");
                                 //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
                                 intervalPath.put(intInfo);
@@ -225,11 +231,11 @@ public class select_path extends AppCompatActivity {
         @Override
         public void onSuccess(ODsayData oDsayData, API api) {
 
-
-            busDetail = oDsayData.getJson();
             Log.d("API 호출 성공", String.valueOf(api));
-
-
+            result = null;
+            result = oDsayData.getJson();
+            //해당 버스의 전체 경로
+            Log.d("station 정보 받아옴", String.valueOf(result.length()));
         }
 
         @Override
@@ -244,7 +250,7 @@ public class select_path extends AppCompatActivity {
             Log.d("API 호출 성공", String.valueOf(api));
             result = null;
             result = oDsayData.getJson();
-            //해당 버스의 전체 경로
+            //해당 지하철의 전체 경로
             Log.d("station 정보 받아옴", String.valueOf(result.length()));
         }
 
