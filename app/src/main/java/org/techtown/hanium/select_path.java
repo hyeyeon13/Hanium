@@ -91,7 +91,9 @@ public class select_path extends AppCompatActivity {
     JSONObject intInfo;
     JSONArray intervalPath = new JSONArray();
     ODsayService odsayService = null;
-    int startStnID, endStnID;
+    int busID, startStnID, endStnID;
+    int startIdx = 0;
+    int endIdx = 0;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -157,26 +159,21 @@ public class select_path extends AppCompatActivity {
 //                            intInfo.put("endX", temp.getDouble("endX"));//도착정류장 경도
 //                            intInfo.put("endY", temp.getDouble("endY"));//도착정류장 위도
 //                            intInfo.put("transID", temp.getJSONArray("lane").getJSONObject(0).getInt("busID"));//버스ID
-//                            startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
-//                            endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
-                            int startIdx = 0;
-                            int endIdx = 0;
-                            JSONArray stopList = temp.getJSONObject("passStopList").getJSONArray("stations");
-                            int stopListsize = stopList.length();
-                            //Toast.makeText(getApplicationContext(), "길이 : "+stopListsize, Toast.LENGTH_SHORT).show();
-                            for (int i = 0; i < stopList.length(); i++) {
-                                JSONObject busStn = stopList.getJSONObject(i);
-                                int stnIdx = busStn.getInt("stationID");
-                                if (stnIdx == startStnID) {
-                                    startIdx = busStn.getInt("index");
-                                } else if (stnIdx == endStnID) {
-                                    endIdx = busStn.getInt("index");
-                                }
-                            }
+                            busID = temp.getJSONArray("lane").getJSONObject(0).getInt("busID");
+                            startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
+                            endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
+
+                            odsayService.requestBusLaneDetail(String.valueOf(busID), busLaneDetail);
+                            android.os.SystemClock.sleep(10000);
                             String mapobj = new String();
                             mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("busID") + ":1:" + startIdx + ":" + endIdx;
-                            //requestBusLaneDetail(temp, startStnID);
                             odsayService.requestLoadLane("0:0@" + mapobj, busline);
+                            android.os.SystemClock.sleep(10000);
+//                            try {
+//                                Thread.sleep(5000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
                             //busDetail.getJSONArray("station");
                             //startStnID, endStnID를 이용 requestBusLaneDetail(busID)를 통해 해당 버스의 경로 중 startStnID, endStnID와 일치하는 idx 리턴
                         } else if (tempTrafficType == 3) {
@@ -251,6 +248,39 @@ public class select_path extends AppCompatActivity {
         public void onError(int i, String errorMessage, API api) {
 
             Log.i("경로검색 실패", errorMessage);
+        }
+    };
+
+    public OnResultCallbackListener busLaneDetail = new OnResultCallbackListener() {
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+
+            Log.d("API 호출 성공", String.valueOf(api));
+            result = null;
+            result = oDsayData.getJson();
+            try {
+                JSONArray busLaneData = result.getJSONObject("result").getJSONArray("station");
+                int length = busLaneData.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject busStn = busLaneData.getJSONObject(i);
+                    int stnIdx = busStn.getInt("stationID");
+                    if (stnIdx == startStnID) {
+                        startIdx = busStn.getInt("index");
+                    } else if (stnIdx == endStnID) {
+                        endIdx = busStn.getInt("index");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //해당 버스의 전체 경로
+
+            Log.d("station 정보 받아옴", String.valueOf(result.length()));
+        }
+
+        @Override
+        public void onError(int i, String s, API api) {
+
         }
     };
 

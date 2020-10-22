@@ -98,7 +98,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
         TMapTapi tMapTapi = new TMapTapi(this);
 
-        tmapview.setCompassMode(true);
+        tmapview.setCompassMode(false);
+        //이거 true로 해놓으면 ㅈㄴ 지도가 ㅂㄷㅂㄷ거림
         tmapview.setIconVisibility(true);
         tmapgps = new TMapGpsManager(this);
         tmapgps.setMinTime(1000);
