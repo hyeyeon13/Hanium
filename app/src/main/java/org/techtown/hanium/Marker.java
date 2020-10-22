@@ -135,9 +135,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         destMarker.setIcon(dest);
         destMarker.setPosition(0.5f, 1.0f);
-        ;
         destMarker.setTMapPoint(desttMappoint);
-        ;
         destMarker.setName("dest"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("destPoint", destMarker);
 
