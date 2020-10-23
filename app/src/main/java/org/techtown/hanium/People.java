@@ -226,7 +226,7 @@ public class People extends AppCompatActivity {
             people_id = login_id;
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            intent.putExtra("signup_id", signup_id);
+            intent.putExtra("log_ok_id", login_id);
             Toast.makeText(getApplicationContext(), people_name + " 님이 보호자로 등록되었습니다", Toast.LENGTH_SHORT).show();
             startActivity(intent);
 //                overridePendingTransition(R.anim.right_in, R.anim.left_out);
