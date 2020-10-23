@@ -87,7 +87,7 @@
             android:fontFamily="@font/font3"
             android:text="수정/등록"
             android:textColor="#ff000000"
-            android:textSize="20sp"
+            android:textSize="20sp" />
 
         </RelativeLayout>
 

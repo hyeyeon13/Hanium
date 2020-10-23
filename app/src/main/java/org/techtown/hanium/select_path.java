@@ -93,6 +93,7 @@ public class select_path extends AppCompatActivity {
     JSONObject intInfo;
     JSONArray intervalPath = new JSONArray();
     ODsayService odsayService = null;
+    ODsayService oDsayServiceForSubTrans = null;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -157,7 +158,7 @@ public class select_path extends AppCompatActivity {
                             startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                             endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
                             String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
-                            odsayService.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
+                            oDsayServiceForSubTrans.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
                                 @Override
                                 public void onSuccess(ODsayData oDsayData, API api) {
                                     Log.d("API 호출 성공", String.valueOf(api));
@@ -266,9 +267,8 @@ public class select_path extends AppCompatActivity {
                 }
             }
             Log.d("SearchPubTransPath", String.valueOf(result));
-        }
-
-        // 에러 표출시 데이터
+            }
+        //에러 표출시 데이터
         @Override
         public void onError(int i, String errorMessage, API api) {
 
@@ -304,7 +304,6 @@ public class select_path extends AppCompatActivity {
 //        public void onError(int i, String s, API api) {
 //        }
 //    };
-
 
 
     public OnResultCallbackListener subwayLine = new OnResultCallbackListener() {
@@ -348,10 +347,14 @@ public class select_path extends AppCompatActivity {
         RelativeLayout relativeLayout = new RelativeLayout(this);
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
-        odsayService.setReadTimeout(5000);
+        odsayService.setReadTimeout(1000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
-        odsayService.setConnectionTimeout(5000);
+        odsayService.setConnectionTimeout(1000);
         // 서버 연결 제한 시간(단위(초), default : 5초)
+
+        oDsayServiceForSubTrans = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
+        oDsayServiceForSubTrans.setReadTimeout(1000);
+        oDsayServiceForSubTrans.setConnectionTimeout(1000);
 
 
         Button completeSetPath = (Button) findViewById(R.id.completeSetPath);
