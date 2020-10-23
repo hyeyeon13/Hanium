@@ -99,6 +99,8 @@ public class select_path extends AppCompatActivity {
     Button button;
     // 콜백 함수 구현
 
+    Intent Markerintent;
+
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
         //200924 ODSay API의 콜백함수
         // 호출 성공시 데이터 들어옴
@@ -151,13 +153,43 @@ public class select_path extends AppCompatActivity {
                             startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                             endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
                             String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
-                            odsayService.requestLoadLane("0:0@" + mapObj, busline);
+                            odsayService.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
+                                @Override
+                                public void onSuccess(ODsayData oDsayData, API api) {
+                                    Log.d("API 호출 성공", String.valueOf(api));
+                                    result = null;
+                                    result = oDsayData.getJson();
+                                    JSONArray busLaneData = null;
+                                    //해당 버스의 전체 경로
+                                    try {
+                                        busLaneData = result.getJSONObject("result").getJSONArray("lane").getJSONObject(0).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
+                                        int length = busLaneData.length();
+                                        for (int i = 0; i < length; i++) {
+                                            double busLat = busLaneData.getJSONObject(i).getDouble("x");
+                                            double busLong = busLaneData.getJSONObject(i).getDouble("y");
+                                            String tempPath = String.valueOf(busLat) + "," + String.valueOf(busLong);
+                                            pathData2.add(tempPath);
+                                            Log.d("tempPath ", String.valueOf(tempPath));
+                                        }
+                                        Markerintent.putExtra("pathData", pathData2);
+                                        Log.d("버스노선그래픽 intent 삽입", String.valueOf(Markerintent));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.d("busline 실행 완료", String.valueOf(busLaneData));
+                                }
+
+                                @Override
+                                public void onError(int i, String s, API api) {
+
+                                }
+                            });
                             try {
                                 sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        } else if (tempTrafficType == 3) {
+                            } else if (tempTrafficType == 3) {
                             //출발은 왠만하면 도보다.
                             //그러면 시작점은 내 위치가 되겠지.
                             //첫번째 도보의 시작점은 내 위치고 목적지는 다음 교통수단의 첫 위치이다.
@@ -194,11 +226,12 @@ public class select_path extends AppCompatActivity {
                                         for (int j = 0; j < nodeListPointItem.getLength(); j++) {
                                             if (nodeListPointItem.item(j).getNodeName().equals("coordinates")) {
                                                 pathData2.add(nodeListPointItem.item(j).getTextContent().trim());
-                                                Log.d("debug", nodeListPointItem.item(j).getTextContent().trim());
+                                                Log.d("도보데이터 ", nodeListPointItem.item(j).getTextContent().trim());
                                             }
                                         }
                                     }
-
+                                    Markerintent.putExtra("pathData", pathData2);
+                                    Log.d("도보경로에서 intent 삽입", String.valueOf(Markerintent));
                                 }
                             });
                             try {
@@ -209,20 +242,26 @@ public class select_path extends AppCompatActivity {
                         }
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
-                    Intent intent = new Intent(getApplicationContext(), Marker.class);
-                    intent.putExtra("curLongitude", longitude);
-                    intent.putExtra("curLatitude", latitude);
-                    intent.putExtra("destLongitude", destLongitude);
-                    intent.putExtra("destLatitude", destLatitude);
-                    intent.putExtra("pathData", pathData2);
+                    Markerintent = new Intent(getApplicationContext(), Marker.class);
+                    Markerintent.putExtra("curLongitude", longitude);
+                    Log.d(" intent 출발지 경도", String.valueOf(Markerintent));
+                    Markerintent.putExtra("curLatitude", latitude);
+                    Log.d(" intent 출발지 위도", String.valueOf(Markerintent));
+                    Markerintent.putExtra("destLongitude", destLongitude);
+                    Log.d(" intent 도착지 경도", String.valueOf(Markerintent));
+                    Markerintent.putExtra("destLatitude", destLatitude);
+                    Log.d(" intent 도착지 위도", String.valueOf(Markerintent));
+                    Markerintent.putExtra("pathData", pathData2);
+                    Log.d(" intent pathData 삽입", String.valueOf(Markerintent));
+                    //Markerintent.putExtra("pathData", pathData2);
                     //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
-                    startActivity(intent);
+                    startActivity(Markerintent);
+                    Log.d("Activity 시작", String.valueOf(Markerintent));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-            Log.d("callback 호출 끝", String.valueOf(result));
+            Log.d("SearchPubTransPath", String.valueOf(result));
         }
 
         // 에러 표출시 데이터
@@ -233,32 +272,34 @@ public class select_path extends AppCompatActivity {
         }
     };
 
-    public OnResultCallbackListener busline = new OnResultCallbackListener() {
-        @Override
-        public void onSuccess(ODsayData oDsayData, API api) {
-            Log.d("API 호출 성공", String.valueOf(api));
-            result = null;
-            result = oDsayData.getJson();
-            JSONArray busLaneData = null;
-            //해당 버스의 전체 경로
-            try {
-                busLaneData = result.getJSONObject("result").getJSONArray("lane").getJSONObject(0).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
-                int length = busLaneData.length();
-                for (int i = 0; i < length; i++) {
-                    double busLat = busLaneData.getJSONObject(i).getDouble("x");
-                    double busLong = busLaneData.getJSONObject(i).getDouble("y");
-                    String tempPath = String.valueOf(busLat) + "," + String.valueOf(busLong);
-                    pathData2.add(tempPath);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Log.d("station 정보 받아옴", String.valueOf(result.length()));
-        }
-        @Override
-        public void onError(int i, String s, API api) {
-        }
-    };
+//    public OnResultCallbackListener busline = new OnResultCallbackListener() {
+//        @Override
+//        public void onSuccess(ODsayData oDsayData, API api) {
+//            Log.d("API 호출 성공", String.valueOf(api));
+//            result = null;
+//            result = oDsayData.getJson();
+//            JSONArray busLaneData = null;
+//            //해당 버스의 전체 경로
+//            try {
+//                busLaneData = result.getJSONObject("result").getJSONArray("lane").getJSONObject(0).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
+//                int length = busLaneData.length();
+//                for (int i = 0; i < length; i++) {
+//                    double busLat = busLaneData.getJSONObject(i).getDouble("x");
+//                    double busLong = busLaneData.getJSONObject(i).getDouble("y");
+//                    String tempPath = String.valueOf(busLat) + "," + String.valueOf(busLong);
+//                    pathData2.add(tempPath);
+//                    Log.d("tempPath : ", String.valueOf(tempPath));
+//                }
+//                Markerintent.putExtra("pathData", pathData2);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            Log.d("busline 실행 완료", String.valueOf(busLaneData));
+//        }
+//        @Override
+//        public void onError(int i, String s, API api) {
+//        }
+//    };
 
 
 
@@ -278,6 +319,7 @@ public class select_path extends AppCompatActivity {
                     double subwayLong = subwayLaneData.getJSONObject(i).getDouble("y");
                     String tempPath = String.valueOf(subwayLat) + "," + String.valueOf(subwayLong);
                     pathData2.add(tempPath);
+                    Log.d("tempPath ", String.valueOf(tempPath));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -313,6 +355,7 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
+                Log.d("경로 설정 버튼 눌림", String.valueOf(1));
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
             }
