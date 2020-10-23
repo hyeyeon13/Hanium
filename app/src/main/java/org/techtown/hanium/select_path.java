@@ -78,6 +78,8 @@ public class select_path extends AppCompatActivity {
     JSONObject result;
     JSONObject busDetail;
     JSONArray subPath = null;
+    int totalTime=0;
+    double totalDistance=0;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
     ArrayList<String> pathData2 = new ArrayList<String>();
@@ -114,6 +116,8 @@ public class select_path extends AppCompatActivity {
                 result = oDsayData.getJson();
                 //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
                 try {
+                    totalTime = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
+                    totalDistance = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getDouble("totalDistance");
                     subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
                     //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
                     //result에서 데이터 받아와 파싱 후 subPath에 저장
