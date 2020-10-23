@@ -34,7 +34,6 @@ import java.util.ArrayList;
 public class Marker extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
     private static final int SMS_RECEIVE_PERMISSON = 1;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
-    SmsManager mSMSManager;
     ArrayList<String> pathData = new ArrayList<String>();
     Double myLongitude, myLatitude, myAltitude;
     Double destLongitude, destLatitude;
@@ -200,9 +199,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         num_min = Double.valueOf(min);
 
-        if (num_min > 50) {
+        if (num_min > 50 ) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("경로이탈감지").setMessage("경로를 이탈하였습니다. 문자를 전송하시겠습니까?");
+            Log.d("경로이탈감지: ", min + "m");
             builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -214,16 +214,16 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try{
-                        SmsManager sms = SmsManager.getDefault();
-                        sendSms();
+//                        SmsManager sms = SmsManager.getDefault();
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage("01050484236", null, "경로를 이탈하였습니다.", null, null);
+                        Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
                         Log.d("에러",e.toString());
                     }
 
                 }
             });
-            Log.d("경로이탈감지: ", min + "m");
-            builder.setTitle("경로이탈감지!").setMessage("경로를 벗어났습니다");
 
             AlertDialog alertDialog = builder.create();
 
@@ -327,8 +327,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage("01050484236", null, "경로를 이탈하였습니다.", null, null);
                     Toast.makeText(getApplicationContext(), "문자 전송 완료.",
                             Toast.LENGTH_LONG).show();
                 } else {
