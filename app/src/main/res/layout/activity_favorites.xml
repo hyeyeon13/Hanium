@@ -56,7 +56,7 @@
             android:textSize="30sp" />
 
         <EditText
-            android:id="@+id/people_name"
+            android:id="@+id/favor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -87,7 +87,7 @@
             android:textSize="30sp" />
 
         <EditText
-            android:id="@+id/people_phone"
+            android:id="@+id/favor_addr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -98,10 +98,17 @@
             android:inputType="textPersonName"
             android:textColor="#ff000000" />
 
+        <Button
+            android:id="@+id/btnsearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
+
     </LinearLayout>
 
     <Button
-        android:id="@+id/button16"
+        android:id="@+id/btnfavor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
