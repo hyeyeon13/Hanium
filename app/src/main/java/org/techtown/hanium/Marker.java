@@ -3,8 +3,10 @@ package org.techtown.hanium;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,8 +16,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
@@ -28,6 +32,9 @@ import com.skt.Tmap.TMapView;
 import java.util.ArrayList;
 
 public class Marker extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
+    private static final int SMS_RECEIVE_PERMISSON = 1;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
+    SmsManager mSMSManager;
     ArrayList<String> pathData = new ArrayList<String>();
     Double myLongitude, myLatitude, myAltitude;
     Double destLongitude, destLatitude;
@@ -195,7 +202,26 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         if (num_min > 50) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("경로이탈감지").setMessage("경로를 이탈하였습니다. 문자를 전송하시겠습니까?");
+            builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getApplicationContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
 
+                }
+            });
+            builder.setPositiveButton("문자 전송", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try{
+                        SmsManager sms = SmsManager.getDefault();
+                        sendSms();
+                    }catch (Exception e){
+                        Log.d("에러",e.toString());
+                    }
+
+                }
+            });
             Log.d("경로이탈감지: ", min + "m");
             builder.setTitle("경로이탈감지!").setMessage("경로를 벗어났습니다");
 
@@ -229,6 +255,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
                 desDist = Double.valueOf(locationA.distanceTo(locationB));
                 if (desDist <= 15) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Marker.this);
+                    builder.setTitle("길찾기 종료").setMessage("목적지에 도착하였습니다.");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                     Log.d("목적지 도착", desDist.toString());
                 } else {
                     Log.d("목적지 미도착", desDist.toString());
@@ -261,6 +291,54 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
 
+        int permissonCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
+        if(permissonCheck == PackageManager.PERMISSION_GRANTED){
+
+        }else {
+            Toast.makeText(getApplicationContext(), "SMS 수신권한 없음", Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
+                Toast.makeText(getApplicationContext(), "SMS권한이 필요합니다", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, SMS_RECEIVE_PERMISSON);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, SMS_RECEIVE_PERMISSON);
+            }
+        }
+
     }
+
+    public void sendSms(){
+        //메시지
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.SEND_SMS)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        MY_PERMISSIONS_REQUEST_SEND_SMS);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage("01050484236", null, "경로를 이탈하였습니다.", null, null);
+                    Toast.makeText(getApplicationContext(), "문자 전송 완료.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "문자전송 실패", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+        }
+    }
+
 
 }
