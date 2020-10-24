@@ -233,7 +233,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                     try{
 //                        SmsManager sms = SmsManager.getDefault();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(people_array[0], null, "경로를 이탈하였습니다.", null, null);
+                        smsManager.sendTextMessage(people_array[0], null, "경로를 이탈하였습니다. 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.", null, null);
+                        ArrayList<String> partMessage = smsManager.divideMessage("경로를 이탈하였습니다. 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.");
+                        smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
+
                         Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
                         Log.d("에러",e.toString());
