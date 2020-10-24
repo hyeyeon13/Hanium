@@ -248,6 +248,10 @@ public class select_path extends AppCompatActivity {
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
                     Markerintent = new Intent(getApplicationContext(), Marker.class);
+                    String login_id;
+                    Intent intent = getIntent();
+                    login_id = intent.getExtras().getString("log_ok_id");
+                    Markerintent.putExtra("log_ok_id", login_id);
                     Markerintent.putExtra("curLongitude", longitude);
                     Log.d(" intent 출발지 경도", String.valueOf(Markerintent));
                     Markerintent.putExtra("curLatitude", latitude);

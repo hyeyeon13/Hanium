@@ -15,10 +15,12 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skt.Tmap.TMapGpsManager;
@@ -29,7 +31,12 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class Marker extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
     private static final int SMS_RECEIVE_PERMISSON = 1;
@@ -49,9 +56,14 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     private boolean m_bTrackingMode = true;
     private TMapGpsManager tmapgps = null;
     TMapView tmapview;
+    public String login_id;
 
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
+    TextView people1;
+    TextView people2;
+    String[] people_array;
+    public people_list task;
     @Override
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
@@ -98,7 +110,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         setContentView(R.layout.activity_marker);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
+        Intent intent = getIntent();
+        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
+        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
         tmapview = new TMapView(this);
+        tmapview.setLocationPoint(realtimeLongitude, realtimeLatitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
@@ -115,9 +131,9 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tmapview.setSightVisible(true);
 
 
-        Intent intent = getIntent();
-        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
-        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
+
+        login_id = intent.getExtras().getString("log_ok_id");
+        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude = intent.getExtras().getDouble("curLongitude");
@@ -199,10 +215,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         num_min = Double.valueOf(min);
 
-        if (num_min > 50 ) {
+        if (num_min > 50) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("경로이탈감지").setMessage("경로를 이탈하였습니다. 문자를 전송하시겠습니까?");
             Log.d("경로이탈감지: ", min + "m");
+            getpeople_list();
             builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -216,7 +233,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                     try{
 //                        SmsManager sms = SmsManager.getDefault();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage("01050484236", null, "경로를 이탈하였습니다.", null, null);
+                        smsManager.sendTextMessage(people_array[0], null, "경로를 이탈하였습니다.", null, null);
                         Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
                         Log.d("에러",e.toString());
@@ -337,6 +354,87 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             }
         }
     }
+    private class people_list extends AsyncTask<String, Void, String> {
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... arg0) {
+            String id = arg0[0];
+            try {
+                String link = "http://211.221.215.166/androidwithdb/phoneNo.php?ID=" + id;
+
+                String ret = server_network_check(link);
+                if (ret.equals("1") != true) return ret;
+
+                HttpURLConnection urlConn = null;
+                URL url = new URL(link);
+                urlConn = (HttpURLConnection) url.openConnection();
+                urlConn.setConnectTimeout(1000);
+                urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+                urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
+                urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
 
 
+                if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.d("retret2", "" + ret);
+                    return "-2";
+                }
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(), "UTF-8"));
+
+                StringBuffer sb = new StringBuffer("");
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                    break;
+                }
+                reader.close();
+                if (urlConn != null) urlConn.disconnect();
+
+                Log.d("라인값", sb.toString());
+
+                return sb.toString();
+            } catch (Exception e) {
+                return new String("Exception: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    private void getpeople_list() {
+        String people_r = null;
+
+        task = new Marker.people_list();
+        try {
+            people_r = task.execute(login_id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("getpeople", "가져오기");
+
+        if (people_r.equals("0") == true) Log.d("보호자없음", "등록된 보호자가 없습니다.");
+        else if (people_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
+        else {
+            people_array = people_r.split("@");
+            Log.d("네트워크2", people_r);
+
+            Log.d("보호자5", people_array[0]);
+
+            Log.d("보호자6", people_array[1]);
+        }
+
+
+    }
+    public String server_network_check (String host){
+        return "1";
+    }
 }

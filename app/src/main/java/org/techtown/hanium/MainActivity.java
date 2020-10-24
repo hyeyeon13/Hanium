@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getApplicationContext(),select_path.class);
+                intent.putExtra("log_ok_id", login_id);
                 startActivity(intent);
             }
         });
