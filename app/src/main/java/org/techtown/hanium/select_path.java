@@ -262,6 +262,10 @@ public class select_path extends AppCompatActivity {
                     Log.d(" intent 도착지 위도", String.valueOf(Markerintent));
                     Markerintent.putExtra("pathData", pathData2);
                     Log.d(" intent pathData 삽입", String.valueOf(Markerintent));
+                    Markerintent.putExtra("totalTime", totalTime);
+                    Log.d(" intent totalTime 삽입", String.valueOf(Markerintent));
+                    Markerintent.putExtra("totalDistance", totalDistance);
+                    Log.d(" intent totalDistance", String.valueOf(Markerintent));
                     //Markerintent.putExtra("pathData", pathData2);
                     //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
                     startActivity(Markerintent);
