@@ -54,17 +54,18 @@
             android:fontFamily="@font/font3"
             android:text="이름"
             android:textColor="#ff000000"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/favor_name"
-            android:layout_width="wrap_content"
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="80dp"
             android:backgroundTint="#ff000000"
             android:ems="10"
+            android:fontFamily="@font/font3"
             android:hint="예) 집, 학교"
             android:inputType="textPersonName"
             android:textColor="#ff000000"
@@ -86,17 +87,18 @@
             android:fontFamily="@font/font3"
             android:text="주소"
             android:textColor="#ff000000"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/favor_addr"
-            android:layout_width="wrap_content"
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="80dp"
             android:backgroundTint="#ff000000"
             android:ems="10"
+            android:fontFamily="@font/font3"
             android:inputType="textPersonName"
             android:textColor="#ff000000" />
 
@@ -104,8 +106,8 @@
             android:id="@+id/btnsearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="80dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
@@ -113,7 +115,7 @@
             android:fontFamily="@font/font3"
             android:text="주소변환"
             android:textColor="#ff000000"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
