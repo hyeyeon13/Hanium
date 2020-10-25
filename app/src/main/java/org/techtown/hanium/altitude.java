@@ -1,6 +1,7 @@
 package org.techtown.hanium;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -75,7 +76,10 @@ public class altitude extends AppCompatActivity {
             Log.d("test", "onLocationChanged, location:" + location);
             double longitude = location.getLongitude(); //경도
             double latitude = location.getLatitude();   //위도
+
+            Intent intent = new Intent(getApplicationContext(),Marker.class);
             double altitude = location.getAltitude();   //고도
+            intent.putExtra("destAltitude",altitude);
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.

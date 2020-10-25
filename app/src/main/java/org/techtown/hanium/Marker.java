@@ -52,8 +52,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     private static final int SMS_RECEIVE_PERMISSON = 1;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     ArrayList<String> pathData = new ArrayList<String>();
-    Double myLongitude, myLatitude, myAltitude;
-    Double destLongitude, destLatitude;
+    Double myLongitude, myLatitude;
+    Double destLongitude, destLatitude, destAltitude;
     Double realtimeLongitude, realtimeLatitude;
     String min;
     Double num_min;
@@ -111,9 +111,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             realtimeLatitude = location.getLatitude();   //현재 위도
 
 
-            double altitude = location.getAltitude();   //고도
-            float accuracy = location.getAccuracy();    //정확도
-            String provider = location.getProvider();   //위치제공자
+
+            altitude = location.getAltitude();   //고도
+            //float accuracy = location.getAccuracy();    //정확도
+            //String provider = location.getProvider();   //위치제공자
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
@@ -167,6 +168,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         TextView destTime = (TextView) findViewById(R.id.destTime);
         TextView totalTime = (TextView) findViewById(R.id.totalTime);
         TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
+        TextView destAltitude = (TextView) findViewById(R.id.destAltitude);
 
 
         int destT = intent.getExtras().getInt("totalTime");
@@ -192,14 +194,23 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         Double totalDist = intent.getExtras().getDouble("totalDistance");
         totalDistance.setText("총 거리 : " + totalDist / 1000.0 + "km");
 
+        altitude = intent.getExtras().getDouble("destAltitude");
+        destAltitude.setText("목적지 고도 : " + altitude);
+
+
+
+
+
+
         login_id = intent.getExtras().getString("log_ok_id");
 //        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude = intent.getExtras().getDouble("curLongitude"); //출발지 위도
-        myLatitude = intent.getExtras().getDouble("curLatitude");   //출발지 경ㄷ
+        myLatitude = intent.getExtras().getDouble("curLatitude");
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
+
         //stationName=intent.getExtras().getString("stationName");
         TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
         TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
@@ -221,15 +232,15 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         destMarker.setName("dest"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("destPoint", destMarker);
 
-        double centerLong, centerLat;
+        double centerLong, centerLat, centerAlt;
         centerLong = (myLongitude + destLongitude) / 2;
         centerLat = (myLatitude + destLatitude) / 2;
         tmapview.setCenterPoint(centerLong, centerLat); //지도의 중심지점 좌표 (경도, 위도 순서)
         Log.d("내 위도  ", String.valueOf(realtimeLatitude));
         Log.d("내 경도  ", String.valueOf(realtimeLongitude));
-        Log.d("내 고도  ", String.valueOf(myAltitude));
         Log.d("목적지 위도  ", String.valueOf(destLatitude));
         Log.d("목적지 경도  ", String.valueOf(destLongitude));
+        Log.d("목적지 고도  ", String.valueOf(destAltitude));
 
         TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
         TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
