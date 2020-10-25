@@ -161,6 +161,7 @@ public class select_path extends AppCompatActivity {
                 for (int k = 0; k < subPath.length(); k++) {
                     flags[k] = false;
                 }
+                String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
                 for (int k = 0; k < subPath.length(); k++) {
                     int receivedData = 0;
                     //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
@@ -177,7 +178,7 @@ public class select_path extends AppCompatActivity {
                         //200924 subPath가 여러개인데 구분하는 기준은 위에 있어 1은 지하철 2는 버스 3은 도보
                         //200924 이경우는 type=1인 경우 (지하철)
                         //지하철
-                        String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
+                        //String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
                         oDsayServiceForSubTrans.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
                             @Override
                             public void onSuccess(ODsayData oDsayData, API api) {
@@ -219,7 +220,7 @@ public class select_path extends AppCompatActivity {
                         busID = temp.getJSONArray("lane").getJSONObject(0).getInt("busID");
                         startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                         endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
-                        String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
+                        //String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
                         final int finalK = k;
                         oDsayServiceForSubTrans.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
                             @Override
