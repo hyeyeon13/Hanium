@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
         btnfavor2 = (Button)findViewById(R.id.btnfavor2);
         btnfavor3 = (Button)findViewById(R.id.btnfavor3);
 
-        startfavor1 = (Button)findViewById(R.id.startfavor1);
-        startfavor2 = (Button)findViewById(R.id.startfavor2);
-        startfavor3 = (Button)findViewById(R.id.startfavor3);
+//        startfavor1 = (Button)findViewById(R.id.startfavor1);
+//        startfavor2 = (Button)findViewById(R.id.startfavor2);
+//        startfavor3 = (Button)findViewById(R.id.startfavor3);
 
 
         Intent intent = getIntent();
