@@ -105,7 +105,7 @@ public class select_path extends AppCompatActivity {
 
     Intent Markerintent;
 
-    public void startActivity(){
+    public void startActivity1(){
         Markerintent = new Intent(getApplicationContext(), Marker.class);
         String login_id;
         Intent intent = getIntent();
@@ -133,11 +133,6 @@ public class select_path extends AppCompatActivity {
         Log.d("Activity 시작", String.valueOf(Markerintent));
     }
 
-    public void test(boolean flag){
-        while(true){
-            if(flag==true) return;
-        }
-    }
 
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
         //200924 ODSay API의 콜백함수
@@ -159,6 +154,7 @@ public class select_path extends AppCompatActivity {
                     //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
                     //result에서 데이터 받아와 파싱 후 subPath에 저장
                     for (int k = 0; k < subPath.length(); k++) {
+                        int receivedData = 0;
                         //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
                         //200924 예를들면 도보(1) - 버스(2) - 지하철(3) - 버스(4) - 도보(5) - 지하철(6) 이면
                         //200924 subPath.length()의 값은 6이 된다
@@ -189,7 +185,6 @@ public class select_path extends AppCompatActivity {
 //                                String mapobj = new String();
 //                                mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode")+":2:"+temp.getInt("startID")+":"+temp.getInt("endID");
 //                                odsayService.requestLoadLane("0:0@"+mapobj, subwayLine);
-                            flag=true;
                         } else if (tempTrafficType == 2) {
                             //버스
                             int busID, startStnID, endStnID;
@@ -214,21 +209,22 @@ public class select_path extends AppCompatActivity {
                                             String tempPath = String.valueOf(busLat) + "," + String.valueOf(busLong);
                                             pathData2.add(tempPath);
                                             Log.d("tempPath ", String.valueOf(tempPath));
-                                            flag=true;
                                         }
                                         //Markerintent.putExtra("pathData", pathData2);
                                         //Log.d("버스노선그래픽 intent 삽입", String.valueOf(Markerintent));
-                                        startActivity();
+                                        //startActivity();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                     Log.d("busline 실행 완료", String.valueOf(busLaneData));
+                                    startActivity1();
                                 }
 
                                 @Override
                                 public void onError(int i, String s, API api) {
 
                                 }
+
                             });
                             } else if (tempTrafficType == 3) {
                             //출발은 왠만하면 도보다.
@@ -281,6 +277,7 @@ public class select_path extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
                     //원래 activity 스타트 하는 부분
@@ -395,7 +392,6 @@ public class select_path extends AppCompatActivity {
                 Log.d("경로 설정 버튼 눌림", String.valueOf(1));
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
-                startActivity();
             }
 
         });
