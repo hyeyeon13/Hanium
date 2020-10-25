@@ -7,45 +7,32 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
 import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 import com.skt.Tmap.TMapPoint;
-import com.skt.Tmap.TMapPolyLine;
-import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.TMapData;
-import com.skt.Tmap.TMapPoint;
 
 import org.json.JSONException;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,8 +41,7 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 
@@ -82,8 +68,19 @@ public class select_path extends AppCompatActivity {
     int totalTime = 0;
     double totalDistance = 0;
     TMapData tmapdata = new TMapData();
-    ArrayList<String> pathData = new ArrayList<String>();
-    ArrayList<String> pathData2 = new ArrayList<String>();
+    //ArrayList<String> pathData = new ArrayList<String>();
+//    ArrayList<String> pathData2 = new ArrayList<String>();
+//    ArrayList<String> pathData3 = new ArrayList<String>();
+//    ArrayList<String> pathData4 = new ArrayList<String>();
+//    ArrayList<String> pathData5 = new ArrayList<String>();
+//    ArrayList<String> pathData6 = new ArrayList<String>();
+//    ArrayList<String> pathData7 = new ArrayList<String>();
+//    ArrayList<String> pathData8 = new ArrayList<String>();
+//    ArrayList<String> pathData9 = new ArrayList<String>();
+//    ArrayList<String> pathData10 = new ArrayList<String>();
+    ArrayList<ArrayList<String>> array;
+    Boolean[] flags;
+
     Element root;
     NodeList nodeListPlacemark;
     NodeList nodeListCoordinates;
@@ -99,13 +96,23 @@ public class select_path extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
+    AtomicBoolean done = new AtomicBoolean(false);
+
 
     Button button;
     // 콜백 함수 구현
 
     Intent Markerintent;
 
-    public void startActivity1() {
+    public void startActivity(int length) {
+        for(int i=0;i<length;i++){
+            if(flags[i]==false){
+                return;
+            }
+        }
+        //array.add(pathData);
+        //array.get(0);
+        //array.add(0, pathData);
         Markerintent = new Intent(getApplicationContext(), Marker.class);
         String login_id;
         Intent intent = getIntent();
@@ -119,7 +126,7 @@ public class select_path extends AppCompatActivity {
         Log.d(" intent 도착지 경도", String.valueOf(Markerintent));
         Markerintent.putExtra("destLatitude", destLatitude);
         Log.d(" intent 도착지 위도", String.valueOf(Markerintent));
-        Markerintent.putExtra("pathData", pathData2);
+        Markerintent.putExtra("pathDataArray", array);
         Log.d(" intent pathData 삽입", String.valueOf(Markerintent));
         Markerintent.putExtra("totalTime", totalTime);
         Log.d(" intent totalTime 삽입", String.valueOf(Markerintent));
@@ -144,7 +151,6 @@ public class select_path extends AppCompatActivity {
                 //200924 호출한 메서드가 requestPubTransPathSearch 일 때
                 Log.d("API 호출 성공", String.valueOf(api));
                 result = oDsayData.getJson();
-
                 //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
                 try {
                     totalTime = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
@@ -152,6 +158,11 @@ public class select_path extends AppCompatActivity {
                     subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
                     //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
                     //result에서 데이터 받아와 파싱 후 subPath에 저장
+                    array = new ArrayList<ArrayList<String>>(subPath.length());
+                    flags = new Boolean[subPath.length()];
+                    for(int k=0;k<subPath.length();k++){
+                        flags[k]=false;
+                    }
                     for (int k = 0; k < subPath.length(); k++) {
                         int receivedData = 0;
                         //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
@@ -162,9 +173,9 @@ public class select_path extends AppCompatActivity {
                         intInfo = null;
                         intInfo = new JSONObject();
                         int tempTrafficType = temp.getInt(("trafficType"));
-                        flag = false;
                         //trafficType 1:지하철 2:버스 3:도보
                         if (tempTrafficType == 1) {
+                            final int finalK = k;
                             //200924 subPath가 여러개인데 구분하는 기준은 위에 있어 1은 지하철 2는 버스 3은 도보
                             //200924 이경우는 type=1인 경우 (지하철)
                             //지하철
@@ -183,6 +194,9 @@ public class select_path extends AppCompatActivity {
 //                                String mapobj = new String();
 //                                mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode")+":2:"+temp.getInt("startID")+":"+temp.getInt("endID");
 //                                odsayService.requestLoadLane("0:0@"+mapobj, subwayLine);
+                            flags[finalK]=true;
+                            Log.d("flag 변경", String.valueOf(finalK));
+                            startActivity(subPath.length());
                         } else if (tempTrafficType == 2) {
                             //버스
                             int busID, startStnID, endStnID;
@@ -190,6 +204,7 @@ public class select_path extends AppCompatActivity {
                             startStnID = temp.getInt("startID");//출발정류장 ID 실제 공공정보시스템과 상이함
                             endStnID = temp.getInt("endID");//도착정류장 ID 실제 공공정보시스템과 상이함
                             String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
+                            final int finalK = k;
                             oDsayServiceForSubTrans.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
                                 @Override
                                 public void onSuccess(ODsayData oDsayData, API api) {
@@ -197,6 +212,7 @@ public class select_path extends AppCompatActivity {
                                     result = null;
                                     result = oDsayData.getJson();
                                     JSONArray busLaneData = null;
+                                    ArrayList<String> pathData = new ArrayList<String>();
                                     //해당 버스의 전체 경로
                                     try {
                                         busLaneData = result.getJSONObject("result").getJSONArray("lane").getJSONObject(0).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
@@ -205,9 +221,14 @@ public class select_path extends AppCompatActivity {
                                             double busLat = busLaneData.getJSONObject(i).getDouble("x");
                                             double busLong = busLaneData.getJSONObject(i).getDouble("y");
                                             String tempPath = String.valueOf(busLat) + "," + String.valueOf(busLong);
-                                            pathData2.add(tempPath);
+                                            pathData.add(tempPath);
                                             Log.d("tempPath ", String.valueOf(tempPath));
                                         }
+                                        array.add(finalK, pathData);
+                                        Log.d("array에 데이터 넣음", String.valueOf(finalK));
+                                        flags[finalK]=true;
+                                        Log.d("flag 변경", String.valueOf(finalK));
+                                        startActivity(subPath.length());
                                         Log.d("버스노선그래픽 삽입", "");
                                         //Markerintent.putExtra("pathData", pathData2);
                                         //Log.d("버스노선그래픽 intent 삽입", String.valueOf(Markerintent));
@@ -216,7 +237,6 @@ public class select_path extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                     Log.d("busline 실행 완료", String.valueOf(busLaneData));
-                                    startActivity1();
                                 }
                                 @Override
                                 public void onError(int i, String s, API api) {
@@ -227,6 +247,7 @@ public class select_path extends AppCompatActivity {
                             //그러면 시작점은 내 위치가 되겠지.
                             //첫번째 도보의 시작점은 내 위치고 목적지는 다음 교통수단의 첫 위치이다.
                             //여기서 구해야 할 정보는 출발지 위/경도 , 도착지 위/경도이다.
+
                             if (k == 0) {
                                 startLat = latitude;
                                 startLong = longitude;
@@ -249,22 +270,27 @@ public class select_path extends AppCompatActivity {
                             }
                             TMapPoint startPoint = new TMapPoint(startLat, startLong);// 마커 놓을 좌표 (위도, 경도 순서)
                             TMapPoint destPoint = new TMapPoint(destLat, destLong); // 마커 놓을 좌표 (위도, 경도 순서)
+                            final int finalK1 = k;
                             tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
                                 @Override
                                 public void onFindPathDataAll(Document document) {
+                                    ArrayList<String> pathData = new ArrayList<String>();
                                     root = document.getDocumentElement();
                                     nodeListPoint = root.getElementsByTagName("Point");
                                     for (int i = 0; i < nodeListPoint.getLength(); i++) {
                                         nodeListPointItem = nodeListPoint.item(i).getChildNodes();
                                         for (int j = 0; j < nodeListPointItem.getLength(); j++) {
                                             if (nodeListPointItem.item(j).getNodeName().equals("coordinates")) {
-                                                pathData2.add(nodeListPointItem.item(j).getTextContent().trim());
+                                                pathData.add(nodeListPointItem.item(j).getTextContent().trim());
                                                 Log.d("도보데이터 ", nodeListPointItem.item(j).getTextContent().trim());
                                             }
                                         }
                                     }
-                                    Markerintent.putExtra("pathData", pathData2);
-                                    Log.d("도보경로에서 intent 삽입", String.valueOf(Markerintent));
+                                    array.add(finalK1,pathData);
+                                    Log.d("array에 데이터 넣음", String.valueOf(finalK1));
+                                    flags[finalK1] = true;
+                                    Log.d("flag 변경", String.valueOf(finalK1));
+                                    startActivity(subPath.length());
                                 }
                             });
                             try {
@@ -336,7 +362,7 @@ public class select_path extends AppCompatActivity {
                     double subwayLat = subwayLaneData.getJSONObject(i).getDouble("x");
                     double subwayLong = subwayLaneData.getJSONObject(i).getDouble("y");
                     String tempPath = String.valueOf(subwayLat) + "," + String.valueOf(subwayLong);
-                    pathData2.add(tempPath);
+                    //pathData2.add(tempPath);
                     Log.d("tempPath ", String.valueOf(tempPath));
                 }
             } catch (JSONException e) {
@@ -382,7 +408,7 @@ public class select_path extends AppCompatActivity {
         completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pathData.clear(); //pathData 초기화
+                //pathData.clear(); //pathData 초기화
                 Log.d("경로 설정 버튼 눌림", "");
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);

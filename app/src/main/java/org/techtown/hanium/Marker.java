@@ -79,6 +79,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     int hour_time = 0;
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+    ArrayList<ArrayList<String>> array;
 
 
     @Override
@@ -148,6 +149,14 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         realtimeLongitude = gpsTracker.getLongitude();
         latitude = intent.getExtras().getDouble("curLatitude");
         longitude = intent.getExtras().getDouble("curLongitude");
+        array = (ArrayList<ArrayList<String>>) intent.getExtras().get("pathDataArray");
+        for(int i=0;i< array.size();i++){
+            ArrayList<String> tempData = new ArrayList<String>();
+            tempData = array.get(i);
+            for(int j=0;j<tempData.size();j++){
+                pathData.add(tempData.get(j));
+            }
+        }
         tmapview.setLocationPoint(longitude, latitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
@@ -242,7 +251,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 //        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
 //        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
 
-        pathData = intent.getExtras().getStringArrayList("pathData");
         for (int i = 0; i < pathData.size(); i++) {
             double tempLat, tempLong;
             String tempS;
