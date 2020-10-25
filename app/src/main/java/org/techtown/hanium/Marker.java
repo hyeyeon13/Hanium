@@ -133,7 +133,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
         login_id = intent.getExtras().getString("log_ok_id");
-        Log.d("Marker에서 login 아이디 ", login_id);
+//        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude = intent.getExtras().getDouble("curLongitude");

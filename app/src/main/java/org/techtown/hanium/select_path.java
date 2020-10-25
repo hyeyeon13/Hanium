@@ -352,6 +352,14 @@ public class select_path extends AppCompatActivity {
 
         final EditText editStart = (EditText) findViewById(R.id.editstart);
         final EditText dest = (EditText) findViewById(R.id.editTextDest);
+
+        Intent intent = getIntent();
+        if(intent.getExtras().getString("px") != null)
+        {
+            destLatitude = Double.parseDouble(intent.getExtras().getString("px"));
+            destLongitude = Double.parseDouble(intent.getExtras().getString("py"));
+            dest.setText(Double.toString(destLatitude) + "," + Double.toString(destLongitude));
+        }
         RelativeLayout relativeLayout = new RelativeLayout(this);
         odsayService = ODsayService.init(getApplicationContext(), "o35DS9VMHDOCosWoVhEYWv43HTeN5uX6ID/cO660rlI");
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
@@ -445,6 +453,8 @@ public class select_path extends AppCompatActivity {
                 showDialog(DIALOG_TIME);
             }
         });
+
+        if(destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
     }
 
     /*

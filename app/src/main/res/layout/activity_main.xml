@@ -89,6 +89,12 @@
             android:textColor="#ff000000"
             android:textSize="20sp" />
 
+            <Button
+                android:id="@+id/startfavor1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -106,22 +112,28 @@
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/btnfavor2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            android:layout_marginLeft="29dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_toEndOf="@+id/favor2"
-            android:layout_toRightOf="@+id/favor2"
-            android:background="@drawable/border"
-            android:fontFamily="@font/font3"
-            android:text="수정/등록"
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btnfavor2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="29dp"
+                android:layout_marginLeft="29dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_toEndOf="@+id/favor2"
+                android:layout_toRightOf="@+id/favor2"
+                android:background="@drawable/border"
+                android:fontFamily="@font/font3"
+                android:text="수정/등록"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/startfavor2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -138,22 +150,28 @@
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/btnfavor3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            android:layout_marginLeft="29dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_toEndOf="@+id/favor3"
-            android:layout_toRightOf="@+id/favor3"
-            android:background="@drawable/border"
-            android:fontFamily="@font/font3"
-            android:text="수정/등록"
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btnfavor3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="29dp"
+                android:layout_marginLeft="29dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_toEndOf="@+id/favor3"
+                android:layout_toRightOf="@+id/favor3"
+                android:background="@drawable/border"
+                android:fontFamily="@font/font3"
+                android:text="수정/등록"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/startfavor3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout

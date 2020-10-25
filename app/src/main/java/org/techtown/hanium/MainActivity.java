@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     Button btnfavor1;
     Button btnfavor2;
     Button btnfavor3;
+    Button startfavor1;
+    Button startfavor2;
+    Button startfavor3;
 
     public String login_id;
     public String px1, py1, px2, py2, px3, py3;
@@ -59,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         btnfavor1 = (Button)findViewById(R.id.btnfavor1);
         btnfavor2 = (Button)findViewById(R.id.btnfavor2);
         btnfavor3 = (Button)findViewById(R.id.btnfavor3);
+
+        startfavor1 = (Button)findViewById(R.id.startfavor1);
+        startfavor2 = (Button)findViewById(R.id.startfavor2);
+        startfavor3 = (Button)findViewById(R.id.startfavor3);
 
 
         Intent intent = getIntent();
@@ -109,6 +116,44 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent=new Intent(getApplicationContext(),People.class);
                 intent.putExtra("log_ok_id", login_id);
                 startActivity(intent);
+            }
+        });
+
+        startfavor1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(px1 != null)
+                {
+                    Intent intent = new Intent(getApplicationContext(),select_path.class);
+                    intent.putExtra("px", px1);
+                    intent.putExtra("py", py1);
+                    startActivity(intent);
+                }
+
+            }
+        });
+        startfavor2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(px2 != null)
+                {
+                    Intent intent = new Intent(getApplicationContext(),select_path.class);
+                    intent.putExtra("px", px2);
+                    intent.putExtra("py", py2);
+                    startActivity(intent);
+                }
+            }
+        });
+        startfavor3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(px3 != null)
+                {
+                    Intent intent = new Intent(getApplicationContext(),select_path.class);
+                    intent.putExtra("px", px3);
+                    intent.putExtra("py", py3);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -282,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             favor_array = favor_r.split("@");
-            Log.d("네트워크2", favor_array[0]);
+//            Log.d("네트워크2", favor_array[0]);
             for(int i=0; i<favor_array.length/4; i++)
             {
                 Log.d("테스트", favor_array[i*4]);
