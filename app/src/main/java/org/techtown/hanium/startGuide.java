@@ -19,18 +19,20 @@ public class startGuide extends AppCompatActivity {
     TMapView tmapview;
     TMapMarkerItem myMarker = new TMapMarkerItem();
     TMapMarkerItem destMarker = new TMapMarkerItem();
-    Intent intent = getIntent();
-    Double myLongitude = intent.getExtras().getDouble("curLongitude"); //출발지 위도
-    Double myLatitude = intent.getExtras().getDouble("curLatitude");   //출발지 경ㄷ
-    TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
-    Double destLatitude = intent.getExtras().getDouble("desLongitude"); //도착지 위도
-    Double destLongitude = intent.getExtras().getDouble("desLatitude");   //도착지 경도
-    TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startguide);
+
+        Intent intent = getIntent();
+        Double myLongitude = intent.getExtras().getDouble("myLongitude"); //출발지 위도
+        Double myLatitude = intent.getExtras().getDouble("myLatitude");   //출발지 경도
+        TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
+        Double destLatitude = intent.getExtras().getDouble("desLongitude"); //도착지 위도
+        Double destLongitude = intent.getExtras().getDouble("desLatitude");   //도착지 경도
+        TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
+
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.guide_map);
         tmapview = new TMapView(this);
