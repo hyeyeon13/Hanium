@@ -30,6 +30,7 @@
         <activity android:name=".Marker" />
         <activity android:name=".MainActivity"/>
         <activity android:name=".Signup" />
+        <activity android:name=".startGuide" />
         <activity android:name=".Map"></activity>
         <activity android:name=".login">
             <intent-filter>
