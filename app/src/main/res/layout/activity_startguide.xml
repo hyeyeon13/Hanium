@@ -40,56 +40,10 @@
         android:background="#AEACAC" />
 
     <RelativeLayout
-        android:id="@+id/map_view"
+        android:id="@+id/guide_map"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_weight="8">
+        android:layout_height="match_parent">
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/destTime1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_toEndOf="@+id/button"
-            android:layout_toRightOf="@+id/button"
-            android:fontFamily="@font/font3"
-            android:text="도착 예정시간 : "
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/remainTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_toEndOf="@+id/button"
-            android:layout_toRightOf="@+id/button"
-            android:fontFamily="@font/font3"
-            android:text="남은 시간 : "
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/totalDistance1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_toEndOf="@+id/button"
-            android:layout_toRightOf="@+id/button"
-            android:fontFamily="@font/font3"
-            android:text="남은 거리 : "
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
-
-
-    </LinearLayout>
 </LinearLayout>

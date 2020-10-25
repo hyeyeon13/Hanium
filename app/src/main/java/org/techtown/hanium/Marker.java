@@ -412,6 +412,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(getApplicationContext(),startGuide.class);
+                intent1.putExtra("myLatitude",myLatitude);
+                intent1.putExtra("myLongitude",myLongitude);
+                intent1.putExtra("destLatitude",destLatitude);
+                intent1.putExtra("destLongitude",destLongitude);
                 startActivity(intent1);
             }
         });

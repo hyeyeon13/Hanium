@@ -395,6 +395,7 @@ public class select_path extends AppCompatActivity {
                 Log.d("경로 설정 버튼 눌림", String.valueOf(1));
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
+                startActivity();
             }
 
         });
