@@ -224,10 +224,10 @@ public class select_path extends AppCompatActivity {
                                             pathData.add(tempPath);
                                             Log.d("tempPath ", String.valueOf(tempPath));
                                         }
-                                        array.add(finalK, pathData);
-                                        Log.d("array에 데이터 넣음", String.valueOf(finalK));
                                         flags[finalK]=true;
                                         Log.d("flag 변경", String.valueOf(finalK));
+                                        array.add(finalK, pathData);
+                                        Log.d("array에 데이터 넣음", String.valueOf(finalK));
                                         startActivity(subPath.length());
                                         Log.d("버스노선그래픽 삽입", "");
                                         //Markerintent.putExtra("pathData", pathData2);
@@ -286,10 +286,10 @@ public class select_path extends AppCompatActivity {
                                             }
                                         }
                                     }
-                                    array.add(finalK1,pathData);
-                                    Log.d("array에 데이터 넣음", String.valueOf(finalK1));
                                     flags[finalK1] = true;
                                     Log.d("flag 변경", String.valueOf(finalK1));
+                                    array.add(finalK1,pathData);
+                                    Log.d("array에 데이터 넣음", String.valueOf(finalK1));
                                     startActivity(subPath.length());
                                 }
                             });
