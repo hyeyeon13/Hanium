@@ -41,8 +41,88 @@
 
     <RelativeLayout
         android:id="@+id/map_view"
-        android:layout_width="410dp"
-        android:layout_height="672dp">
+        android:layout_width="match_parent"
+        android:layout_height="550dp">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/path_info"
+        android:layout_width="match_parent"
+        android:layout_height="246dp">
+
+        <TextView
+            android:id="@+id/text_arrive_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="4dp"
+            android:text="도착예정시간 : "
+            android:textColor="#040404"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/text_totalDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="65dp"
+            android:text="총 거리 : "
+            android:textColor="#040404"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/text_totalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="117dp"
+            android:text="소요시간 : "
+            android:textColor="#040404"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/arrive_time"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/text_arrive_time"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/totalDistance"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_arrive_time"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/text_totalDistance"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/totalTime"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/text_totalDistance"
+            android:layout_toRightOf="@+id/text_totalTime"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="30sp"/>
 
     </RelativeLayout>
 </LinearLayout>

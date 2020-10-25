@@ -133,6 +133,7 @@ public class select_path extends AppCompatActivity {
                         int tempTrafficType = temp.getInt(("trafficType"));
                         //trafficType 1:지하철 2:버스 3:도보
                         if (tempTrafficType == 1) {
+
                             //200924 subPath가 여러개인데 구분하는 기준은 위에 있어 1은 지하철 2는 버스 3은 도보
                             //200924 이경우는 type=1인 경우 (지하철)
                             //지하철
@@ -268,6 +269,8 @@ public class select_path extends AppCompatActivity {
                     Log.d(" intent totalDistance", String.valueOf(Markerintent));
                     //Markerintent.putExtra("pathData", pathData2);
                     //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
+                    Markerintent.putExtra("totalTime",totalTime);
+                    Markerintent.putExtra("totalDistance",totalDistance);
                     startActivity(Markerintent);
                     Log.d("Activity 시작", String.valueOf(Markerintent));
                 } catch (JSONException e) {
@@ -602,6 +605,9 @@ public class select_path extends AppCompatActivity {
                                                           int hourOfDay, int minute) {
                                         TextView textView = (TextView) findViewById(R.id.textView3);
                                         textView.setText(hourOfDay + "시 " + minute + "분");
+                                        Intent intent = new Intent(getApplicationContext(), Map.class);
+                                        intent.putExtra("hourOfDay", hourOfDay);
+                                        intent.putExtra("minute",minute);
                                     }
                                 }, // 값설정시 호출될 리스너 등록
                                 4, 19, false); // 기본값 시분 등록
@@ -610,6 +616,7 @@ public class select_path extends AppCompatActivity {
                 return tpd;
         }
         return super.onCreateDialog(id);
+
     }
 
 }
