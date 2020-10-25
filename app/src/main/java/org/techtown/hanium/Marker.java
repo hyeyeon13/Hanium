@@ -66,7 +66,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     private boolean m_bTrackingMode = true;
     private TMapGpsManager tmapgps = null;
     TMapView tmapview;
-    TMapView tmapview2;
     public String login_id;
 
     //경도 : longitude 범위 : 127
@@ -77,6 +76,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     public people_list task;
     int min_time=0;
     int hour_time=0;
+    TMapPolyLine tpolyline2 = new TMapPolyLine();
+    ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
 
 
 
@@ -84,6 +85,16 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
             tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
+            alTMapPoint.add( new TMapPoint(location.getLatitude(), location.getLongitude()) );
+//            alTMapPoint.add( new TMapPoint(37.570841, 126.985302) ); // SKT타워
+//            alTMapPoint.add( new TMapPoint(37.551135, 126.988205) ); // N서울타워
+//            alTMapPoint.add( new TMapPoint(37.579600, 126.976998) ); // 경복궁
+            for(int i=0; i<alTMapPoint.size(); i++)
+            {
+                Log.d("tetetest", Integer.toString(alTMapPoint.size()));
+                tpolyline2.addLinePoint(alTMapPoint.get(i));
+            }
+            tmapview.addTMapPolyLine("path2", tpolyline2);
         }
     }
 
@@ -93,20 +104,15 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
 
-            TMapPolyLine tpolyline2 = new TMapPolyLine();
-            tpolyline2.setLineColor(Color.GRAY);
+            tpolyline2.setLineColor(Color.RED);
             tpolyline2.setLineWidth(2);
-            ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
 
-            Log.d("test", "onLocationChanged, location:" + location);
+
+
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
-            alTMapPoint.add(new TMapPoint(realtimeLatitude, realtimeLongitude));
-            for(int i=0; i<alTMapPoint.size(); i++)
-            {
-                tpolyline2.addLinePoint(alTMapPoint.get(i));
-            }
-            tmapview2.addTMapPolyLine("Line1", tpolyline2);
+
+
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
