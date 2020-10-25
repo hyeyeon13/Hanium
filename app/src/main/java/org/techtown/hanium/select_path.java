@@ -73,6 +73,7 @@ public class select_path extends AppCompatActivity {
     TextView tv;
     ToggleButton tb;
     boolean flag1 = false;
+    boolean flag=false;
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
@@ -104,6 +105,40 @@ public class select_path extends AppCompatActivity {
 
     Intent Markerintent;
 
+    public void startActivity(){
+        Markerintent = new Intent(getApplicationContext(), Marker.class);
+        String login_id;
+        Intent intent = getIntent();
+        login_id = intent.getExtras().getString("log_ok_id");
+        Markerintent.putExtra("log_ok_id", login_id);
+        Markerintent.putExtra("curLongitude", longitude);
+        Log.d(" intent 출발지 경도", String.valueOf(Markerintent));
+        Markerintent.putExtra("curLatitude", latitude);
+        Log.d(" intent 출발지 위도", String.valueOf(Markerintent));
+        Markerintent.putExtra("destLongitude", destLongitude);
+        Log.d(" intent 도착지 경도", String.valueOf(Markerintent));
+        Markerintent.putExtra("destLatitude", destLatitude);
+        Log.d(" intent 도착지 위도", String.valueOf(Markerintent));
+        Markerintent.putExtra("pathData", pathData2);
+        Log.d(" intent pathData 삽입", String.valueOf(Markerintent));
+        Markerintent.putExtra("totalTime", totalTime);
+        Log.d(" intent totalTime 삽입", String.valueOf(Markerintent));
+        Markerintent.putExtra("totalDistance", totalDistance);
+        Log.d(" intent totalDistance", String.valueOf(Markerintent));
+        //Markerintent.putExtra("pathData", pathData2);
+        //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
+        Markerintent.putExtra("totalTime",totalTime);
+        Markerintent.putExtra("totalDistance",totalDistance);
+        startActivity(Markerintent);
+        Log.d("Activity 시작", String.valueOf(Markerintent));
+    }
+
+    public void test(boolean flag){
+        while(true){
+            if(flag==true) return;
+        }
+    }
+
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
         //200924 ODSay API의 콜백함수
         // 호출 성공시 데이터 들어옴
@@ -115,6 +150,7 @@ public class select_path extends AppCompatActivity {
                 //200924 호출한 메서드가 requestPubTransPathSearch 일 때
                 Log.d("API 호출 성공", String.valueOf(api));
                 result = oDsayData.getJson();
+
                 //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
                 try {
                     totalTime = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
@@ -131,6 +167,7 @@ public class select_path extends AppCompatActivity {
                         intInfo = null;
                         intInfo = new JSONObject();
                         int tempTrafficType = temp.getInt(("trafficType"));
+                        flag=false;
                         //trafficType 1:지하철 2:버스 3:도보
                         if (tempTrafficType == 1) {
 
@@ -152,6 +189,7 @@ public class select_path extends AppCompatActivity {
 //                                String mapobj = new String();
 //                                mapobj = temp.getJSONArray("lane").getJSONObject(0).getInt("subwayCode")+":2:"+temp.getInt("startID")+":"+temp.getInt("endID");
 //                                odsayService.requestLoadLane("0:0@"+mapobj, subwayLine);
+                            flag=true;
                         } else if (tempTrafficType == 2) {
                             //버스
                             int busID, startStnID, endStnID;
@@ -176,9 +214,11 @@ public class select_path extends AppCompatActivity {
                                             String tempPath = String.valueOf(busLat) + "," + String.valueOf(busLong);
                                             pathData2.add(tempPath);
                                             Log.d("tempPath ", String.valueOf(tempPath));
+                                            flag=true;
                                         }
-                                        Markerintent.putExtra("pathData", pathData2);
-                                        Log.d("버스노선그래픽 intent 삽입", String.valueOf(Markerintent));
+                                        //Markerintent.putExtra("pathData", pathData2);
+                                        //Log.d("버스노선그래픽 intent 삽입", String.valueOf(Markerintent));
+                                        startActivity();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -190,11 +230,6 @@ public class select_path extends AppCompatActivity {
 
                                 }
                             });
-                            try {
-                                sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
                             } else if (tempTrafficType == 3) {
                             //출발은 왠만하면 도보다.
                             //그러면 시작점은 내 위치가 되겠지.
@@ -248,31 +283,7 @@ public class select_path extends AppCompatActivity {
                         }
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
-                    Markerintent = new Intent(getApplicationContext(), Marker.class);
-                    String login_id;
-                    Intent intent = getIntent();
-                    login_id = intent.getExtras().getString("log_ok_id");
-                    Markerintent.putExtra("log_ok_id", login_id);
-                    Markerintent.putExtra("curLongitude", longitude);
-                    Log.d(" intent 출발지 경도", String.valueOf(Markerintent));
-                    Markerintent.putExtra("curLatitude", latitude);
-                    Log.d(" intent 출발지 위도", String.valueOf(Markerintent));
-                    Markerintent.putExtra("destLongitude", destLongitude);
-                    Log.d(" intent 도착지 경도", String.valueOf(Markerintent));
-                    Markerintent.putExtra("destLatitude", destLatitude);
-                    Log.d(" intent 도착지 위도", String.valueOf(Markerintent));
-                    Markerintent.putExtra("pathData", pathData2);
-                    Log.d(" intent pathData 삽입", String.valueOf(Markerintent));
-                    Markerintent.putExtra("totalTime", totalTime);
-                    Log.d(" intent totalTime 삽입", String.valueOf(Markerintent));
-                    Markerintent.putExtra("totalDistance", totalDistance);
-                    Log.d(" intent totalDistance", String.valueOf(Markerintent));
-                    //Markerintent.putExtra("pathData", pathData2);
-                    //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
-                    Markerintent.putExtra("totalTime",totalTime);
-                    Markerintent.putExtra("totalDistance",totalDistance);
-                    startActivity(Markerintent);
-                    Log.d("Activity 시작", String.valueOf(Markerintent));
+                    //원래 activity 스타트 하는 부분
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
