@@ -145,10 +145,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         latitude = intent.getExtras().getDouble("curLatitude");
         longitude = intent.getExtras().getDouble("curLongitude");
         array = (ArrayList<ArrayList<String>>) intent.getExtras().get("pathDataArray");
-        for(int i=0;i< array.size();i++){
+        for (int i = 0; i < array.size(); i++) {
             ArrayList<String> tempData = new ArrayList<String>();
             tempData = array.get(i);
-            for(int j=0;j<tempData.size();j++){
+            for (int j = 0; j < tempData.size(); j++) {
                 pathData.add(tempData.get(j));
             }
         }
@@ -173,7 +173,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
 
 
-
         final int destT = intent.getExtras().getInt("totalTime");
 //        String t = String.valueOf(destT);
 
@@ -195,9 +194,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         }
 
         final Double totalDist = intent.getExtras().getDouble("totalDistance");
-        final Double totalDist_km=totalDist / 1000.0;
-        totalDistance.setText("총 거리 : " +  totalDist_km+ "km");
-
+        final Double totalDist_km = totalDist / 1000.0;
+        totalDistance.setText("총 거리 : " + totalDist_km + "km");
 
 
         login_id = intent.getExtras().getString("log_ok_id");
@@ -358,7 +356,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 TextView destAltitude = (TextView) findViewById(R.id.destAltitude);
                 altitude = location.getAltitude();
                 destAltitude.setText("목적지 고도 : " + altitude);
-                Log.d("목적지 고도",String.valueOf(altitude));
+                Log.d("목적지 고도", String.valueOf(altitude));
 
 
                 Double desDist;
@@ -433,12 +431,12 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 intent1.putExtra("myLongitude", myLongitude);
                 intent1.putExtra("destLatitude", destLatitude);
                 intent1.putExtra("destLongitude", destLongitude);
-                intent1.putExtra("pathData",pathData);
-                intent1.putExtra("login_id",login_id);
-                intent1.putExtra("destT",destT);
-                intent1.putExtra("totalDist_km",totalDist_km);
+                intent1.putExtra("pathData", pathData);
+                intent1.putExtra("login_id", login_id);
+                intent1.putExtra("destT", destT);
+                intent1.putExtra("totalDist_km", totalDist_km);
                 //intent1.putExtra("totalDist",totalDist);
-                intent1.putExtra("altitude",altitude);
+                intent1.putExtra("altitude", altitude);
                 startActivity(intent1);
             }
         });

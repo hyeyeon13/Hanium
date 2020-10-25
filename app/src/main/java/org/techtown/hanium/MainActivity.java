@@ -46,26 +46,25 @@ public class MainActivity extends AppCompatActivity {
     public favor_list favortastk;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        people1 = (TextView)findViewById(R.id.people1);
-        people2 = (TextView)findViewById(R.id.people2);
+        people1 = (TextView) findViewById(R.id.people1);
+        people2 = (TextView) findViewById(R.id.people2);
 
-        favor1 = (TextView)findViewById(R.id.favor1);
-        favor2 = (TextView)findViewById(R.id.favor2);
-        favor3 = (TextView)findViewById(R.id.favor3);
+        favor1 = (TextView) findViewById(R.id.favor1);
+        favor2 = (TextView) findViewById(R.id.favor2);
+        favor3 = (TextView) findViewById(R.id.favor3);
 
-        btnfavor1 = (Button)findViewById(R.id.btnfavor1);
-        btnfavor2 = (Button)findViewById(R.id.btnfavor2);
-        btnfavor3 = (Button)findViewById(R.id.btnfavor3);
+        btnfavor1 = (Button) findViewById(R.id.btnfavor1);
+        btnfavor2 = (Button) findViewById(R.id.btnfavor2);
+        btnfavor3 = (Button) findViewById(R.id.btnfavor3);
 
-        startfavor1 = (Button)findViewById(R.id.startfavor1);
-        startfavor2 = (Button)findViewById(R.id.startfavor2);
-        startfavor3 = (Button)findViewById(R.id.startfavor3);
+        startfavor1 = (Button) findViewById(R.id.startfavor1);
+        startfavor2 = (Button) findViewById(R.id.startfavor2);
+        startfavor3 = (Button) findViewById(R.id.startfavor3);
 
 
         Intent intent = getIntent();
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         btnfavor1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Favorites.class);
+                Intent intent = new Intent(getApplicationContext(), Favorites.class);
                 intent.putExtra("log_ok_id", login_id);
                 intent.putExtra("chkid", "1");
                 startActivity(intent);
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         btnfavor2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Favorites.class);
+                Intent intent = new Intent(getApplicationContext(), Favorites.class);
                 intent.putExtra("log_ok_id", login_id);
                 intent.putExtra("chkid", "2");
                 startActivity(intent);
@@ -94,26 +93,26 @@ public class MainActivity extends AppCompatActivity {
         btnfavor3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Favorites.class);
+                Intent intent = new Intent(getApplicationContext(), Favorites.class);
                 intent.putExtra("log_ok_id", login_id);
                 intent.putExtra("chkid", "3");
                 startActivity(intent);
             }
         });
-        Button pathSetting=(Button)findViewById(R.id.pathsetting);
+        Button pathSetting = (Button) findViewById(R.id.pathsetting);
         pathSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),select_path.class);
+                Intent intent = new Intent(getApplicationContext(), select_path.class);
                 intent.putExtra("log_ok_id", login_id);
                 startActivity(intent);
             }
         });
-        Button button9=(Button)findViewById(R.id.guardian);
+        Button button9 = (Button) findViewById(R.id.guardian);
         button9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),People.class);
+                Intent intent = new Intent(getApplicationContext(), People.class);
                 intent.putExtra("log_ok_id", login_id);
                 startActivity(intent);
             }
@@ -122,9 +121,8 @@ public class MainActivity extends AppCompatActivity {
         startfavor1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(px1 != null)
-                {
-                    Intent intent = new Intent(getApplicationContext(),select_path.class);
+                if (px1 != null) {
+                    Intent intent = new Intent(getApplicationContext(), select_path.class);
                     intent.putExtra("px", px1);
                     intent.putExtra("py", py1);
                     startActivity(intent);
@@ -135,9 +133,8 @@ public class MainActivity extends AppCompatActivity {
         startfavor2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(px2 != null)
-                {
-                    Intent intent = new Intent(getApplicationContext(),select_path.class);
+                if (px2 != null) {
+                    Intent intent = new Intent(getApplicationContext(), select_path.class);
                     intent.putExtra("px", px2);
                     intent.putExtra("py", py2);
                     startActivity(intent);
@@ -147,9 +144,8 @@ public class MainActivity extends AppCompatActivity {
         startfavor3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(px3 != null)
-                {
-                    Intent intent = new Intent(getApplicationContext(),select_path.class);
+                if (px3 != null) {
+                    Intent intent = new Intent(getApplicationContext(), select_path.class);
                     intent.putExtra("px", px3);
                     intent.putExtra("py", py3);
                     startActivity(intent);
@@ -167,9 +163,9 @@ public class MainActivity extends AppCompatActivity {
 //        content.setSpan(new UnderlineSpan(), 0, content.length(), 0); textView1.setText(content);
 
 
-      //  TMapTapi tMapTapi = new TMapTapi(this);
+        //  TMapTapi tMapTapi = new TMapTapi(this);
         //relativeLayout.addView(tmapview);
-      //  setContentView(relativeLayout);
+        //  setContentView(relativeLayout);
     }
 
     private class people_list extends AsyncTask<String, Void, String> {
@@ -241,14 +237,13 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("getpeople", "가져오기");
 
-        if(people_r.equals("0") == true) Log.d("보호자없음", "등록된 보호자가 없습니다.");
-        else if(people_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
-        else
-        {
+        if (people_r.equals("0") == true) Log.d("보호자없음", "등록된 보호자가 없습니다.");
+        else if (people_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
+        else {
             people_array = people_r.split("@");
             Log.d("네트워크2", people_r);
-            if(people_array.length > 0) people1.setText(people_array[0]);
-            if(people_array.length > 1) people2.setText(people_array[1]);
+            if (people_array.length > 0) people1.setText(people_array[0]);
+            if (people_array.length > 1) people2.setText(people_array[1]);
         }
 
     }
@@ -306,8 +301,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getfavor_list()
-    {
+    private void getfavor_list() {
         String favor_r = null;
         String[] favor_array;
 
@@ -322,42 +316,35 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("getfavor", "가져오기");
 
-        if(favor_r.equals("0") == true) Log.d("즐겨찾기 없음", "등록된 보호자가 없습니다.");
-        else if(favor_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
-        else
-        {
+        if (favor_r.equals("0") == true) Log.d("즐겨찾기 없음", "등록된 보호자가 없습니다.");
+        else if (favor_r.equals("-2") == true) Log.d("네트워크", "네트워크에러임");
+        else {
             favor_array = favor_r.split("@");
 //            Log.d("네트워크2", favor_array[0]);
-            for(int i=0; i<favor_array.length/4; i++)
-            {
-                Log.d("테스트", favor_array[i*4]);
-                if(favor_array[i*4].equals("1"))
-                {
-                    Log.d("favor1", favor_array[i*4+1]);
-                    favor1.setText(favor_array[i*4+1]);
-                    px1 = favor_array[i*4+2];
-                    py1 = favor_array[i*4+3];
-                }
-                else if(favor_array[i*4].equals("2"))
-                {
-                    Log.d("favor2", favor_array[i*4+1]);
-                    favor2.setText(favor_array[i*4+1]);
-                    px2 = favor_array[i*4+2];
-                    py2 = favor_array[i*4+3];
-                }
-                else
-                {
-                    Log.d("favor3", favor_array[i*4+1]);
-                    favor3.setText(favor_array[i*4+1]);
-                    px3 = favor_array[i*4+2];
-                    py3 = favor_array[i*4+3];
+            for (int i = 0; i < favor_array.length / 4; i++) {
+                Log.d("테스트", favor_array[i * 4]);
+                if (favor_array[i * 4].equals("1")) {
+                    Log.d("favor1", favor_array[i * 4 + 1]);
+                    favor1.setText(favor_array[i * 4 + 1]);
+                    px1 = favor_array[i * 4 + 2];
+                    py1 = favor_array[i * 4 + 3];
+                } else if (favor_array[i * 4].equals("2")) {
+                    Log.d("favor2", favor_array[i * 4 + 1]);
+                    favor2.setText(favor_array[i * 4 + 1]);
+                    px2 = favor_array[i * 4 + 2];
+                    py2 = favor_array[i * 4 + 3];
+                } else {
+                    Log.d("favor3", favor_array[i * 4 + 1]);
+                    favor3.setText(favor_array[i * 4 + 1]);
+                    px3 = favor_array[i * 4 + 2];
+                    py3 = favor_array[i * 4 + 3];
                 }
             }
         }
 
     }
 
-    public String server_network_check (String host){
+    public String server_network_check(String host) {
         return "1";
     }
 }

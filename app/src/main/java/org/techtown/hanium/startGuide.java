@@ -204,9 +204,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         destAltitude.setText("목적지 고도 : " + altitude);
 
 
-
-
-
         login_id = intent.getExtras().getString("login_id");
 //        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
@@ -256,7 +253,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
 //        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
 //        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
-
 
 
         pathData = intent.getExtras().getStringArrayList("pathData");
@@ -425,7 +421,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:" + "남은 거리");
-
 
 
     }

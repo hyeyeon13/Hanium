@@ -51,12 +51,12 @@ public class Favorites extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        favor_name = (EditText)findViewById(R.id.favor_name);
-        favor_addr = (EditText)findViewById(R.id.favor_addr);
+        favor_name = (EditText) findViewById(R.id.favor_name);
+        favor_addr = (EditText) findViewById(R.id.favor_addr);
 
-        btnsearch = (Button)findViewById(R.id.btnsearch);
-        btnfavor = (Button)findViewById(R.id.btnfavor);
-        
+        btnsearch = (Button) findViewById(R.id.btnsearch);
+        btnfavor = (Button) findViewById(R.id.btnfavor);
+
         btnsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,11 +78,10 @@ public class Favorites extends AppCompatActivity {
         });
     }
 
-    private void addrsearch()
-    {
+    private void addrsearch() {
         List<Address> list = null;
-        favor_addr = (EditText)findViewById(R.id.favor_addr);
-        String straddr= favor_addr.getText().toString();
+        favor_addr = (EditText) findViewById(R.id.favor_addr);
+        String straddr = favor_addr.getText().toString();
         coder = new Geocoder(this);
         try {
             list = coder.getFromLocationName(straddr, 1);
@@ -138,8 +137,7 @@ public class Favorites extends AppCompatActivity {
                 urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
                 urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
 
-                if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
-                {
+                if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     Log.d("retret2", "" + ret);
                     return "-2";
                 }
