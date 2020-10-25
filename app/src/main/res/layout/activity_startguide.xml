@@ -52,11 +52,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_weight="2"
-        android:background="#FFFFFF"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/destTime"
+            android:id="@+id/destTime1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -68,34 +67,28 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/totalTime"
+            android:id="@+id/remainTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_toEndOf="@+id/button"
             android:layout_toRightOf="@+id/button"
             android:fontFamily="@font/font3"
-            android:text="소요 시간 : "
+            android:text="남은 시간 : "
             android:textColor="#ff000000"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/totalDistance"
+            android:id="@+id/totalDistance1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_toEndOf="@+id/button"
             android:layout_toRightOf="@+id/button"
             android:fontFamily="@font/font3"
-            android:text="총 거리 : "
+            android:text="남은 거리 : "
             android:textColor="#ff000000"
             android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/btn_startGuide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="안내 시작" />
 
 
     </LinearLayout>

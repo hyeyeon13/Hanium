@@ -3,6 +3,7 @@ package org.techtown.hanium;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -19,6 +20,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +38,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class Marker extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
@@ -64,6 +74,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     TextView people2;
     String[] people_array;
     public people_list task;
+    int min_time=0;
+    int hour_time=0;
+
+
+
     @Override
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
@@ -78,8 +93,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
 
             Log.d("test", "onLocationChanged, location:" + location);
-            realtimeLongitude = location.getLongitude(); //경도
-            realtimeLatitude = location.getLatitude();   //위도
+            realtimeLongitude = location.getLongitude(); //현재 경도
+            realtimeLatitude = location.getLatitude();   //현재 위도
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
@@ -109,11 +124,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marker);
 
-        RelativeLayout relativeLayout = new RelativeLayout(this);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.map_view);
+        tmapview = new TMapView(this);
         Intent intent = getIntent();
         realtimeLatitude = intent.getExtras().getDouble("curLatitude");
         realtimeLongitude = intent.getExtras().getDouble("curLongitude");
-        tmapview = new TMapView(this);
         tmapview.setLocationPoint(realtimeLongitude, realtimeLatitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
@@ -130,14 +145,41 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
 
+        TextView destTime = (TextView) findViewById(R.id.destTime);
+        TextView totalTime = (TextView) findViewById(R.id.totalTime);
+        TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
 
+
+        int destT = intent.getExtras().getInt("totalTime");
+//        String t = String.valueOf(destT);
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH시 mm분");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, destT);
+        String now = dateFormat.format(cal.getTime());
+        destTime.setText("도착예정시간 : "+ now);
+
+        int totalT = intent.getExtras().getInt("totalTime");
+        if(totalT>=60){
+            min_time=totalT%60;
+            hour_time=totalT/60;
+            totalTime.setText("소요 시간 : "+ String.valueOf(hour_time) + "시간" + String.valueOf(min_time) + "분");
+        }
+        else{
+            totalTime.setText("소요 시간 : "+ totalT + "분");
+        }
+
+        Double totalDist = intent.getExtras().getDouble("totalDistance");
+        totalDistance.setText("총 거리 : "+ totalDist/1000.0 + "km");
 
         login_id = intent.getExtras().getString("log_ok_id");
         Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
-        myLongitude = intent.getExtras().getDouble("curLongitude");
-        myLatitude = intent.getExtras().getDouble("curLatitude");
+        myLongitude = intent.getExtras().getDouble("curLongitude"); //출발지 위도
+        myLatitude = intent.getExtras().getDouble("curLatitude");   //출발지 경ㄷ
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
         //stationName=intent.getExtras().getString("stationName");
@@ -179,6 +221,9 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
 
+        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
+        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
+
         pathData = intent.getExtras().getStringArrayList("pathData");
         for (int i = 0; i < pathData.size(); i++) {
             double tempLat, tempLong;
@@ -191,9 +236,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             TMapPoint temp = new TMapPoint(tempLat, tempLong);
             tpolyline.addLinePoint(temp);
 
+
             Location locationA = new Location("point A");
-            locationA.setLatitude(myLatitude);
-            locationA.setLongitude(myLongitude);
+            locationA.setLatitude(realtimeLatitude);
+            locationA.setLongitude(realtimeLongitude);
             Location locationB = new Location("point B");
             locationB.setLatitude(tempLat);
             locationB.setLongitude(tempLong);
@@ -233,8 +279,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                     try{
 //                        SmsManager sms = SmsManager.getDefault();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(people_array[0], null, "경로를 이탈하였습니다. 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.", null, null);
-                        ArrayList<String> partMessage = smsManager.divideMessage("경로를 이탈하였습니다. 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.");
+                        smsManager.sendTextMessage(people_array[0], null, "[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.", null, null);
+                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.");
                         smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
 
                         Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
@@ -252,7 +298,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         relativeLayout.addView(tmapview);
         //relativeLayout.addView(infoview);
 
-        setContentView(relativeLayout);
+//        setContentView(relativeLayout);
 
         LocationManager locationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
@@ -323,6 +369,17 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, SMS_RECEIVE_PERMISSON);
             }
         }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:"+"남은 거리");
+
+        final Button startGuide = (Button) findViewById(R.id.btn_startGuide);
+        startGuide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getApplicationContext(),startGuide.class);
+                startActivity(intent1);
+            }
+        });
 
     }
 
@@ -429,9 +486,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         else {
             people_array = people_r.split("@");
             Log.d("네트워크2", people_r);
-
             Log.d("보호자5", people_array[0]);
-
             Log.d("보호자6", people_array[1]);
         }
 

@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="p2lpxwkj10" />
@@ -38,5 +39,7 @@
             </intent-filter>
         </activity>
     </application>
+
+
 
 </manifest>
