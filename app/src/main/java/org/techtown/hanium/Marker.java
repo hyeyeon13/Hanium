@@ -147,6 +147,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         Intent intent = getIntent();
         realtimeLatitude = intent.getExtras().getDouble("curLatitude");
         realtimeLongitude = intent.getExtras().getDouble("curLongitude");
+        latitude = intent.getExtras().getDouble("curLatitude");
+        longitude = intent.getExtras().getDouble("curLongitude");
         tmapview.setLocationPoint(realtimeLongitude, realtimeLatitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
@@ -256,8 +258,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
             Location locationA = new Location("point A");
-            locationA.setLatitude(realtimeLatitude);
-            locationA.setLongitude(realtimeLongitude);
+            locationA.setLatitude(latitude);
+            locationA.setLongitude(longitude);
             Location locationB = new Location("point B");
             locationB.setLatitude(tempLat);
             locationB.setLongitude(tempLong);
