@@ -60,8 +60,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     Double distance;
     String[] dist;
     String stationName;
-    double latitude = 0;
-    double longitude = 0;
+    Double latitude;
+    Double longitude;
     double altitude = 0;
     private boolean m_bTrackingMode = true;
     private TMapGpsManager tmapgps = null;
@@ -414,10 +414,14 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(getApplicationContext(), startGuide.class);
+                intent1.putExtra("Latitude", latitude);
+                intent1.putExtra("Longitude", longitude);
                 intent1.putExtra("myLatitude", myLatitude);
                 intent1.putExtra("myLongitude", myLongitude);
                 intent1.putExtra("destLatitude", destLatitude);
                 intent1.putExtra("destLongitude", destLongitude);
+                intent1.putExtra("pathData",pathData);
+                intent1.putExtra("login_id",login_id);
                 startActivity(intent1);
             }
         });
@@ -456,7 +460,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         }
     }
 
-    private class people_list extends AsyncTask<String, Void, String> {
+    static class people_list extends AsyncTask<String, Void, String> {
         protected void onPreExecute() {
         }
 
@@ -535,7 +539,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
     }
 
-    public String server_network_check(String host) {
+    public static String server_network_check(String host) {
         return "1";
     }
 }
