@@ -67,6 +67,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     private TMapGpsManager tmapgps = null;
     TMapView tmapview;
     public String login_id;
+    private GpsTracker gpsTracker;
 
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
@@ -74,23 +75,21 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     TextView people2;
     String[] people_array;
     public people_list task;
-    int min_time=0;
-    int hour_time=0;
+    int min_time = 0;
+    int hour_time = 0;
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
-
 
 
     @Override
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
             tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-            alTMapPoint.add( new TMapPoint(location.getLatitude(), location.getLongitude()) );
+            alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
 //            alTMapPoint.add( new TMapPoint(37.570841, 126.985302) ); // SKT타워
 //            alTMapPoint.add( new TMapPoint(37.551135, 126.988205) ); // N서울타워
 //            alTMapPoint.add( new TMapPoint(37.579600, 126.976998) ); // 경복궁
-            for(int i=0; i<alTMapPoint.size(); i++)
-            {
+            for (int i = 0; i < alTMapPoint.size(); i++) {
                 Log.d("tetetest", Integer.toString(alTMapPoint.size()));
                 tpolyline2.addLinePoint(alTMapPoint.get(i));
             }
@@ -106,7 +105,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
             tpolyline2.setLineColor(Color.RED);
             tpolyline2.setLineWidth(2);
-
 
 
             realtimeLongitude = location.getLongitude(); //현재 경도
@@ -145,11 +143,12 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.map_view);
         tmapview = new TMapView(this);
         Intent intent = getIntent();
-        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
-        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
+        gpsTracker = new GpsTracker(Marker.this);
+        realtimeLatitude = gpsTracker.getLatitude();
+        realtimeLongitude = gpsTracker.getLongitude();
         latitude = intent.getExtras().getDouble("curLatitude");
         longitude = intent.getExtras().getDouble("curLongitude");
-        tmapview.setLocationPoint(realtimeLongitude, realtimeLatitude);
+        tmapview.setLocationPoint(longitude, latitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
@@ -179,20 +178,19 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         cal.setTime(date);
         cal.add(Calendar.MINUTE, destT);
         String now = dateFormat.format(cal.getTime());
-        destTime.setText("도착예정시간 : "+ now);
+        destTime.setText("도착예정시간 : " + now);
 
         int totalT = intent.getExtras().getInt("totalTime");
-        if(totalT>=60){
-            min_time=totalT%60;
-            hour_time=totalT/60;
-            totalTime.setText("소요 시간 : "+ String.valueOf(hour_time) + "시간" + String.valueOf(min_time) + "분");
-        }
-        else{
-            totalTime.setText("소요 시간 : "+ totalT + "분");
+        if (totalT >= 60) {
+            min_time = totalT % 60;
+            hour_time = totalT / 60;
+            totalTime.setText("소요 시간 : " + String.valueOf(hour_time) + "시간" + String.valueOf(min_time) + "분");
+        } else {
+            totalTime.setText("소요 시간 : " + totalT + "분");
         }
 
         Double totalDist = intent.getExtras().getDouble("totalDistance");
-        totalDistance.setText("총 거리 : "+ totalDist/1000.0 + "km");
+        totalDistance.setText("총 거리 : " + totalDist / 1000.0 + "km");
 
         login_id = intent.getExtras().getString("log_ok_id");
 //        Log.d("Marker에서 login 아이디 ", login_id);
@@ -241,8 +239,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
 
-        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
-        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
+//        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
+//        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
 
         pathData = intent.getExtras().getStringArrayList("pathData");
         for (int i = 0; i < pathData.size(); i++) {
@@ -258,11 +256,13 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
             Location locationA = new Location("point A");
-            locationA.setLatitude(latitude);
-            locationA.setLongitude(longitude);
+            locationA.setLatitude(realtimeLatitude);
+            locationA.setLongitude(realtimeLongitude);
+            //locationA 는 내 위치
             Location locationB = new Location("point B");
             locationB.setLatitude(tempLat);
             locationB.setLongitude(tempLong);
+            //locationB 는 pathData에서 가져옴
 
             distance = Double.valueOf(locationA.distanceTo(locationB));
 //            Log.d(i+"번째 distance 거리",String.valueOf(distance)+"m");
@@ -313,16 +313,16 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             builder.setPositiveButton("문자 전송", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    try{
+                    try {
 //                        SmsManager sms = SmsManager.getDefault();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(people_array[0], null, "[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.", null, null);
-                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+"+realtimeLatitude+",+"+realtimeLongitude+"/ 입니다.");
+                        smsManager.sendTextMessage(people_array[0], null, "[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.", null, null);
+                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
                         smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
 
                         Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
-                    }catch (Exception e){
-                        Log.d("에러",e.toString());
+                    } catch (Exception e) {
+                        Log.d("에러", e.toString());
                     }
 
                 }
@@ -394,10 +394,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
 
-        int permissonCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
-        if(permissonCheck == PackageManager.PERMISSION_GRANTED){
+        int permissonCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
+        if (permissonCheck == PackageManager.PERMISSION_GRANTED) {
 
-        }else {
+        } else {
             Toast.makeText(getApplicationContext(), "SMS 수신권한 없음", Toast.LENGTH_SHORT).show();
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
                 Toast.makeText(getApplicationContext(), "SMS권한이 필요합니다", Toast.LENGTH_SHORT).show();
@@ -407,24 +407,24 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             }
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:"+"남은 거리");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:" + "남은 거리");
 
         final Button startGuide = (Button) findViewById(R.id.btn_startGuide);
         startGuide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(getApplicationContext(),startGuide.class);
-                intent1.putExtra("myLatitude",myLatitude);
-                intent1.putExtra("myLongitude",myLongitude);
-                intent1.putExtra("destLatitude",destLatitude);
-                intent1.putExtra("destLongitude",destLongitude);
+                Intent intent1 = new Intent(getApplicationContext(), startGuide.class);
+                intent1.putExtra("myLatitude", myLatitude);
+                intent1.putExtra("myLongitude", myLongitude);
+                intent1.putExtra("destLatitude", destLatitude);
+                intent1.putExtra("destLongitude", destLongitude);
                 startActivity(intent1);
             }
         });
 
     }
 
-    public void sendSms(){
+    public void sendSms() {
         //메시지
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS)
@@ -440,7 +440,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0
@@ -455,6 +455,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             }
         }
     }
+
     private class people_list extends AsyncTask<String, Void, String> {
         protected void onPreExecute() {
         }
@@ -533,7 +534,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
     }
-    public String server_network_check (String host){
+
+    public String server_network_check(String host) {
         return "1";
     }
 }

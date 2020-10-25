@@ -54,7 +54,7 @@ public class startGuide extends AppCompatActivity {
         destMarker.setTMapPoint(desttMappoint);
         destMarker.setName("dest"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("destPoint", destMarker);
-        relativeLayout.addView( tmapview );
+        relativeLayout.addView(tmapview);
 
         TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
         TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);

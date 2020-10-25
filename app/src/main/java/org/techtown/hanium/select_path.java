@@ -73,14 +73,14 @@ public class select_path extends AppCompatActivity {
     TextView tv;
     ToggleButton tb;
     boolean flag1 = false;
-    boolean flag=false;
+    boolean flag = false;
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
     JSONObject busDetail;
     JSONArray subPath = null;
-    int totalTime=0;
-    double totalDistance=0;
+    int totalTime = 0;
+    double totalDistance = 0;
     TMapData tmapdata = new TMapData();
     ArrayList<String> pathData = new ArrayList<String>();
     ArrayList<String> pathData2 = new ArrayList<String>();
@@ -105,7 +105,7 @@ public class select_path extends AppCompatActivity {
 
     Intent Markerintent;
 
-    public void startActivity1(){
+    public void startActivity1() {
         Markerintent = new Intent(getApplicationContext(), Marker.class);
         String login_id;
         Intent intent = getIntent();
@@ -125,10 +125,9 @@ public class select_path extends AppCompatActivity {
         Log.d(" intent totalTime 삽입", String.valueOf(Markerintent));
         Markerintent.putExtra("totalDistance", totalDistance);
         Log.d(" intent totalDistance", String.valueOf(Markerintent));
-        //Markerintent.putExtra("pathData", pathData2);
         //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
-        Markerintent.putExtra("totalTime",totalTime);
-        Markerintent.putExtra("totalDistance",totalDistance);
+        Markerintent.putExtra("totalTime", totalTime);
+        Markerintent.putExtra("totalDistance", totalDistance);
         startActivity(Markerintent);
         Log.d("Activity 시작", String.valueOf(Markerintent));
     }
@@ -163,10 +162,9 @@ public class select_path extends AppCompatActivity {
                         intInfo = null;
                         intInfo = new JSONObject();
                         int tempTrafficType = temp.getInt(("trafficType"));
-                        flag=false;
+                        flag = false;
                         //trafficType 1:지하철 2:버스 3:도보
                         if (tempTrafficType == 1) {
-
                             //200924 subPath가 여러개인데 구분하는 기준은 위에 있어 1은 지하철 2는 버스 3은 도보
                             //200924 이경우는 type=1인 경우 (지하철)
                             //지하철
@@ -210,6 +208,7 @@ public class select_path extends AppCompatActivity {
                                             pathData2.add(tempPath);
                                             Log.d("tempPath ", String.valueOf(tempPath));
                                         }
+                                        Log.d("버스노선그래픽 삽입", "");
                                         //Markerintent.putExtra("pathData", pathData2);
                                         //Log.d("버스노선그래픽 intent 삽입", String.valueOf(Markerintent));
                                         //startActivity();
@@ -219,14 +218,11 @@ public class select_path extends AppCompatActivity {
                                     Log.d("busline 실행 완료", String.valueOf(busLaneData));
                                     startActivity1();
                                 }
-
                                 @Override
                                 public void onError(int i, String s, API api) {
-
                                 }
-
                             });
-                            } else if (tempTrafficType == 3) {
+                        } else if (tempTrafficType == 3) {
                             //출발은 왠만하면 도보다.
                             //그러면 시작점은 내 위치가 되겠지.
                             //첫번째 도보의 시작점은 내 위치고 목적지는 다음 교통수단의 첫 위치이다.
@@ -277,7 +273,6 @@ public class select_path extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-
                         Log.d("traffic type ", String.valueOf(tempTrafficType));
                     }
                     //원래 activity 스타트 하는 부분
@@ -286,7 +281,8 @@ public class select_path extends AppCompatActivity {
                 }
             }
             Log.d("SearchPubTransPath", String.valueOf(result));
-            }
+        }
+
         //에러 표출시 데이터
         @Override
         public void onError(int i, String errorMessage, API api) {
@@ -351,7 +347,6 @@ public class select_path extends AppCompatActivity {
 
         @Override
         public void onError(int i, String s, API api) {
-
         }
     };
 
@@ -365,8 +360,7 @@ public class select_path extends AppCompatActivity {
         final EditText dest = (EditText) findViewById(R.id.editTextDest);
 
         Intent intent = getIntent();
-        if(intent.getExtras().getString("px") != null)
-        {
+        if (intent.getExtras().getString("px") != null) {
             destLatitude = Double.parseDouble(intent.getExtras().getString("px"));
             destLongitude = Double.parseDouble(intent.getExtras().getString("py"));
             dest.setText(Double.toString(destLatitude) + "," + Double.toString(destLongitude));
@@ -389,7 +383,7 @@ public class select_path extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pathData.clear(); //pathData 초기화
-                Log.d("경로 설정 버튼 눌림", String.valueOf(1));
+                Log.d("경로 설정 버튼 눌림", "");
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
             }
@@ -459,7 +453,7 @@ public class select_path extends AppCompatActivity {
         });
 
 
-        if(destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
+        if (destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
     }
 
     /*
@@ -480,7 +474,6 @@ public class select_path extends AppCompatActivity {
                     break;
                 }
             }
-
             if (check_result) {
                 //위치 값을 가져올 수 있음
                 ;
@@ -593,9 +586,4 @@ public class select_path extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
-
-
 }
-
-
