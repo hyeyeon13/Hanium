@@ -57,71 +57,77 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/favor1"
-            android:layout_width="180sp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#ff000000"
-            android:ems="10"
-                android:textColor="#000000"
-                android:textColorHint="#90000000"
+            <TextView
+                android:id="@+id/favor1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="2"
+                android:backgroundTint="#ff000000"
+                android:ems="10"
+                android:textColor="#ff000000"
                 android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/btnfavor1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            android:layout_marginLeft="29dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_toEndOf="@+id/favor1"
-            android:layout_toRightOf="@+id/favor1"
-            android:background="@drawable/border"
-            android:fontFamily="@font/font3"
-            android:text="수정/등록"
-            android:textColor="#ff000000"
-            android:textSize="20sp" />
+            <Button
+                android:id="@+id/btnfavor1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:fontFamily="@font/font3"
+                android:text="수정/등록"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/startfavor1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:fontFamily="@font/font3"
+                android:text="출발지선택"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-            android:id="@+id/favor2"
-                android:layout_width="180dp"
+                android:id="@+id/favor2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_weight="2"
                 android:backgroundTint="#ff000000"
                 android:ems="10"
-                android:textColor="#000000"
+                android:textColor="#ff000000"
                 android:textSize="24sp" />
 
             <Button
                 android:id="@+id/btnfavor2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="29dp"
-                android:layout_marginLeft="29dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="30dp"
-                android:layout_toEndOf="@+id/favor2"
-                android:layout_toRightOf="@+id/favor2"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
                 android:background="@drawable/border"
                 android:fontFamily="@font/font3"
                 android:text="수정/등록"
@@ -132,34 +138,42 @@
                 android:id="@+id/startfavor2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
-        </RelativeLayout>
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:fontFamily="@font/font3"
+                android:text="출발지선택"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+        </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/favor3"
-                android:layout_width="180dp"
+            <TextView
+                android:id="@+id/favor3"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_weight="2"
                 android:backgroundTint="#ff000000"
                 android:ems="10"
-                android:textColor="#000000"
+                android:textColor="#ff000000"
                 android:textSize="24sp" />
 
             <Button
                 android:id="@+id/btnfavor3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="29dp"
-                android:layout_marginLeft="29dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="30dp"
-                android:layout_toEndOf="@+id/favor3"
-                android:layout_toRightOf="@+id/favor3"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
                 android:background="@drawable/border"
                 android:fontFamily="@font/font3"
                 android:text="수정/등록"
@@ -170,8 +184,17 @@
                 android:id="@+id/startfavor3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
-        </RelativeLayout>
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:fontFamily="@font/font3"
+                android:text="출발지선택"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -196,19 +219,19 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/pathsetting"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="28dp"
-                android:layout_marginLeft="28dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
                 android:background="#00ff0000"
                 android:fontFamily="@font/font3"
                 android:text="경로 설정"
@@ -218,10 +241,12 @@
             <Button
                 android:id="@+id/guardian"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginTop="20dp"
-                android:layout_toRightOf="@+id/pathsetting"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
                 android:background="#00ff0000"
                 android:fontFamily="@font/font3"
                 android:text="보호자 등록"
@@ -231,19 +256,21 @@
             <Button
                 android:id="@+id/pathinput"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@+id/guardian"
-                android:layout_toRightOf="@+id/guardian"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
                 android:background="#00ff0000"
                 android:fontFamily="@font/font3"
                 android:text="이동경로 입력"
                 android:textColor="#ff000000"
                 android:textSize="20sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -287,7 +314,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView12"
                 android:layout_marginLeft="30sp"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#ff000000"
                 android:ems="10"
                 android:fontFamily="@font/font3"
