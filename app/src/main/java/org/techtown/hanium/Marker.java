@@ -66,6 +66,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     private boolean m_bTrackingMode = true;
     private TMapGpsManager tmapgps = null;
     TMapView tmapview;
+    TMapView tmapview2;
     public String login_id;
 
     //경도 : longitude 범위 : 127
@@ -92,9 +93,20 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
 
+            TMapPolyLine tpolyline2 = new TMapPolyLine();
+            tpolyline2.setLineColor(Color.GRAY);
+            tpolyline2.setLineWidth(2);
+            ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+
             Log.d("test", "onLocationChanged, location:" + location);
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
+            alTMapPoint.add(new TMapPoint(realtimeLatitude, realtimeLongitude));
+            for(int i=0; i<alTMapPoint.size(); i++)
+            {
+                tpolyline2.addLinePoint(alTMapPoint.get(i));
+            }
+            tmapview2.addTMapPolyLine("Line1", tpolyline2);
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
