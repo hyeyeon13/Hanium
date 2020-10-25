@@ -89,6 +89,18 @@
             android:textColor="#ff000000"
             android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/destAltitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/button"
+            android:layout_toRightOf="@+id/button"
+            android:fontFamily="@font/font3"
+            android:text="목적지 고도 : "
+            android:textColor="#ff000000"
+            android:textSize="20sp" />
+
         <Button
             android:id="@+id/btn_startGuide"
             android:layout_width="match_parent"
