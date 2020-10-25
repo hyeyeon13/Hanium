@@ -109,7 +109,23 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
+/*
+            TMapMarkerItem marker_currentlocation = new TMapMarkerItem();
 
+            TMapPoint tMapPoint1 = new TMapPoint(realtimeLatitude, realtimeLongitude);
+
+// 마커 아이콘
+            Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.current_location);
+
+            marker_currentlocation.setIcon(bitmap); // 마커 아이콘 지정
+            marker_currentlocation.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
+            marker_currentlocation.setTMapPoint( tMapPoint1 ); // 마커의 좌표 지정
+            marker_currentlocation.setName("현재위치"); // 마커의 타이틀 지정
+            tmapview.addMarkerItem("marker_currentlocation", marker_currentlocation); // 지도에 마커 추가
+
+            tmapview.setCenterPoint( realtimeLongitude, realtimeLatitude );
+
+*/
 
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
@@ -164,6 +180,32 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
 
+        TextView destTime = (TextView) findViewById(R.id.destTime);
+        TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
+        TextView destAltitude = (TextView) findViewById(R.id.destAltitude);
+
+
+        final int destT = intent.getExtras().getInt("destT");
+//        String t = String.valueOf(destT);
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH시 mm분");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, destT);
+        String now = dateFormat.format(cal.getTime());
+        destTime.setText("도착예정시간 : " + now);
+
+
+        Double totalDist_km = intent.getExtras().getDouble("totalDist_km");
+        totalDistance.setText("총 거리 : " + totalDist_km + "km");
+
+        altitude = intent.getExtras().getDouble("altitude");
+        destAltitude.setText("목적지 고도 : " + altitude);
+
+
+
+
 
         login_id = intent.getExtras().getString("login_id");
 //        Log.d("Marker에서 login 아이디 ", login_id);
@@ -214,6 +256,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
 //        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
 //        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
+
+
 
         pathData = intent.getExtras().getStringArrayList("pathData");
         for (int i = 0; i < pathData.size(); i++) {

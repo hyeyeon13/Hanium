@@ -174,7 +174,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
 
-        int destT = intent.getExtras().getInt("totalTime");
+        final int destT = intent.getExtras().getInt("totalTime");
 //        String t = String.valueOf(destT);
 
         Date date = new Date();
@@ -194,8 +194,9 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             totalTime.setText("소요 시간 : " + totalT + "분");
         }
 
-        Double totalDist = intent.getExtras().getDouble("totalDistance");
-        totalDistance.setText("총 거리 : " + totalDist / 1000.0 + "km");
+        final Double totalDist = intent.getExtras().getDouble("totalDistance");
+        final Double totalDist_km=totalDist / 1000.0;
+        totalDistance.setText("총 거리 : " +  totalDist_km+ "km");
 
 
 
@@ -434,6 +435,10 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 intent1.putExtra("destLongitude", destLongitude);
                 intent1.putExtra("pathData",pathData);
                 intent1.putExtra("login_id",login_id);
+                intent1.putExtra("destT",destT);
+                intent1.putExtra("totalDist_km",totalDist_km);
+                //intent1.putExtra("totalDist",totalDist);
+                intent1.putExtra("altitude",altitude);
                 startActivity(intent1);
             }
         });
