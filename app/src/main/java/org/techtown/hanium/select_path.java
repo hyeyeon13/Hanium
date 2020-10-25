@@ -457,13 +457,7 @@ public class select_path extends AppCompatActivity {
                 startActivityForResult(intent, 1101);
             }
         });
-        Button button = (Button) findViewById(R.id.timeselect);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DIALOG_TIME);
-            }
-        });
+
 
         if(destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
     }
@@ -600,32 +594,7 @@ public class select_path extends AppCompatActivity {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    @Override
-    @Deprecated
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DIALOG_TIME:
-                TimePickerDialog tpd =
-                        new TimePickerDialog(select_path.this,
-                                new TimePickerDialog.OnTimeSetListener() {
-                                    @Override
-                                    public void onTimeSet(TimePicker view,
-                                                          int hourOfDay, int minute) {
-                                        TextView textView = (TextView) findViewById(R.id.textView3);
-                                        textView.setText(hourOfDay + "시 " + minute + "분");
-                                        Intent intent = new Intent(getApplicationContext(), Map.class);
-                                        intent.putExtra("hourOfDay", hourOfDay);
-                                        intent.putExtra("minute",minute);
-                                    }
-                                }, // 값설정시 호출될 리스너 등록
-                                4, 19, false); // 기본값 시분 등록
-                // true : 24 시간(0~23) 표시
-                // false : 오전/오후 항목이 생김
-                return tpd;
-        }
-        return super.onCreateDialog(id);
 
-    }
 
 }
 
