@@ -175,7 +175,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         totalDistance.setText("총 거리 : "+ totalDist/1000.0 + "km");
 
         login_id = intent.getExtras().getString("log_ok_id");
-        Log.d("Marker에서 login 아이디 ", login_id);
+//        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude = intent.getExtras().getDouble("curLongitude"); //출발지 위도
@@ -258,6 +258,23 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         }
         Log.d("내위치 사이 거리: ", min + "m");
         tmapview.addTMapPolyLine("path", tpolyline);
+
+        int totalTime=intent.getExtras().getInt("totalTime");
+        int totalhour=totalTime/60;
+        int totalminute=totalTime%60;
+        Double totalDistance=intent.getExtras().getDouble("totalDistance");
+
+        TextView set_totalTime=(TextView)findViewById(R.id.totalTime);
+        String format_totaltime=totalhour+"시간"+totalminute+"분";
+        set_totalTime.setText(format_totaltime);
+
+        TextView set_totalDistance=(TextView)findViewById(R.id.totalDistance);
+        String format_totaldistance=totalDistance+"m";
+        set_totalDistance.setText(format_totaldistance);
+
+        TextView set_arriveTime=(TextView)findViewById(R.id.arrive_time);
+        int hourOfDay=intent.getExtras().getInt("hourOfDay");
+        int minute=intent.getExtras().getInt("minute");
 
         num_min = Double.valueOf(min);
 

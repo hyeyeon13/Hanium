@@ -215,8 +215,6 @@ public class login extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("log_ok_id", login_ok_id);
-//            Intent intent2 = new Intent(getApplicationContext(), Marker.class);
-//            intent2.putExtra("log_ok_id", login_ok_id);
             Toast.makeText(getApplicationContext(), login_ok_id + " 님 환영합니다", Toast.LENGTH_SHORT).show();
             startActivity(intent);
 //                overridePendingTransition(R.anim.right_in, R.anim.left_out);
