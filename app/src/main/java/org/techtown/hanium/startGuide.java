@@ -156,7 +156,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.guide_map);
         tmapview = new TMapView(this);
         Intent intent = getIntent();
-        gpsTracker = new GpsTracker(this);
+        gpsTracker = new GpsTracker(startGuide.this);
         realtimeLatitude = gpsTracker.getLatitude();
         realtimeLongitude = gpsTracker.getLongitude();
         latitude = intent.getExtras().getDouble("latitude");
