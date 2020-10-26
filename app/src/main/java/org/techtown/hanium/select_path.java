@@ -113,126 +113,168 @@ public class select_path extends AppCompatActivity {
             //200924 호출한 메서드가 requestPubTransPathSearch 일 때
             Log.d("API 호출 성공", String.valueOf(api));
             result = oDsayData.getJson();
+            JSONArray key = result.names();
             //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
             try {
-                String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
-                oDsayServiceForSubTrans.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
-                    @Override
-                    public void onSuccess(ODsayData oDsayData, API api) {
-                        Log.d("API 호출 성공", String.valueOf(api));
-                        result2 = oDsayData.getJson();
-                        //노선그래픽 리턴값에서 class는 버스/지하철을 나타낸다. 1-> 버스, 2-> 지하철
-                        try {
-                            trafficLaneData = result2.getJSONObject("result").getJSONArray("lane");
-                            Log.d("`노선그래픽 호출 완료", "");
-                            totalTime = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
-                            totalDistance = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getDouble("totalDistance");
-                            subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
-                            //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
-                            //result에서 데이터 받아와 파싱 후 subPath에 저장
-                            array = new ArrayList<ArrayList<String>>(subPath.length());
-                            flags = new Boolean[subPath.length()];
-                            for (int k = 0; k < subPath.length(); k++) {
-                                flags[k] = false;
-                            }
-                            int trafficidx = 0;
-                            for (int k = 0; k < subPath.length(); k++) {
-                                //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
-                                //200924 예를들면 도보(1) - 버스(2) - 지하철(3) - 버스(4) - 도보(5) - 지하철(6) 이면
-                                //200924 subPath.length()의 값은 6이 된다
-                                JSONObject temp = subPath.getJSONObject(k);
-                                //200924 또 temp라는 JSONObject를 선언해서 subPath의 수 만큼 데이터를 받아오는듯?
-                                intInfo = null;
-                                intInfo = new JSONObject();
-                                int tempTrafficType = temp.getInt(("trafficType"));
-                                //trafficType 1:지하철 2:버스 3:도보
-                                if (tempTrafficType != 3) {
-                                    final int finalK = k;
-                                    JSONArray tempTrafficLaneData = trafficLaneData.getJSONObject(trafficidx).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
-                                    trafficidx++;
-                                    ArrayList<String> pathData = new ArrayList<String>();
-                                    int length = tempTrafficLaneData.length();
-                                    for (int i = 0; i < length; i++) {
-                                        double trafficLat = tempTrafficLaneData.getJSONObject(i).getDouble("x");
-                                        double trafficLong = tempTrafficLaneData.getJSONObject(i).getDouble("y");
-                                        String tempPath = String.valueOf(trafficLat) + "," + String.valueOf(trafficLong);
-                                        pathData.add(tempPath);
-                                        Log.d("tempPath ", String.valueOf(tempPath));
-                                    }
-                                    flags[finalK] = true;
-                                    Log.d("flag 변경", String.valueOf(finalK));
-                                    array.add(finalK, pathData);
-                                    Log.d("array에 데이터 넣음", String.valueOf(finalK));
-                                    startActivity(subPath.length());
-                                } else if (tempTrafficType == 3) {
-                                    //출발은 왠만하면 도보다.
-                                    //그러면 시작점은 내 위치가 되겠지.
-                                    //첫번째 도보의 시작점은 내 위치고 목적지는 다음 교통수단의 첫 위치이다.
-                                    //여기서 구해야 할 정보는 출발지 위/경도 , 도착지 위/경도이다.
-                                    if (k == 0) {
-                                        startLat = latitude;
-                                        startLong = longitude;
-                                        JSONObject temp2 = subPath.getJSONObject(k + 1);
-                                        destLat = temp2.getDouble("startY");
-                                        destLong = temp2.getDouble("startX");
-                                    } else if (k == subPath.length() - 1) {
-                                        destLat = destLatitude;
-                                        destLong = destLongitude;
-                                        JSONObject temp2 = subPath.getJSONObject(k - 1);
-                                        startLat = temp2.getDouble("endY");
-                                        startLong = temp2.getDouble("endX");
-                                    } else {
-                                        JSONObject temp2 = subPath.getJSONObject(k - 1);
-                                        startLat = temp2.getDouble("endY");
-                                        startLong = temp2.getDouble("endX");
-                                        JSONObject temp3 = subPath.getJSONObject(k + 1);
-                                        destLat = temp3.getDouble("startY");
-                                        destLong = temp3.getDouble("startX");
-                                    }
-                                    TMapPoint startPoint = new TMapPoint(startLat, startLong);// 마커 놓을 좌표 (위도, 경도 순서)
-                                    TMapPoint destPoint = new TMapPoint(destLat, destLong); // 마커 놓을 좌표 (위도, 경도 순서)
-                                    final int finalK1 = k;
-                                    tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
-                                        @Override
-                                        public void onFindPathDataAll(Document document) {
-                                            ArrayList<String> pathData = new ArrayList<String>();
-                                            root = document.getDocumentElement();
-                                            nodeListPoint = root.getElementsByTagName("Point");
-                                            for (int i = 0; i < nodeListPoint.getLength(); i++) {
-                                                nodeListPointItem = nodeListPoint.item(i).getChildNodes();
-                                                for (int j = 0; j < nodeListPointItem.getLength(); j++) {
-                                                    if (nodeListPointItem.item(j).getNodeName().equals("coordinates")) {
-                                                        pathData.add(nodeListPointItem.item(j).getTextContent().trim());
-                                                        Log.d("도보데이터 ", nodeListPointItem.item(j).getTextContent().trim());
-                                                    }
-                                                }
-                                            }
-                                            flags[finalK1] = true;
-                                            Log.d("flag 변경", String.valueOf(finalK1));
-                                            array.add(finalK1, pathData);
-                                            Log.d("array에 데이터 넣음", String.valueOf(finalK1));
-                                            startActivity(subPath.length());
-                                        }
-                                    });
-                                    try {
-                                        sleep(500);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                if (key.getString(0) != "result") {
+                    startLat = latitude;
+                    startLong = longitude;
+                    destLat = destLatitude;
+                    destLong = destLongitude;
+                    TMapPoint startPoint = new TMapPoint(startLat, startLong);// 마커 놓을 좌표 (위도, 경도 순서)
+                    TMapPoint destPoint = new TMapPoint(destLat, destLong); // 마커 놓을 좌표 (위도, 경도 순서)
+                    tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
+                        @Override
+                        public void onFindPathDataAll(Document document) {
+                            ArrayList<String> pathData = new ArrayList<String>();
+                            root = document.getDocumentElement();
+                            nodeListPoint = root.getElementsByTagName("Point");
+                            NodeList totaldist = root.getElementsByTagName("tmap:totalDistance");
+                            totalDistance = Integer.parseInt(totaldist.item(0).getFirstChild().getNodeValue());
+                            NodeList totaltime = root.getElementsByTagName("tmap:totalTime");
+                            totalTime = Integer.parseInt(totaltime.item(0).getFirstChild().getNodeValue()) / 60;
+                            for (int i = 0; i < nodeListPoint.getLength(); i++) {
+                                nodeListPointItem = nodeListPoint.item(i).getChildNodes();
+                                for (int j = 0; j < nodeListPointItem.getLength(); j++) {
+                                    if (nodeListPointItem.item(j).getNodeName().equals("coordinates")) {
+                                        pathData.add(nodeListPointItem.item(j).getTextContent().trim());
+                                        Log.d("도보데이터 ", nodeListPointItem.item(j).getTextContent().trim());
                                     }
                                 }
-                                Log.d("traffic type ", String.valueOf(tempTrafficType));
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            array = new ArrayList<ArrayList<String>>(1);
+                            flags = new Boolean[1];
+                            flags[0] = true;
+                            Log.d("flag 변경", String.valueOf(0));
+                            array.add(0, pathData);
+                            startActivity(1);
                         }
-                        Log.d("교통수단 경로좌표 실행 완료", String.valueOf(trafficLaneData));
+                    });
+                    try {
+                        sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    String mapObj = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getString("mapObj");
+                    oDsayServiceForSubTrans.requestLoadLane("0:0@" + mapObj, new OnResultCallbackListener() {
+                        @Override
+                        public void onSuccess(ODsayData oDsayData, API api) {
+                            Log.d("API 호출 성공", String.valueOf(api));
+                            result2 = oDsayData.getJson();
+                            //노선그래픽 리턴값에서 class는 버스/지하철을 나타낸다. 1-> 버스, 2-> 지하철
+                            try {
+                                trafficLaneData = result2.getJSONObject("result").getJSONArray("lane");
+                                Log.d("`노선그래픽 호출 완료", "");
+                                totalTime = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
+                                totalDistance = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getDouble("totalDistance");
+                                subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                                //200924 이 이후 데이터 추출은 result를 기반으로 이루어짐
+                                //result에서 데이터 받아와 파싱 후 subPath에 저장
+                                array = new ArrayList<ArrayList<String>>(subPath.length());
+                                flags = new Boolean[subPath.length()];
+                                for (int k = 0; k < subPath.length(); k++) {
+                                    flags[k] = false;
+                                }
+                                int trafficidx = 0;
+                                for (int k = 0; k < subPath.length(); k++) {
+                                    //200924 이게아마 대중교통 경로에서 서로다른 대중교통 갯수만큼 나올거야
+                                    //200924 예를들면 도보(1) - 버스(2) - 지하철(3) - 버스(4) - 도보(5) - 지하철(6) 이면
+                                    //200924 subPath.length()의 값은 6이 된다
+                                    JSONObject temp = subPath.getJSONObject(k);
+                                    //200924 또 temp라는 JSONObject를 선언해서 subPath의 수 만큼 데이터를 받아오는듯?
+                                    intInfo = null;
+                                    intInfo = new JSONObject();
+                                    int tempTrafficType = temp.getInt(("trafficType"));
+                                    //trafficType 1:지하철 2:버스 3:도보
+                                    if (tempTrafficType != 3) {
+                                        final int finalK = k;
+                                        JSONArray tempTrafficLaneData = trafficLaneData.getJSONObject(trafficidx).getJSONArray("section").getJSONObject(0).getJSONArray("graphPos");
+                                        trafficidx++;
+                                        ArrayList<String> pathData = new ArrayList<String>();
+                                        int length = tempTrafficLaneData.length();
+                                        for (int i = 0; i < length; i++) {
+                                            double trafficLat = tempTrafficLaneData.getJSONObject(i).getDouble("x");
+                                            double trafficLong = tempTrafficLaneData.getJSONObject(i).getDouble("y");
+                                            String tempPath = String.valueOf(trafficLat) + "," + String.valueOf(trafficLong);
+                                            pathData.add(tempPath);
+                                            Log.d("tempPath ", String.valueOf(tempPath));
+                                        }
+                                        flags[finalK] = true;
+                                        Log.d("flag 변경", String.valueOf(finalK));
+                                        array.add(finalK, pathData);
+                                        Log.d("array에 데이터 넣음", String.valueOf(finalK));
+                                        startActivity(subPath.length());
+                                    } else if (tempTrafficType == 3) {
+                                        //출발은 왠만하면 도보다.
+                                        //그러면 시작점은 내 위치가 되겠지.
+                                        //첫번째 도보의 시작점은 내 위치고 목적지는 다음 교통수단의 첫 위치이다.
+                                        //여기서 구해야 할 정보는 출발지 위/경도 , 도착지 위/경도이다.
+                                        if (k == 0) {
+                                            startLat = latitude;
+                                            startLong = longitude;
+                                            JSONObject temp2 = subPath.getJSONObject(k + 1);
+                                            destLat = temp2.getDouble("startY");
+                                            destLong = temp2.getDouble("startX");
+                                        } else if (k == subPath.length() - 1) {
+                                            destLat = destLatitude;
+                                            destLong = destLongitude;
+                                            JSONObject temp2 = subPath.getJSONObject(k - 1);
+                                            startLat = temp2.getDouble("endY");
+                                            startLong = temp2.getDouble("endX");
+                                        } else {
+                                            JSONObject temp2 = subPath.getJSONObject(k - 1);
+                                            startLat = temp2.getDouble("endY");
+                                            startLong = temp2.getDouble("endX");
+                                            JSONObject temp3 = subPath.getJSONObject(k + 1);
+                                            destLat = temp3.getDouble("startY");
+                                            destLong = temp3.getDouble("startX");
+                                        }
+                                        TMapPoint startPoint = new TMapPoint(startLat, startLong);// 마커 놓을 좌표 (위도, 경도 순서)
+                                        TMapPoint destPoint = new TMapPoint(destLat, destLong); // 마커 놓을 좌표 (위도, 경도 순서)
+                                        final int finalK1 = k;
+                                        tmapdata.findPathDataAllType(TMapData.TMapPathType.PEDESTRIAN_PATH, startPoint, destPoint, new TMapData.FindPathDataAllListenerCallback() {
+                                            @Override
+                                            public void onFindPathDataAll(Document document) {
+                                                ArrayList<String> pathData = new ArrayList<String>();
+                                                root = document.getDocumentElement();
+                                                nodeListPoint = root.getElementsByTagName("Point");
+                                                for (int i = 0; i < nodeListPoint.getLength(); i++) {
+                                                    nodeListPointItem = nodeListPoint.item(i).getChildNodes();
+                                                    for (int j = 0; j < nodeListPointItem.getLength(); j++) {
+                                                        if (nodeListPointItem.item(j).getNodeName().equals("coordinates")) {
+                                                            pathData.add(nodeListPointItem.item(j).getTextContent().trim());
+                                                            Log.d("도보데이터 ", nodeListPointItem.item(j).getTextContent().trim());
+                                                        }
+                                                    }
+                                                }
+                                                flags[finalK1] = true;
+                                                Log.d("flag 변경", String.valueOf(finalK1));
+                                                array.add(finalK1, pathData);
+                                                Log.d("array에 데이터 넣음", String.valueOf(finalK1));
+                                                startActivity(subPath.length());
+                                            }
+                                        });
+                                        try {
+                                            sleep(500);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    Log.d("traffic type ", String.valueOf(tempTrafficType));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("교통수단 경로좌표 실행 완료", String.valueOf(trafficLaneData));
+                        }
 
-                    @Override
-                    public void onError(int i, String s, API api) {
-                    }
-                });
-                //원래 activity 스타트 하는 부분
+                        @Override
+                        public void onError(int i, String s, API api) {
+                        }
+                    });
+                    //원래 activity 스타트 하는 부분
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
