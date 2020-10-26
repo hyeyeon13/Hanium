@@ -68,41 +68,20 @@ public class select_path extends AppCompatActivity {
     int totalTime = 0;
     double totalDistance = 0;
     TMapData tmapdata = new TMapData();
-    //ArrayList<String> pathData = new ArrayList<String>();
-//    ArrayList<String> pathData2 = new ArrayList<String>();
-//    ArrayList<String> pathData3 = new ArrayList<String>();
-//    ArrayList<String> pathData4 = new ArrayList<String>();
-//    ArrayList<String> pathData5 = new ArrayList<String>();
-//    ArrayList<String> pathData6 = new ArrayList<String>();
-//    ArrayList<String> pathData7 = new ArrayList<String>();
-//    ArrayList<String> pathData8 = new ArrayList<String>();
-//    ArrayList<String> pathData9 = new ArrayList<String>();
-//    ArrayList<String> pathData10 = new ArrayList<String>();
     ArrayList<ArrayList<String>> array;
     Boolean[] flags;
     JSONArray trafficLaneData = null;
 
     Element root;
-    NodeList nodeListPlacemark;
-    NodeList nodeListCoordinates;
     NodeList nodeListPoint;
-    NodeList nodeListPlacemarkItem;
     NodeList nodeListPointItem;
-    JSONObject pathInfo = new JSONObject();
     JSONObject intInfo;
-    JSONArray intervalPath = new JSONArray();
     ODsayService odsayService = null;
     ODsayService oDsayServiceForSubTrans = null;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
-    AtomicBoolean done = new AtomicBoolean(false);
-
-
-    Button button;
-    // 콜백 함수 구현
-
     Intent Markerintent;
 
     public void startActivity(int length) {
@@ -248,7 +227,7 @@ public class select_path extends AppCompatActivity {
                                         }
                                     });
                                     try {
-                                        sleep(1000);
+                                        sleep(500);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -260,7 +239,6 @@ public class select_path extends AppCompatActivity {
                         }
                         Log.d("교통수단 경로좌표 실행 완료", String.valueOf(trafficLaneData));
                     }
-
                     @Override
                     public void onError(int i, String s, API api) {
                     }
