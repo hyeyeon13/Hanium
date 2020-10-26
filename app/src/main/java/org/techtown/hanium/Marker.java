@@ -295,39 +295,39 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         num_min = Double.valueOf(min);
 
-        if (num_min > 50) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("경로이탈감지").setMessage("경로를 이탈하였습니다. 문자를 전송하시겠습니까?");
-            Log.d("경로이탈감지: ", min + "m");
-            getpeople_list();
-            builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-            builder.setPositiveButton("문자 전송", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    try {
-                        sendSms();
-                        SmsManager smsManager = SmsManager.getDefault();
-                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
-                        smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
-                        smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
-                        Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Log.d("에러", e.toString());
-                    }
-
-                }
-            });
-
-            AlertDialog alertDialog = builder.create();
-
-            alertDialog.show();
-        }
+//        if (num_min > 50) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("경로이탈감지").setMessage("경로를 이탈하였습니다. 문자를 전송하시겠습니까?");
+//            Log.d("경로이탈감지: ", min + "m");
+//            getpeople_list();
+//            builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    Toast.makeText(getApplicationContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            });
+//            builder.setPositiveButton("문자 전송", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    try {
+//                        sendSms();
+//                        SmsManager smsManager = SmsManager.getDefault();
+//                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
+//                        smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
+//                        smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
+//                        Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
+//                    } catch (Exception e) {
+//                        Log.d("에러", e.toString());
+//                    }
+//
+//                }
+//            });
+//
+//            AlertDialog alertDialog = builder.create();
+//
+//            alertDialog.show();
+//        }
         relativeLayout.addView(tmapview);
         //relativeLayout.addView(infoview);
 

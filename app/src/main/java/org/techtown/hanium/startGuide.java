@@ -79,6 +79,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     int hour_time = 0;
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+
     @Override
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
@@ -193,8 +194,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
         Double totalDist_km = intent.getExtras().getDouble("totalDist_km");
         Double moved_dist = intent.getExtras().getDouble("moved_dist");
-        Double remain = totalDist_km-moved_dist;
-        totalDistance.setText("남은 거리 : " + remain/1000.0 + "km");
+        Double remain = totalDist_km - moved_dist;
+        totalDistance.setText("남은 거리 : " + remain / 1000.0 + "km");
 
         altitude = intent.getExtras().getDouble("altitude");
         destAltitude.setText("목적지 고도 : " + altitude);
@@ -306,12 +307,11 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try {
-//                        SmsManager sms = SmsManager.getDefault();
+                        sendSms();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(people_array[0], null, "[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.", null, null);
-                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
+                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
                         smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
-
+                        smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
                         Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Log.d("에러", e.toString());
