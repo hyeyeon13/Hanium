@@ -116,7 +116,7 @@ public class select_path extends AppCompatActivity {
             JSONArray key = result.names();
             //200924 출발지~목적지까지의 대중교통 정보가 json으로 반환되고 우리는 result라는 json에 해당 결과 저장
             try {
-                if (key.getString(0) != "result") {
+                if (key.getString(0).equals("error")) {
                     startLat = latitude;
                     startLong = longitude;
                     destLat = destLatitude;
