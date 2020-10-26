@@ -350,20 +350,9 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                 locationB.setLongitude(destLongitude);
 
                 desDist = Double.valueOf(locationA.distanceTo(locationB));
-                if (desDist <= 50) {
+                if (desDist <= 3000) {
                    dest_arrive=true;
-                    AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
-                    builder_arrive.setMessage("목적지에 도착하였습니다.");
-                    builder_arrive.setPositiveButton("안내종료", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //버튼클릭시 동작
-                            Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    AlertDialog alertDialog = builder_arrive.create();
-                    alertDialog.show();
-                    Log.d("목적지 도착", desDist.toString());
+
                 } else {
                     Log.d("목적지 미도착", desDist.toString());
                 }
@@ -410,7 +399,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:" + "남은 거리");
 
-       /* if(dest_arrive==true)
+        if(dest_arrive==true)
         {
             AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
             builder_arrive.setMessage("목적지에 도착하였습니다.");
@@ -424,7 +413,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             AlertDialog alertDialog = builder_arrive.create();
             alertDialog.show();
             Log.d("목적지 도착", desDist.toString());
-        }*/
+        }
 
     }
 
