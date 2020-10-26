@@ -342,10 +342,12 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 TMapPoint tp = new TMapPoint(latitude, longitude);
                 Log.d("테스트", tp.toString());
 
-                TextView destAltitude = (TextView) findViewById(R.id.destAltitude);
+
+
+                TextView myAltitude = (TextView) findViewById(R.id.myAltitude);
                 altitude = location.getAltitude();
-                destAltitude.setText("목적지 고도 : " + altitude);
-                Log.d("목적지 고도", String.valueOf(altitude));
+                myAltitude.setText("현재 고도 : " + altitude);
+                Log.d("현재 고도", String.valueOf(altitude));
 
 
 

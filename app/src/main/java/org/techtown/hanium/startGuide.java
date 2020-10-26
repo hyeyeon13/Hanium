@@ -52,7 +52,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     private static final int SMS_RECEIVE_PERMISSON = 1;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     ArrayList<String> pathData = new ArrayList<String>();
-    Double myLongitude, myLatitude, myAltitude;
+    Double myLongitude, myLatitude;
     Double destLongitude, destLatitude;
     Double realtimeLongitude, realtimeLatitude;
     String min;
@@ -179,7 +179,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
         TextView destTime = (TextView) findViewById(R.id.destTime);
         TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
-        TextView destAltitude = (TextView) findViewById(R.id.destAltitude);
+        TextView destAltitude = (TextView) findViewById(R.id.myAltitude);
 
 
         final int destT = intent.getExtras().getInt("destT");
@@ -199,7 +199,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         totalDistance.setText("남은 거리 : " + remain / 1000.0 + "km");
 
         altitude = intent.getExtras().getDouble("altitude");
-        destAltitude.setText("목적지 고도 : " + altitude);
+        destAltitude.setText("현재 고도 : " + altitude);
 
 
         login_id = intent.getExtras().getString("login_id");
@@ -237,7 +237,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         tmapview.setCenterPoint(centerLong, centerLat); //지도의 중심지점 좌표 (경도, 위도 순서)
         Log.d("내 위도  ", String.valueOf(realtimeLatitude));
         Log.d("내 경도  ", String.valueOf(realtimeLongitude));
-        Log.d("내 고도  ", String.valueOf(myAltitude));
+        Log.d("내 고도  ", String.valueOf(altitude));
         Log.d("목적지 위도  ", String.valueOf(destLatitude));
         Log.d("목적지 경도  ", String.valueOf(destLongitude));
 
