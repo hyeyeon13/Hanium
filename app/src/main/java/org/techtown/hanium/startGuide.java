@@ -81,6 +81,23 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
     Double desDist;
 
+    public void arrive_destination()
+    {
+        AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
+        builder_arrive.setMessage("목적지에 도착하였습니다.");
+        builder_arrive.setPositiveButton("안내종료", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //버튼클릭시 동작
+                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = builder_arrive.create();
+        alertDialog.show();
+        dest_arrive=true;
+        Log.d("목적지 도착", desDist.toString());
+    }
+
     @Override
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
@@ -351,19 +368,9 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
                 desDist = Double.valueOf(locationA.distanceTo(locationB));
                 if (desDist <= 3000) {
-                  // dest_arrive=true;
-                    AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
-                    builder_arrive.setMessage("목적지에 도착하였습니다.");
-                    builder_arrive.setPositiveButton("안내종료", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //버튼클릭시 동작
-                            Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    AlertDialog alertDialog = builder_arrive.create();
-                    alertDialog.show();
-                    Log.d("목적지 도착", desDist.toString());
+                    if (dest_arrive == false) {
+                        arrive_destination();
+                    }
                 } else {
                     Log.d("목적지 미도착", desDist.toString());
                 }
