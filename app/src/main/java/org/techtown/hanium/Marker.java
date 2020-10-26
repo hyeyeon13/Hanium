@@ -297,8 +297,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 //        if (num_min > 50) {
 //            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("경로이탈감지").setMessage("경로를 이탈하였습니다. 문자를 전송하시겠습니까?");
-//            Log.d("경로이탈감지: ", min + "m");
+//            builder.setTitle("경로 이탈 탐지").setMessage("경로 이탈이 탐지되었습니다. 문자를 전송하시겠습니까?");
+//            Log.d("경로이탈탐지: ", min + "m");
 //            getpeople_list();
 //            builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
 //                @Override
