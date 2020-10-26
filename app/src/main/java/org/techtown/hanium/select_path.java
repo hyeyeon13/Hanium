@@ -227,6 +227,7 @@ public class select_path extends AppCompatActivity {
                         }
                         Log.d("교통수단 경로좌표 실행 완료", String.valueOf(trafficLaneData));
                     }
+
                     @Override
                     public void onError(int i, String s, API api) {
                     }
