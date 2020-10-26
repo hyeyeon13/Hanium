@@ -68,7 +68,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     TMapView tmapview;
     public String login_id;
     private GpsTracker gpsTracker;
-
+    boolean dest_arrive=false;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     TextView people1;
@@ -79,6 +79,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     int hour_time = 0;
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+    Double desDist;
 
     @Override
     public void onLocationChange(Location location) {
@@ -340,7 +341,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                 double altitude = location.getAltitude();
 
 
-                Double desDist;
+
                 Location locationA = new Location("point a");
                 locationA.setLatitude(latitude);
                 locationA.setLongitude(longitude);
@@ -349,12 +350,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                 locationB.setLongitude(destLongitude);
 
                 desDist = Double.valueOf(locationA.distanceTo(locationB));
-                if (desDist <= 15) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(startGuide.this);
-                    builder.setTitle("길찾기 종료").setMessage("목적지에 도착하였습니다.");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                    Log.d("목적지 도착", desDist.toString());
+                if (desDist <= 50) {
+                   dest_arrive=true;
                 } else {
                     Log.d("목적지 미도착", desDist.toString());
                 }
@@ -401,6 +398,14 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:" + "남은 거리");
 
+        if(dest_arrive==true)
+        {
+            AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
+            builder_arrive.setTitle("길찾기 종료").setMessage("목적지에 도착하였습니다.");
+            AlertDialog alertDialog = builder_arrive.create();
+            alertDialog.show();
+            Log.d("목적지 도착", desDist.toString());
+        }
 
     }
 

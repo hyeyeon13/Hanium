@@ -63,8 +63,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     public String login_id;
     private GpsTracker gpsTracker;
     Double moved_dist;
-
-
+    boolean des_arrive=false;
+    Double desDist;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     String[] people_array;
@@ -348,7 +348,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 Log.d("목적지 고도", String.valueOf(altitude));
 
 
-                Double desDist;
+
                 Location locationA = new Location("point a");
                 locationA.setLatitude(latitude);
                 locationA.setLongitude(longitude);
@@ -358,11 +358,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
                 desDist = Double.valueOf(locationA.distanceTo(locationB));
                 if (desDist <= 15) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Marker.this);
-                    builder.setTitle("길찾기 종료").setMessage("목적지에 도착하였습니다.");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                    Log.d("목적지 도착", desDist.toString());
+                   des_arrive=true;
                 } else {
                     Log.d("목적지 미도착", desDist.toString());
                 }
@@ -429,7 +425,13 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 startActivity(intent1);
             }
         });
-
+        if(des_arrive==true) {
+            AlertDialog.Builder builder_arrive = new AlertDialog.Builder(Marker.this);
+            builder_arrive.setTitle("길찾기 종료").setMessage("목적지에 도착하였습니다.");
+            AlertDialog alertDialog = builder_arrive.create();
+            alertDialog.show();
+            Log.d("목적지 도착", desDist.toString());
+        }
     }
 
     public void sendSms() {
