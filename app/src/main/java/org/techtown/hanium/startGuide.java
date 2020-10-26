@@ -259,7 +259,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             String[] tempA = tempS.split(",");
             tempLat = Double.valueOf(tempA[1]);
             tempLong = Double.valueOf(tempA[0]);
-            Log.e("test", tempA[0]);
+            //Log.e("test", tempA[0]);
             TMapPoint temp = new TMapPoint(tempLat, tempLong);
             tpolyline.addLinePoint(temp);
 

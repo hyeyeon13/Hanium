@@ -19,9 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
@@ -41,25 +39,19 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 
-
 public class select_path extends AppCompatActivity {
     String stationName;
-    Double longitude, latitude, altitude;
+    Double longitude, latitude;
     //경도 : longitude 범위 : 127 < 1st argument
     //위도 : latitude 범위 : 37 < 2nd argument (path arrayList에 들어가는 순서)
-    Double destLongitude, destLatitude, destaltitude;
+    Double destLongitude, destLatitude;
     double startLat = 0;
     double startLong = 0;
     double destLat = 0;
     double destLong = 0;
-    TextView tv;
-    ToggleButton tb;
-    boolean flag1 = false;
-    boolean flag = false;
     private GpsTracker gpsTracker;
     Geocoder coder;
     JSONObject result;
@@ -71,7 +63,6 @@ public class select_path extends AppCompatActivity {
     ArrayList<ArrayList<String>> array;
     Boolean[] flags;
     JSONArray trafficLaneData = null;
-
     Element root;
     NodeList nodeListPoint;
     NodeList nodeListPointItem;
@@ -82,7 +73,7 @@ public class select_path extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
-    Intent Markerintent;
+    Intent MarkerIntent;
 
     public void startActivity(int length) {
         for (int i = 0; i < length; i++) {
@@ -90,30 +81,27 @@ public class select_path extends AppCompatActivity {
                 return;
             }
         }
-        Markerintent = new Intent(getApplicationContext(), Marker.class);
+        MarkerIntent = new Intent(getApplicationContext(), Marker.class);
         String login_id;
         Intent intent = getIntent();
         login_id = intent.getExtras().getString("log_ok_id");
-        Markerintent.putExtra("log_ok_id", login_id);
-        Markerintent.putExtra("curLongitude", longitude);
-        Log.d(" intent 출발지 경도", String.valueOf(Markerintent));
-        Markerintent.putExtra("curLatitude", latitude);
-        Log.d(" intent 출발지 위도", String.valueOf(Markerintent));
-        Markerintent.putExtra("destLongitude", destLongitude);
-        Log.d(" intent 도착지 경도", String.valueOf(Markerintent));
-        Markerintent.putExtra("destLatitude", destLatitude);
-        Log.d(" intent 도착지 위도", String.valueOf(Markerintent));
-        Markerintent.putExtra("pathDataArray", array);
-        Log.d(" intent pathData 삽입", String.valueOf(Markerintent));
-        Markerintent.putExtra("totalTime", totalTime);
-        Log.d(" intent totalTime 삽입", String.valueOf(Markerintent));
-        Markerintent.putExtra("totalDistance", totalDistance);
-        Log.d(" intent totalDistance", String.valueOf(Markerintent));
-        //pathData에 trafficeType별로 돌린 경도 위도 쌍을 넣어 intent에 넣어 Marker.java로 전달
-        Markerintent.putExtra("totalTime", totalTime);
-        Markerintent.putExtra("totalDistance", totalDistance);
-        startActivity(Markerintent);
-        Log.d("Activity 시작", String.valueOf(Markerintent));
+        MarkerIntent.putExtra("log_ok_id", login_id);
+        MarkerIntent.putExtra("curLongitude", longitude);
+        Log.d(" intent 출발지 경도", String.valueOf(MarkerIntent));
+        MarkerIntent.putExtra("curLatitude", latitude);
+        Log.d(" intent 출발지 위도", String.valueOf(MarkerIntent));
+        MarkerIntent.putExtra("destLongitude", destLongitude);
+        Log.d(" intent 도착지 경도", String.valueOf(MarkerIntent));
+        MarkerIntent.putExtra("destLatitude", destLatitude);
+        Log.d(" intent 도착지 위도", String.valueOf(MarkerIntent));
+        MarkerIntent.putExtra("pathDataArray", array);
+        Log.d(" intent pathData 삽입", String.valueOf(MarkerIntent));
+        MarkerIntent.putExtra("totalTime", totalTime);
+        Log.d(" intent totalTime 삽입", String.valueOf(MarkerIntent));
+        MarkerIntent.putExtra("totalDistance", totalDistance);
+        Log.d(" intent totalDistance", String.valueOf(MarkerIntent));
+        startActivity(MarkerIntent);
+        Log.d("Activity 시작", String.valueOf(MarkerIntent));
     }
 
     public OnResultCallbackListener OnResultCallbackListener = new OnResultCallbackListener() {
@@ -284,7 +272,6 @@ public class select_path extends AppCompatActivity {
         completeSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //pathData.clear(); //pathData 초기화
                 Log.d("경로 설정 버튼 눌림", "");
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
@@ -306,7 +293,6 @@ public class select_path extends AppCompatActivity {
                 intent.putExtra("stationName", stationName);
                 intent.putExtra("longitude", longitude);
                 intent.putExtra("latitude", latitude);
-                //startActivity(intent);
                 editStart.setText(latitude + ", " + longitude);
             }
         });
@@ -350,7 +336,7 @@ public class select_path extends AppCompatActivity {
                 startActivityForResult(intent, 1101);
             }
         });
-        if (destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
+        //if (destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
     }
 
     /*

@@ -38,14 +38,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class Marker extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
@@ -59,7 +55,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     Double num_min;
     Double distance;
     String[] dist;
-    String stationName;
     Double latitude;
     Double longitude;
     private boolean m_bTrackingMode = true;
@@ -72,8 +67,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
-    TextView people1;
-    TextView people2;
     String[] people_array;
     public people_list task;
     int min_time = 0;
@@ -209,7 +202,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
 
-        //stationName=intent.getExtras().getString("stationName");
         TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
         TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
@@ -247,9 +239,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
 
-//        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
-//        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
-
         for (int i = 0; i < pathData.size(); i++) {
             double tempLat, tempLong;
             String tempS;
@@ -257,7 +246,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             String[] tempA = tempS.split(",");
             tempLat = Double.valueOf(tempA[1]);
             tempLong = Double.valueOf(tempA[0]);
-            Log.e("test", tempA[0]);
+            //Log.e("test", tempA[0]);
             TMapPoint temp = new TMapPoint(tempLat, tempLong);
             tpolyline.addLinePoint(temp);
 
@@ -322,13 +311,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try {
-//                        SmsManager sms = SmsManager.getDefault();
+                        sendSms();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(people_array[0], null, "[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.", null, null);
                         ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 현재 사용자가 경로를 이탈하였습니다.\n 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
                         smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
                         smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
-
                         Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Log.d("에러", e.toString());
