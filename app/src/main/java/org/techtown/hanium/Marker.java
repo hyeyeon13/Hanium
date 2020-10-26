@@ -67,6 +67,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     TMapView tmapview;
     public String login_id;
     private GpsTracker gpsTracker;
+    Double moved_dist;
+
 
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37

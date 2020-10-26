@@ -79,16 +79,11 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     int hour_time = 0;
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
-
-
     @Override
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
             tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
             alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
-//            alTMapPoint.add( new TMapPoint(37.570841, 126.985302) ); // SKT타워
-//            alTMapPoint.add( new TMapPoint(37.551135, 126.988205) ); // N서울타워
-//            alTMapPoint.add( new TMapPoint(37.579600, 126.976998) ); // 경복궁
             for (int i = 0; i < alTMapPoint.size(); i++) {
                 Log.d("tetetest", Integer.toString(alTMapPoint.size()));
                 tpolyline2.addLinePoint(alTMapPoint.get(i));
@@ -196,9 +191,10 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         String now = dateFormat.format(cal.getTime());
         destTime.setText("도착예정시간 : " + now);
 
-
         Double totalDist_km = intent.getExtras().getDouble("totalDist_km");
-        totalDistance.setText("총 거리 : " + totalDist_km + "km");
+        Double moved_dist = intent.getExtras().getDouble("moved_dist");
+        Double remain = totalDist_km-moved_dist;
+        totalDistance.setText("남은 거리 : " + remain/1000.0 + "km");
 
         altitude = intent.getExtras().getDouble("altitude");
         destAltitude.setText("목적지 고도 : " + altitude);
@@ -291,23 +287,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         }
         Log.d("내위치 사이 거리: ", min + "m");
         tmapview.addTMapPolyLine("path", tpolyline);
-
-//        int totalTime=intent.getExtras().getInt("totalTime");
-//        int totalhour=totalTime/60;
-//        int totalminute=totalTime%60;
-//        Double totalDistance=intent.getExtras().getDouble("totalDistance");
-//
-//        TextView set_totalTime=(TextView)findViewById(R.id.totalTime);
-//        String format_totaltime=totalhour+"시간"+totalminute+"분";
-//        set_totalTime.setText(format_totaltime);
-//
-//        TextView set_totalDistance=(TextView)findViewById(R.id.totalDistance);
-//        String format_totaldistance=totalDistance+"m";
-//        set_totalDistance.setText(format_totaldistance);
-//
-//        TextView set_arriveTime=(TextView)findViewById(R.id.arrive_time);
-//        int hourOfDay=intent.getExtras().getInt("hourOfDay");
-//        int minute=intent.getExtras().getInt("minute");
 
         num_min = Double.valueOf(min);
 
