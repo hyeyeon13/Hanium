@@ -102,6 +102,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
             tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
+            Log.d("105라인 ", location.getLongitude()+","+location.getLatitude());
             alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
             for (int i = 0; i < alTMapPoint.size(); i++) {
                 Log.d("tetetest", Integer.toString(alTMapPoint.size()));
@@ -182,12 +183,14 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         gpsTracker = new GpsTracker(startGuide.this);
         realtimeLatitude = gpsTracker.getLatitude();
         realtimeLongitude = gpsTracker.getLongitude();
-        latitude = intent.getExtras().getDouble("latitude");
-        longitude = intent.getExtras().getDouble("longitude");
+        latitude = intent.getExtras().getDouble("Latitude");
+        longitude = intent.getExtras().getDouble("Longitude");
         tmapview.setLocationPoint(longitude, latitude);
+        Log.d("189라인 ", longitude+","+latitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
-        tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
+        //tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
+        Log.d("193라인 ", String.valueOf(TMapView.POSITION_DEFAULT));
         TMapTapi tMapTapi = new TMapTapi(this);
 
         tmapview.setCompassMode(false);
@@ -256,6 +259,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         centerLong = (myLongitude + destLongitude) / 2;
         centerLat = (myLatitude + destLatitude) / 2;
         tmapview.setCenterPoint(centerLong, centerLat); //지도의 중심지점 좌표 (경도, 위도 순서)
+        Log.d("261라인 ", centerLong+","+centerLat);
         Log.d("내 위도  ", String.valueOf(realtimeLatitude));
         Log.d("내 경도  ", String.valueOf(realtimeLongitude));
         Log.d("내 고도  ", String.valueOf(altitude));
