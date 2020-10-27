@@ -204,6 +204,11 @@ public class select_path extends AppCompatActivity {
                                             pathData.add(tempPath);
                                             Log.d("tempPath ", String.valueOf(tempPath));
                                         }
+                                        try {
+                                            sleep(500);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                         flags[finalK] = true;
                                         Log.d("flag 변경", String.valueOf(finalK));
                                         array.add(finalK, pathData);
@@ -341,7 +346,7 @@ public class select_path extends AppCompatActivity {
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
                 //Place this where you no longer need to have the processor running
-                wakeLock.release();
+                //wakeLock.release();
             }
         });
         if (checkLocationServicesStatus()) {
