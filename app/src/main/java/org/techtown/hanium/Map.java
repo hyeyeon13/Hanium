@@ -42,8 +42,8 @@ public class Map extends AppCompatActivity {
 
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
-            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-            tmapview.setCenterPoint(location.getLongitude(), location.getLatitude());
+            //tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
+            //tmapview.setCenterPoint(location.getLongitude(), location.getLatitude());
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
         }

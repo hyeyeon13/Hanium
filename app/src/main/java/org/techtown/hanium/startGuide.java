@@ -135,8 +135,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
             Log.d("현재 내 위치 ", realtimeLongitude + ", " + realtimeLatitude);
-            Toast.makeText(getApplicationContext(), "현재 내 위치 : " + realtimeLongitude + ", " + realtimeLatitude, Toast.LENGTH_SHORT).show();
-            double altitude = location.getAltitude();   //고도
+            //Toast.makeText(getApplicationContext(), "현재 내 위치 : " + realtimeLongitude + ", " + realtimeLatitude, Toast.LENGTH_SHORT).show();
+            //double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
@@ -144,6 +144,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
             latitude = location.getLatitude();
             longitude = location.getLongitude();
+            altitude = location.getAltitude();
             TMapPoint tp = new TMapPoint(latitude, longitude);
             Log.d("테스트", tp.toString());
             Location locationA = new Location("point a");
