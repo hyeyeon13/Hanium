@@ -165,7 +165,7 @@ public class select_path extends AppCompatActivity {
                             //노선그래픽 리턴값에서 class는 버스/지하철을 나타낸다. 1-> 버스, 2-> 지하철
                             try {
                                 trafficLaneData = result2.getJSONObject("result").getJSONArray("lane");
-                                Log.d("`노선그래픽 호출 완료", "");
+                                Log.d("노선그래픽 호출 완료", "");
                                 totalTime = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
                                 totalDistance = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getDouble("totalDistance");
                                 subPath = result.getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
@@ -212,7 +212,7 @@ public class select_path extends AppCompatActivity {
                                             JSONObject temp2 = subPath.getJSONObject(k - 1);
                                             startLat = temp2.getDouble("endY");
                                             startLong = temp2.getDouble("endX");
-                                            pathData.add(String.valueOf(startLat) + "," + String.valueOf(startLong));
+                                            pathData.add(String.valueOf(startLong) + "," + String.valueOf(startLat));
                                             flags[k] = true;
                                             Log.d("flag 변경", String.valueOf(k));
                                             array.add(k, pathData);

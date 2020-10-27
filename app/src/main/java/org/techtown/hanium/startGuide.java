@@ -124,6 +124,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
+            Log.d("현재 내 위치 ", realtimeLongitude+", "+realtimeLatitude);
+            Toast.makeText(getApplicationContext(),  "현재 내 위치 : "+realtimeLongitude+", "+realtimeLatitude, Toast.LENGTH_SHORT).show();
 
 
             double altitude = location.getAltitude();   //고도
