@@ -89,8 +89,6 @@ public class Map extends AppCompatActivity {
         final TextView longitude = (TextView) findViewById(R.id.longitude);
         final TextView latitude = (TextView) findViewById(R.id.latitude);
         LocationManager locationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
-
-
         tmapview.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
             @Override
             public void onLongPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, final TMapPoint tMapPoint) {
@@ -123,10 +121,7 @@ public class Map extends AppCompatActivity {
                 finish();
             }
         });
-
-
         relativeLayout.addView(tmapview);
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -139,12 +134,7 @@ public class Map extends AppCompatActivity {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, mLocationListener);
-
-//        setContentView(relativeLayout);
-
     }
-
-
 }
 
 

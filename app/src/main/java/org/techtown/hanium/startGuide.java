@@ -313,7 +313,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //진동객체
             vi.vibrate(1000);
             //1초간 진동
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
             builder.setCancelable(false);
 
 
