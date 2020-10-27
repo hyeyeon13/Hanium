@@ -36,6 +36,9 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -78,54 +81,45 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
     ArrayList<ArrayList<String>> array;
+    JSONObject result;
 
 
     @Override
     public void onLocationChange(Location location) {
-        if (m_bTrackingMode) {
-            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-            alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
-
-            for (int i = 0; i < alTMapPoint.size(); i++) {
-                Log.d("tetetest", Integer.toString(alTMapPoint.size()));
-                tpolyline2.addLinePoint(alTMapPoint.get(i));
-            }
-            tmapview.addTMapPolyLine("path2", tpolyline2);
-        }
     }
 
 
-    private final LocationListener mLocationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            //여기서 위치값이 갱신되면 이벤트가 발생한다.
-            //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
-            tpolyline2.setLineColor(Color.RED);
-            tpolyline2.setLineWidth(2);
-            realtimeLongitude = location.getLongitude(); //현재 경도
-            realtimeLatitude = location.getLatitude();   //현재 위도
-//            altitude = location.getAltitude();   //고도
-            //float accuracy = location.getAccuracy();    //정확도
-            //String provider = location.getProvider();   //위치제공자
-            //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
-            //Network 위치제공자에 의한 위치변화
-            //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
-        }
-
-        public void onProviderDisabled(String provider) {
-            // Disabled시
-            Log.d("test", "onProviderDisabled, provider:" + provider);
-        }
-
-        public void onProviderEnabled(String provider) {
-            // Enabled시
-            Log.d("test", "onProviderEnabled, provider:" + provider);
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // 변경시
-            Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
-        }
-    };
+//    private final LocationListener mLocationListener = new LocationListener() {
+//        public void onLocationChanged(Location location) {
+//            //여기서 위치값이 갱신되면 이벤트가 발생한다.
+//            //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
+//            tpolyline2.setLineColor(Color.RED);
+//            tpolyline2.setLineWidth(2);
+//            realtimeLongitude = location.getLongitude(); //현재 경도
+//            realtimeLatitude = location.getLatitude();   //현재 위도
+////            altitude = location.getAltitude();   //고도
+//            //float accuracy = location.getAccuracy();    //정확도
+//            //String provider = location.getProvider();   //위치제공자
+//            //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
+//            //Network 위치제공자에 의한 위치변화
+//            //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
+//        }
+//
+//        public void onProviderDisabled(String provider) {
+//            // Disabled시
+//            Log.d("test", "onProviderDisabled, provider:" + provider);
+//        }
+//
+//        public void onProviderEnabled(String provider) {
+//            // Enabled시
+//            Log.d("test", "onProviderEnabled, provider:" + provider);
+//        }
+//
+//        public void onStatusChanged(String provider, int status, Bundle extras) {
+//            // 변경시
+//            Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +132,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.map_view);
         tmapview = new TMapView(this);
         Intent intent = getIntent();
+        try {
+            result = new JSONObject(getIntent().getStringExtra("pathInfo"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         gpsTracker = new GpsTracker(Marker.this);
         realtimeLatitude = gpsTracker.getLatitude();
         realtimeLongitude = gpsTracker.getLongitude();
@@ -365,6 +364,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 intent1.putExtra("totalDist_km", totalDist_km);
                 //intent1.putExtra("totalDist",totalDist);
                 intent1.putExtra("altitude", altitude);
+                intent1.putExtra("pathInfo", result.toString());
                 startActivity(intent1);
                 //Place this where you no longer need to have the processor running
                 wakeLock.release();
