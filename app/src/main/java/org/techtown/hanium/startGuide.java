@@ -119,18 +119,18 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         public void onLocationChanged(Location location) {
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
-            tpolyline2.setLineColor(Color.RED);
-            tpolyline2.setLineWidth(2);
-            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-            tmapview.setCenterPoint(location.getLongitude(), location.getLatitude());
-            Log.d("105라인 ", location.getLongitude() + "," + location.getLatitude());
-            alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
-            tmapview.removeTMapPolyLine("path2");
-            for (int i = 0; i < alTMapPoint.size(); i++) {
-                //Log.d("tetetest", Integer.toString(alTMapPoint.size()));
-                tpolyline2.addLinePoint(alTMapPoint.get(i));
-            }
-            tmapview.addTMapPolyLine("path2", tpolyline2);
+//            tpolyline2.setLineColor(Color.RED);
+//            tpolyline2.setLineWidth(2);
+//            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
+//            tmapview.setCenterPoint(location.getLongitude(), location.getLatitude());
+//            Log.d("105라인 ", location.getLongitude() + "," + location.getLatitude());
+//            alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
+//            tmapview.removeTMapPolyLine("path2");
+//            for (int i = 0; i < alTMapPoint.size(); i++) {
+//                //Log.d("tetetest", Integer.toString(alTMapPoint.size()));
+//                tpolyline2.addLinePoint(alTMapPoint.get(i));
+//            }
+//            tmapview.addTMapPolyLine("path2", tpolyline2);
             //135~144 라인 위에있던거임
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
@@ -232,7 +232,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         Double totalDist_km = intent.getExtras().getDouble("totalDist_km");
         Double moved_dist = intent.getExtras().getDouble("moved_dist");
         Double remain = totalDist_km - moved_dist;
-        totalDistance.setText("남은 거리 : " + remain / 1000.0 + "km");
+        //totalDistance.setText("남은 거리 : " + remain / 1000.0 + "km");
         altitude = intent.getExtras().getDouble("altitude");
         destAltitude.setText("현재 고도 : " + altitude);
         login_id = intent.getExtras().getString("login_id");
@@ -245,7 +245,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
         TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
-// 마커 아이콘
+        // 마커 아이콘
         Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
         Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.bluepoint);
         tmapview.setTMapPathIcon(Start, dest);
@@ -280,7 +280,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         TMapPolyLine tpolyline = new TMapPolyLine();
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
-
 
         pathData = intent.getExtras().getStringArrayList("pathData");
         for (int i = 0; i < pathData.size(); i++) {
