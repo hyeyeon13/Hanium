@@ -123,23 +123,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
-/*
-            TMapMarkerItem marker_currentlocation = new TMapMarkerItem();
 
-            TMapPoint tMapPoint1 = new TMapPoint(realtimeLatitude, realtimeLongitude);
-
-// 마커 아이콘
-            Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.current_location);
-
-            marker_currentlocation.setIcon(bitmap); // 마커 아이콘 지정
-            marker_currentlocation.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
-            marker_currentlocation.setTMapPoint( tMapPoint1 ); // 마커의 좌표 지정
-            marker_currentlocation.setName("현재위치"); // 마커의 타이틀 지정
-            tmapview.addMarkerItem("marker_currentlocation", marker_currentlocation); // 지도에 마커 추가
-
-            tmapview.setCenterPoint( realtimeLongitude, realtimeLatitude );
-
-*/
 
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
@@ -147,6 +131,27 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            TMapPoint tp = new TMapPoint(latitude, longitude);
+            Log.d("테스트", tp.toString());
+
+            Location locationA = new Location("point a");
+            locationA.setLatitude(latitude);
+            locationA.setLongitude(longitude);
+            Location locationB = new Location("point b");
+            locationB.setLatitude(destLatitude);
+            locationB.setLongitude(destLongitude);
+
+            desDist = Double.valueOf(locationA.distanceTo(locationB));
+            if (desDist <= 100) {
+                if (dest_arrive == false) {
+                    arrive_destination();
+                }
+            } else {
+                Log.d("목적지 미도착", desDist.toString());
+            }
         }
 
         public void onProviderDisabled(String provider) {
@@ -171,6 +176,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         setContentView(R.layout.activity_startguide);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.guide_map);
+        LocationManager locationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         tmapview = new TMapView(this);
         Intent intent = getIntent();
         gpsTracker = new GpsTracker(startGuide.this);
@@ -200,7 +206,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
 
         final int destT = intent.getExtras().getInt("destT");
-//        String t = String.valueOf(destT);
 
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH시 mm분");
@@ -220,11 +225,10 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
 
         login_id = intent.getExtras().getString("login_id");
-//        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude = intent.getExtras().getDouble("myLongitude"); //출발지 위도
-        myLatitude = intent.getExtras().getDouble("myLatitude");   //출발지 경ㄷ
+        myLatitude = intent.getExtras().getDouble("myLatitude");   //출발지 경도
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
         //stationName=intent.getExtras().getString("stationName");
@@ -265,9 +269,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         TMapPolyLine tpolyline = new TMapPolyLine();
         tpolyline.setLineColor(Color.BLUE);
         tpolyline.setLineWidth(2);
-
-//        realtimeLatitude = intent.getExtras().getDouble("curLatitude");
-//        realtimeLongitude = intent.getExtras().getDouble("curLongitude");
 
 
         pathData = intent.getExtras().getStringArrayList("pathData");
@@ -343,51 +344,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             alertDialog.show();
         }
         relativeLayout.addView(tmapview);
-        //relativeLayout.addView(infoview);
-
-//        setContentView(relativeLayout);
-
-        LocationManager locationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-                TMapPoint tp = new TMapPoint(latitude, longitude);
-                Log.d("테스트", tp.toString());
-                double altitude = location.getAltitude();
-
-
-
-                Location locationA = new Location("point a");
-                locationA.setLatitude(latitude);
-                locationA.setLongitude(longitude);
-                Location locationB = new Location("point b");
-                locationB.setLatitude(destLatitude);
-                locationB.setLongitude(destLongitude);
-
-                desDist = Double.valueOf(locationA.distanceTo(locationB));
-                if (desDist <= 3000) {
-                    if (dest_arrive == false) {
-                        arrive_destination();
-                    }
-                } else {
-                    Log.d("목적지 미도착", desDist.toString());
-                }
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-            }
-        };
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -399,8 +355,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, mLocationListener);
 
         int permissonCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
         if (permissonCheck == PackageManager.PERMISSION_GRANTED) {
@@ -416,23 +372,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setContentTitle("안내 중").setContentText("남은 시간:" + "남은 거리");
-
-        /*if(dest_arrive==true)
-        {
-            AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
-            builder_arrive.setMessage("목적지에 도착하였습니다.");
-            builder_arrive.setPositiveButton("안내종료", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                //버튼클릭시 동작
-                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
-            AlertDialog alertDialog = builder_arrive.create();
-            alertDialog.show();
-            Log.d("목적지 도착", desDist.toString());
-        }
-*/
     }
 
     public void sendSms() {

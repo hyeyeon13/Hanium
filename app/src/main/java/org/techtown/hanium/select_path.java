@@ -206,6 +206,20 @@ public class select_path extends AppCompatActivity {
                                         Log.d("array에 데이터 넣음", String.valueOf(finalK));
                                         startActivity(subPath.length());
                                     } else if (tempTrafficType == 3) {
+                                        int tempDist = temp.getInt("distance");
+                                        if (tempDist == 0) {
+                                            ArrayList<String> pathData = new ArrayList<String>();
+                                            JSONObject temp2 = subPath.getJSONObject(k - 1);
+                                            startLat = temp2.getDouble("endY");
+                                            startLong = temp2.getDouble("endX");
+                                            pathData.add(String.valueOf(startLat) + "," + String.valueOf(startLong));
+                                            flags[k] = true;
+                                            Log.d("flag 변경", String.valueOf(k));
+                                            array.add(k, pathData);
+                                            Log.d("array에 데이터 넣음", String.valueOf(k));
+                                            startActivity(subPath.length());
+                                            continue;
+                                        }
                                         //출발은 왠만하면 도보다.
                                         //그러면 시작점은 내 위치가 되겠지.
                                         //첫번째 도보의 시작점은 내 위치고 목적지는 다음 교통수단의 첫 위치이다.
