@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,8 @@ import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.Vibrator;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +51,9 @@ import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
+import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
+import static java.lang.Thread.sleep;
+
 public class startGuide extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
     private static final int SMS_RECEIVE_PERMISSON = 1;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
@@ -68,7 +74,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     TMapView tmapview;
     public String login_id;
     private GpsTracker gpsTracker;
-    boolean dest_arrive=false;
+    boolean dest_arrive = false;
+    boolean flag = false;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     TextView people1;
@@ -80,21 +87,22 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
     Double desDist;
+    PowerManager.WakeLock wakeLock;
 
-    public void arrive_destination()
-    {
+    public void arrive_destination() {
         AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
         builder_arrive.setMessage("목적지에 도착하였습니다.");
+        builder_arrive.setCancelable(false);
         builder_arrive.setPositiveButton("안내종료", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //버튼클릭시 동작
-                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
         AlertDialog alertDialog = builder_arrive.create();
         alertDialog.show();
-        dest_arrive=true;
+        dest_arrive = true;
         Log.d("목적지 도착", desDist.toString());
     }
 
@@ -102,7 +110,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     public void onLocationChange(Location location) {
         if (m_bTrackingMode) {
             tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-            Log.d("105라인 ", location.getLongitude()+","+location.getLatitude());
+            Log.d("105라인 ", location.getLongitude() + "," + location.getLatitude());
             alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
             for (int i = 0; i < alTMapPoint.size(); i++) {
                 Log.d("tetetest", Integer.toString(alTMapPoint.size()));
@@ -112,45 +120,38 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         }
     }
 
-
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
-
             tpolyline2.setLineColor(Color.RED);
             tpolyline2.setLineWidth(2);
-
-
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
-            Log.d("현재 내 위치 ", realtimeLongitude+", "+realtimeLatitude);
-            Toast.makeText(getApplicationContext(),  "현재 내 위치 : "+realtimeLongitude+", "+realtimeLatitude, Toast.LENGTH_SHORT).show();
-
-
+            Log.d("현재 내 위치 ", realtimeLongitude + ", " + realtimeLatitude);
+            Toast.makeText(getApplicationContext(), "현재 내 위치 : " + realtimeLongitude + ", " + realtimeLatitude, Toast.LENGTH_SHORT).show();
             double altitude = location.getAltitude();   //고도
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
-
             latitude = location.getLatitude();
             longitude = location.getLongitude();
             TMapPoint tp = new TMapPoint(latitude, longitude);
             Log.d("테스트", tp.toString());
-
             Location locationA = new Location("point a");
             locationA.setLatitude(latitude);
             locationA.setLongitude(longitude);
             Location locationB = new Location("point b");
             locationB.setLatitude(destLatitude);
             locationB.setLongitude(destLongitude);
-
             desDist = Double.valueOf(locationA.distanceTo(locationB));
             if (desDist <= 100) {
                 if (dest_arrive == false) {
                     arrive_destination();
+                    //Place this where you no longer need to have the processor running
+                    wakeLock.release();
                 }
             } else {
                 Log.d("목적지 미도착", desDist.toString());
@@ -177,7 +178,10 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startguide);
-
+        Context mContext = getApplicationContext();
+        PowerManager powerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PARTIAL_WAKE_LOCK, "motionDetection:keepAwake");
+        wakeLock.acquire();
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.guide_map);
         LocationManager locationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         tmapview = new TMapView(this);
@@ -188,13 +192,12 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         latitude = intent.getExtras().getDouble("Latitude");
         longitude = intent.getExtras().getDouble("Longitude");
         tmapview.setLocationPoint(longitude, latitude);
-        Log.d("189라인 ", longitude+","+latitude);
+        Log.d("189라인 ", longitude + "," + latitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         //tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
         Log.d("193라인 ", String.valueOf(TMapView.POSITION_DEFAULT));
         TMapTapi tMapTapi = new TMapTapi(this);
-
         tmapview.setCompassMode(false);
         //이거 true로 해놓으면 ㅈㄴ 지도가 ㅂㄷㅂㄷ거림
         tmapview.setIconVisibility(true);
@@ -204,14 +207,10 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         tmapgps.OpenGps();
         tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
-
         TextView destTime = (TextView) findViewById(R.id.destTime);
         TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
         TextView destAltitude = (TextView) findViewById(R.id.myAltitude);
-
-
         final int destT = intent.getExtras().getInt("destT");
-
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH시 mm분");
         Calendar cal = Calendar.getInstance();
@@ -219,16 +218,12 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         cal.add(Calendar.MINUTE, destT);
         String now = dateFormat.format(cal.getTime());
         destTime.setText("도착예정시간 : " + now);
-
         Double totalDist_km = intent.getExtras().getDouble("totalDist_km");
         Double moved_dist = intent.getExtras().getDouble("moved_dist");
         Double remain = totalDist_km - moved_dist;
         totalDistance.setText("남은 거리 : " + remain / 1000.0 + "km");
-
         altitude = intent.getExtras().getDouble("altitude");
         destAltitude.setText("현재 고도 : " + altitude);
-
-
         login_id = intent.getExtras().getString("login_id");
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
@@ -261,7 +256,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         centerLong = (myLongitude + destLongitude) / 2;
         centerLat = (myLatitude + destLatitude) / 2;
         tmapview.setCenterPoint(centerLong, centerLat); //지도의 중심지점 좌표 (경도, 위도 순서)
-        Log.d("261라인 ", centerLong+","+centerLat);
+        Log.d("261라인 ", centerLong + "," + centerLat);
         Log.d("내 위도  ", String.valueOf(realtimeLatitude));
         Log.d("내 경도  ", String.valueOf(realtimeLongitude));
         Log.d("내 고도  ", String.valueOf(altitude));
@@ -288,8 +283,6 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //Log.e("test", tempA[0]);
             TMapPoint temp = new TMapPoint(tempLat, tempLong);
             tpolyline.addLinePoint(temp);
-
-
             Location locationA = new Location("point A");
             locationA.setLatitude(realtimeLatitude);
             locationA.setLongitude(realtimeLongitude);
@@ -298,12 +291,9 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             locationB.setLatitude(tempLat);
             locationB.setLongitude(tempLong);
             //locationB 는 pathData에서 가져옴
-
             distance = Double.valueOf(locationA.distanceTo(locationB));
-//            Log.d(i+"번째 distance 거리",String.valueOf(distance)+"m");
             dist = new String[pathData.size()];
             dist[i] = String.valueOf(distance);
-//            Log.d(i+"번째 dist 거리",String.valueOf(dist[i])+"m");
             if (i == 0) {
                 min = dist[0];
             }
@@ -317,33 +307,48 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         num_min = Double.valueOf(min);
 
         if (num_min > 50) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("경로 이탈 탐지").setMessage("경로 이탈이 탐지되었습니다. 문자를 전송하시겠습니까?");
             Log.d("경로이탈탐지: ", min + "m");
             getpeople_list();
+            Vibrator vi = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            //진동객체
+            vi.vibrate(1000);
+            //1초간 진동
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+
+
+            builder.setTitle("경로 이탈 탐지").setMessage("경로 이탈이 탐지되었습니다. 5초 후에 자동으로 문자가 전송됩니다.");
             builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getApplicationContext(), "문자 전송을 취소하였습니다.", Toast.LENGTH_SHORT).show();
+                    flag = true;
                 }
             });
-            builder.setPositiveButton("문자 전송", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("메세지 전송", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    try {
-                        sendSms();
-                        SmsManager smsManager = SmsManager.getDefault();
-                        ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
-                        smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
-                        smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
-                        Toast.makeText(getApplicationContext(), "문자를 전송하였습니다", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Log.d("에러", e.toString());
-                    }
-
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    sendSms();
+                    SmsManager smsManager = SmsManager.getDefault();
+                    ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
+                    smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
+                    smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
+                    Toast.makeText(getApplicationContext(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
+//            builder.setPositiveButton("문자 전송", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    try {
+//
+//                    } catch (Exception e) {
+//                        Log.d("에러", e.toString());
+//                    }
+//
+//                }
+//            });
 
             AlertDialog alertDialog = builder.create();
 

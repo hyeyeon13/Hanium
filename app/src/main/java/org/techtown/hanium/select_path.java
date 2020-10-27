@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
 import static java.lang.Thread.sleep;
 
 public class select_path extends AppCompatActivity {
@@ -304,6 +307,10 @@ public class select_path extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Context mContext = getApplicationContext();
+        PowerManager powerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        final PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PARTIAL_WAKE_LOCK, "motionDetection:keepAwake");
+        wakeLock.acquire();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_path);
         final TMapView tmapview = new TMapView(this);
@@ -332,6 +339,8 @@ public class select_path extends AppCompatActivity {
                 Log.d("경로 설정 버튼 눌림", "");
                 odsayService.requestSearchPubTransPath(longitude.toString(), latitude.toString(), destLongitude.toString(), destLatitude.toString(),
                         "0", "0", "0", OnResultCallbackListener);
+                //Place this where you no longer need to have the processor running
+                wakeLock.release();
             }
         });
         if (checkLocationServicesStatus()) {
