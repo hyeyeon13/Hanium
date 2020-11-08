@@ -186,7 +186,6 @@ public class select_path extends AppCompatActivity {
                                     //200924 예를들면 도보(1) - 버스(2) - 지하철(3) - 버스(4) - 도보(5) - 지하철(6) 이면
                                     //200924 subPath.length()의 값은 6이 된다
                                     JSONObject temp = subPath.getJSONObject(k);
-                                    //200924 또 temp라는 JSONObject를 선언해서 subPath의 수 만큼 데이터를 받아오는듯?
                                     intInfo = null;
                                     intInfo = new JSONObject();
                                     int tempTrafficType = temp.getInt(("trafficType"));

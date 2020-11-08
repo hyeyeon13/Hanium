@@ -207,7 +207,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
         TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
         TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
-
 // 마커 아이콘
         Bitmap Start = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.point);
         Bitmap dest = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.bluepoint);
@@ -264,10 +263,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             //locationB 는 pathData에서 가져옴
 
             distance = Double.valueOf(locationA.distanceTo(locationB));
-//            Log.d(i+"번째 distance 거리",String.valueOf(distance)+"m");
             dist = new String[pathData.size()];
             dist[i] = String.valueOf(distance);
-//            Log.d(i+"번째 dist 거리",String.valueOf(dist[i])+"m");
             if (i == 0) {
                 min = dist[0];
             }

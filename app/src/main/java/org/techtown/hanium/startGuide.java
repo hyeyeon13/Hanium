@@ -338,7 +338,8 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                 public void onClick(DialogInterface dialogInterface, int i) {
                     sendSms();
                     SmsManager smsManager = SmsManager.getDefault();
-                    ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
+                    ArrayList<String> partMessage = smsManager.divideMessage("[보디가드]\n 경로 이탈이 탐지되었습니다.\n 사용자의 현재 위치는 " + "" +
+                            "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
                     smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
                     smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
                     Toast.makeText(getApplicationContext(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();

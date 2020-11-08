@@ -57,17 +57,6 @@
         android:text="도착 예정시간 : "
         android:textColor="#ff000000"
         android:textSize="20sp" />
-    <TextView
-        android:id="@+id/totalDistance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_toEndOf="@+id/button"
-        android:layout_toRightOf="@+id/button"
-        android:fontFamily="@font/font3"
-        android:text="총 거리 : "
-        android:textColor="#ff000000"
-        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/myAltitude"
