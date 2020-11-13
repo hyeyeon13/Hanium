@@ -356,8 +356,9 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         builder_arrive.setPositiveButton("안내종료", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //버튼클릭시 동작
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent);
+                finish();
             }
         });
         AlertDialog alertDialog = builder_arrive.create();
