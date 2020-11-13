@@ -36,6 +36,7 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,7 +70,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     TMapView tmapview;
     public String login_id;
     private GpsTracker gpsTracker;
-    Double moved_dist;
     boolean des_arrive = false;
     Double desDist;
     //경도 : longitude 범위 : 127
@@ -78,48 +78,14 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
     public people_list task;
     int min_time = 0;
     int hour_time = 0;
-    TMapPolyLine tpolyline2 = new TMapPolyLine();
-    ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
     ArrayList<ArrayList<String>> array;
+    JSONArray subPath;
     JSONObject result;
 
 
     @Override
     public void onLocationChange(Location location) {
     }
-
-
-//    private final LocationListener mLocationListener = new LocationListener() {
-//        public void onLocationChanged(Location location) {
-//            //여기서 위치값이 갱신되면 이벤트가 발생한다.
-//            //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
-//            tpolyline2.setLineColor(Color.RED);
-//            tpolyline2.setLineWidth(2);
-//            realtimeLongitude = location.getLongitude(); //현재 경도
-//            realtimeLatitude = location.getLatitude();   //현재 위도
-////            altitude = location.getAltitude();   //고도
-//            //float accuracy = location.getAccuracy();    //정확도
-//            //String provider = location.getProvider();   //위치제공자
-//            //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
-//            //Network 위치제공자에 의한 위치변화
-//            //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
-//        }
-//
-//        public void onProviderDisabled(String provider) {
-//            // Disabled시
-//            Log.d("test", "onProviderDisabled, provider:" + provider);
-//        }
-//
-//        public void onProviderEnabled(String provider) {
-//            // Enabled시
-//            Log.d("test", "onProviderEnabled, provider:" + provider);
-//        }
-//
-//        public void onStatusChanged(String provider, int status, Bundle extras) {
-//            // 변경시
-//            Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +109,12 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         latitude = intent.getExtras().getDouble("curLatitude");
         longitude = intent.getExtras().getDouble("curLongitude");
         array = (ArrayList<ArrayList<String>>) intent.getExtras().get("pathDataArray");
+        String tempSubPath = intent.getStringExtra("subPath");
+        try {
+            subPath = new JSONArray(tempSubPath);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < array.size(); i++) {
             ArrayList<String> tempData = new ArrayList<String>();
             tempData = array.get(i);
@@ -150,7 +122,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 pathData.add(tempData.get(j));
             }
         }
-        tmapview.setLocationPoint(longitude, latitude);
+        //tmapview.setLocationPoint(longitude, latitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
@@ -163,7 +135,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tmapgps.setMinTime(1000);
         tmapgps.setProvider(tmapgps.NETWORK_PROVIDER);
         tmapgps.OpenGps();
-        tmapview.setTrackingMode(true);
+        //tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
 
         TextView destTime = (TextView) findViewById(R.id.destTime);
@@ -172,7 +144,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
         final int destT = intent.getExtras().getInt("totalTime");
-//        String t = String.valueOf(destT);
 
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH시 mm분");
@@ -197,7 +168,6 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
 
 
         login_id = intent.getExtras().getString("log_ok_id");
-//        Log.d("Marker에서 login 아이디 ", login_id);
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();
         myLongitude = intent.getExtras().getDouble("curLongitude"); //출발지 위도
@@ -362,6 +332,8 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 //intent1.putExtra("totalDist",totalDist);
                 intent1.putExtra("altitude", altitude);
                 intent1.putExtra("pathInfo", result.toString());
+                intent1.putExtra("pathDataArray", array);
+                intent1.putExtra("subPath", subPath.toString());
                 startActivity(intent1);
                 //Place this where you no longer need to have the processor running
                 wakeLock.release();

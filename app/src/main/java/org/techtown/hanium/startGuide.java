@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.telephony.SmsManager;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skt.Tmap.TMapGpsManager;
+import com.skt.Tmap.TMapInfo;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
@@ -35,6 +37,7 @@ import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,15 +75,211 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     private GpsTracker gpsTracker;
     boolean dest_arrive = false;
     boolean flag = false;
+    boolean flag2 = false;
     //경도 : longitude 범위 : 127
     //위도 : latitude 범위 : 37
     String[] people_array;
     public people_list task;
-    TMapPolyLine tpolyline2 = new TMapPolyLine();
     ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
     Double desDist;
     PowerManager.WakeLock wakeLock;
     JSONObject result;
+    AlertDialog alertDialog;
+    ArrayList<ArrayList<String>> array;
+    JSONArray subPath;
+    boolean[] flags;
+    int subPathIdx = 0;
+    TextView destTime;
+
+    public void setMap(int subPathIdx) {
+        try {
+            if (subPath.getJSONObject(subPathIdx).getInt("trafficType") == 3) {
+                destTime.setText("도보로 " + subPath.getJSONObject(subPathIdx).getInt("distance") + "m 만큼 이동");
+            } else if (subPath.getJSONObject(subPathIdx).getInt("trafficType") == 2) {
+                destTime.setText(subPath.getJSONObject(subPathIdx).getString("startName") + " 정류장에서 " + subPath.getJSONObject(subPathIdx).getJSONObject("lane").getString("busNo") + " 버스 탑승 후 " +
+                        subPath.getJSONObject(subPathIdx).getInt("stationCount") + "정류장 이동 후 " + subPath.getJSONObject(subPathIdx).getJSONObject("lane").getString("endName") + " 정류장 에서 하차");
+            } else if (subPath.getJSONObject(subPathIdx).getInt("trafficType") == 1) {
+                destTime.setText(subPath.getJSONObject(subPathIdx).getString("startName") + " 역에서 " + subPath.getJSONObject(subPathIdx).getJSONObject("lane").getString("name") + " 탑승 후 " +
+                        subPath.getJSONObject(subPathIdx).getInt("stationCount") + "개 역 이동 후 " + subPath.getJSONObject(subPathIdx).getJSONObject("lane").getString("endName") + " 역 에서 하차");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //이 위는 setText 수정하는 작업
+        //polyline은 최소 2개, 최대 3개 필요하다
+        //2개 필요한 경우 - 현재 subPath가 처음 subPath 또는 마지막 subPath일 때
+        //3개 필요한 경우 - 현재 subPath가 중간 subPath인 경우
+        //1st polyline - 지나온 subPath들
+        //2nd polyline - 현재 subPath
+        //3rd polyline - 다음 subPath들
+        int subPathSize = subPath.length();
+        tmapview.removeAllTMapPolyLine();
+        TMapInfo info;
+        if (subPathIdx == 0) {
+            //현재 subPath가 첫번째 subPath 인 경우
+            TMapPolyLine polyLine = new TMapPolyLine();
+            TMapPolyLine polyLine2 = new TMapPolyLine();
+            polyLine.setLineColor(Color.BLUE);
+            polyLine2.setLineColor(Color.GREEN);
+            polyLine.setLineWidth(8);
+            polyLine2.setLineWidth(8);
+            ArrayList tempPath = new ArrayList(array.get(subPathIdx));
+            for (int i = 0; i < tempPath.size(); i++) {
+                double tempLat, tempLong;
+                String tempS;
+                tempS = String.valueOf(tempPath.get(i));
+                String[] tempA = tempS.split(",");
+                tempLat = Double.valueOf(tempA[1]);
+                tempLong = Double.valueOf(tempA[0]);
+                TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                polyLine.addLinePoint(temp);
+            }
+            for (int i = 1; i < subPathSize - 1; i++) {
+                ArrayList anotherPath = new ArrayList(array.get(i));
+                for (int k = 0; k < anotherPath.size(); k++) {
+                    double tempLat, tempLong;
+                    String tempS;
+                    tempS = String.valueOf(anotherPath.get(k));
+                    String[] tempA = tempS.split(",");
+                    tempLat = Double.valueOf(tempA[1]);
+                    tempLong = Double.valueOf(tempA[0]);
+                    TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                    polyLine2.addLinePoint(temp);
+                }
+            }
+            tmapview.addTMapPolyLine("path", polyLine);
+            tmapview.addTMapPolyLine("path2", polyLine2);
+            info = tmapview.getDisplayTMapInfo(polyLine.getLinePoint());
+        } else if (subPathIdx == subPathSize - 1) {
+            //현재 subPath가 마지막 subPath 인 경우
+            TMapPolyLine polyLine = new TMapPolyLine();
+            //polyLine은 지나온 경로
+            TMapPolyLine polyLine2 = new TMapPolyLine();
+            //poliyLine2 는 현재 subPath
+            polyLine.setLineColor(Color.GRAY);
+            polyLine2.setLineColor(Color.BLUE);
+            polyLine.setLineWidth(8);
+            polyLine2.setLineWidth(8);
+            for (int i = 0; i < subPathSize - 2; i++) {
+                ArrayList tempPath = new ArrayList(array.get(i));
+                for (int k = 0; k < tempPath.size(); k++) {
+                    double tempLat, tempLong;
+                    String tempS;
+                    tempS = String.valueOf(tempPath.get(k));
+                    String[] tempA = tempS.split(",");
+                    tempLat = Double.valueOf(tempA[1]);
+                    tempLong = Double.valueOf(tempA[0]);
+                    TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                    polyLine.addLinePoint(temp);
+                }
+            }
+            ArrayList anotherPath = new ArrayList(array.get(subPathIdx));
+            for (int i = 0; i < anotherPath.size(); i++) {
+                double tempLat, tempLong;
+                String tempS;
+                tempS = String.valueOf(anotherPath.get(i));
+                String[] tempA = tempS.split(",");
+                tempLat = Double.valueOf(tempA[1]);
+                tempLong = Double.valueOf(tempA[0]);
+                TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                polyLine2.addLinePoint(temp);
+            }
+            tmapview.addTMapPolyLine("path", polyLine);
+            tmapview.addTMapPolyLine("path2", polyLine2);
+            info = tmapview.getDisplayTMapInfo(polyLine2.getLinePoint());
+        } else {
+            //현재 subPath가 첫 subPath도, 마지막 subPath도 아닌 경우
+            TMapPolyLine polyLine = new TMapPolyLine();
+            //지나온 경로
+            TMapPolyLine polyLine2 = new TMapPolyLine();
+            //현재 경로
+            TMapPolyLine polyLine3 = new TMapPolyLine();
+            //다음~마지막 경로
+            polyLine.setLineColor(Color.GRAY);
+            polyLine2.setLineColor(Color.BLUE);
+            polyLine3.setLineColor(Color.GREEN);
+            polyLine.setLineWidth(8);
+            polyLine2.setLineWidth(8);
+            polyLine3.setLineWidth(8);
+            for (int i = 0; i < subPathIdx - 1; i++) {
+                ArrayList tempPath = new ArrayList(array.get(i));
+                for (int k = 0; k < tempPath.size(); k++) {
+                    double tempLat, tempLong;
+                    String tempS;
+                    tempS = String.valueOf(tempPath.get(k));
+                    String[] tempA = tempS.split(",");
+                    tempLat = Double.valueOf(tempA[1]);
+                    tempLong = Double.valueOf(tempA[0]);
+                    TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                    polyLine.addLinePoint(temp);
+                }
+            }
+            ArrayList curPath = new ArrayList(array.get(subPathIdx));
+            for (int k = 0; k < curPath.size(); k++) {
+                double tempLat, tempLong;
+                String tempS;
+                tempS = String.valueOf(curPath.get(k));
+                String[] tempA = tempS.split(",");
+                tempLat = Double.valueOf(tempA[1]);
+                tempLong = Double.valueOf(tempA[0]);
+                TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                polyLine2.addLinePoint(temp);
+            }
+            for (int i = subPathIdx + 1; i < subPathSize - 1; i++) {
+                ArrayList anotherPath = new ArrayList(array.get(i));
+                for (int k = 0; k < anotherPath.size(); k++) {
+                    double tempLat, tempLong;
+                    String tempS;
+                    tempS = String.valueOf(anotherPath.get(k));
+                    String[] tempA = tempS.split(",");
+                    tempLat = Double.valueOf(tempA[1]);
+                    tempLong = Double.valueOf(tempA[0]);
+                    TMapPoint temp = new TMapPoint(tempLat, tempLong);
+                    polyLine3.addLinePoint(temp);
+                }
+            }
+            tmapview.addTMapPolyLine("path", polyLine);
+            tmapview.addTMapPolyLine("path2", polyLine2);
+            tmapview.addTMapPolyLine("path3", polyLine3);
+            info = tmapview.getDisplayTMapInfo(polyLine2.getLinePoint());
+        }
+        String tempS, tempS_Last;
+        tempS = String.valueOf(array.get(subPathIdx).get(0));
+        tempS_Last = String.valueOf(array.get(subPathIdx).get(array.get(subPathIdx).size() - 1));
+        String[] tempA = tempS.split(",");
+        String[] tempB = tempS_Last.split(",");
+        double tempFirstLat = Double.valueOf(tempA[1]);
+        double tempFirstLong = Double.valueOf(tempA[0]);
+        double tempLastLat = Double.valueOf(tempB[1]);
+        double tempLastLong = Double.valueOf(tempB[0]);
+
+        int zoom = info.getTMapZoomLevel();
+//        if(zoom>12){
+//            zoom = 12;
+//        }
+//        tmapview.setZoomLevel(zoom);
+        TMapPoint leftTop = new TMapPoint(tempFirstLat, tempFirstLong);
+        TMapPoint rightBottom = new TMapPoint(tempLastLat, tempLastLong);
+        tmapview.zoomToTMapPoint(leftTop, rightBottom);
+        //tmapview.MapZoomOut();
+        tmapview.setCenterPoint(info.getTMapPoint().getLongitude(), info.getTMapPoint().getLatitude()); //지도의 중심지점 좌표 (경도, 위도 순서)
+
+
+        //setMap 끝
+    }
+
+    private Handler handler = new Handler();
+    private Runnable sendSMS = new Runnable() {
+        @Override
+        public void run() {
+            if (flag == true) {
+
+            } else {
+                flag2 = true;
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+            }
+        }
+    };
 
     public void arrive_destination() {
         AlertDialog.Builder builder_arrive = new AlertDialog.Builder(startGuide.this);
@@ -101,37 +300,13 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
 
     @Override
     public void onLocationChange(Location location) {
-//        if (m_bTrackingMode) {
-//            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-//            tmapview.setCenterPoint(location.getLongitude(), location.getLatitude());
-//            Log.d("105라인 ", location.getLongitude() + "," + location.getLatitude());
-//            alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
-//            tmapview.removeTMapPolyLine("path2");
-//            for (int i = 0; i < alTMapPoint.size(); i++) {
-//                //Log.d("tetetest", Integer.toString(alTMapPoint.size()));
-//                tpolyline2.addLinePoint(alTMapPoint.get(i));
-//            }
-//            tmapview.addTMapPolyLine("path2", tpolyline2);
-//        }
+
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
-            //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
-//            tpolyline2.setLineColor(Color.RED);
-//            tpolyline2.setLineWidth(2);
-//            tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-//            tmapview.setCenterPoint(location.getLongitude(), location.getLatitude());
-//            Log.d("105라인 ", location.getLongitude() + "," + location.getLatitude());
-//            alTMapPoint.add(new TMapPoint(location.getLatitude(), location.getLongitude()));
-//            tmapview.removeTMapPolyLine("path2");
-//            for (int i = 0; i < alTMapPoint.size(); i++) {
-//                //Log.d("tetetest", Integer.toString(alTMapPoint.size()));
-//                tpolyline2.addLinePoint(alTMapPoint.get(i));
-//            }
-//            tmapview.addTMapPolyLine("path2", tpolyline2);
-            //135~144 라인 위에있던거임
+
             realtimeLongitude = location.getLongitude(); //현재 경도
             realtimeLatitude = location.getLatitude();   //현재 위도
             Log.d("현재 내 위치 ", realtimeLongitude + ", " + realtimeLatitude);
@@ -198,6 +373,16 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        String tempSubPath = intent.getStringExtra("subPath");
+        try {
+            subPath = new JSONArray(tempSubPath);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        flags = new boolean[subPath.length()];
+        for (int i = 0; i < subPath.length(); i++) {
+            flags[i] = false;
+        }
         gpsTracker = new GpsTracker(startGuide.this);
         realtimeLatitude = gpsTracker.getLatitude();
         realtimeLongitude = gpsTracker.getLongitude();
@@ -219,7 +404,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         tmapgps.OpenGps();
         tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
-        TextView destTime = (TextView) findViewById(R.id.destTime);
+        destTime = (TextView) findViewById(R.id.destTime);
         TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
         TextView destAltitude = (TextView) findViewById(R.id.myAltitude);
         final int destT = intent.getExtras().getInt("destT");
@@ -243,6 +428,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         myLatitude = intent.getExtras().getDouble("myLatitude");   //출발지 경도
         destLongitude = intent.getExtras().getDouble("destLongitude");
         destLatitude = intent.getExtras().getDouble("destLatitude");
+        array = (ArrayList<ArrayList<String>>) intent.getExtras().get("pathDataArray");
         TMapPoint mytMapPoint = new TMapPoint(myLatitude, myLongitude);// 마커 놓을 좌표 (위도, 경도 순서)
         TMapPoint desttMappoint = new TMapPoint(destLatitude, destLongitude); // 마커 놓을 좌표 (위도, 경도 순서)
 
@@ -263,24 +449,14 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         destMarker.setName("dest"); // 마커의 타이틀 지정
         tmapview.addMarkerItem("destPoint", destMarker);
 
-        double centerLong, centerLat;
-        centerLong = (myLongitude + destLongitude) / 2;
-        centerLat = (myLatitude + destLatitude) / 2;
-        tmapview.setCenterPoint(centerLong, centerLat); //지도의 중심지점 좌표 (경도, 위도 순서)
-        Log.d("261라인 ", centerLong + "," + centerLat);
         Log.d("내 위도  ", String.valueOf(realtimeLatitude));
         Log.d("내 경도  ", String.valueOf(realtimeLongitude));
         Log.d("내 고도  ", String.valueOf(altitude));
         Log.d("목적지 위도  ", String.valueOf(destLatitude));
         Log.d("목적지 경도  ", String.valueOf(destLongitude));
 
-        TMapPoint leftTop = new TMapPoint(myLatitude, myLongitude);
-        TMapPoint rightBottom = new TMapPoint(destLatitude, destLongitude);
-        tmapview.zoomToTMapPoint(leftTop, rightBottom);
 
-        TMapPolyLine tpolyline = new TMapPolyLine();
-        tpolyline.setLineColor(Color.BLUE);
-        tpolyline.setLineWidth(2);
+        setMap(0);
 
         pathData = intent.getExtras().getStringArrayList("pathData");
         for (int i = 0; i < pathData.size(); i++) {
@@ -292,7 +468,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             tempLong = Double.valueOf(tempA[0]);
             //Log.e("test", tempA[0]);
             TMapPoint temp = new TMapPoint(tempLat, tempLong);
-            tpolyline.addLinePoint(temp);
+            //tpolyline.addLinePoint(temp);
             Location locationA = new Location("point A");
             locationA.setLatitude(realtimeLatitude);
             locationA.setLongitude(realtimeLongitude);
@@ -312,7 +488,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             }
         }
         Log.d("내위치 사이 거리: ", min + "m");
-        tmapview.addTMapPolyLine("path", tpolyline);
+
 
         num_min = Double.valueOf(min);
 
@@ -323,9 +499,14 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //진동객체
             vi.vibrate(1000);
             //1초간 진동
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+
+            handler.postDelayed(sendSMS, 30000);
+
             builder.setCancelable(false);
-            builder.setTitle("경로 이탈 탐지").setMessage("경로 이탈이 탐지되었습니다. 5초 후에 자동으로 문자가 전송됩니다.");
+            builder.setTitle("경로 이탈 탐지").setMessage("경로 이탈이 탐지되었습니다. 30초 후에 자동으로 문자가 전송됩니다.");
+            Log.d("alertDialog 생성", String.valueOf(1));
             builder.setNegativeButton("전송 취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -342,10 +523,16 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                             "https://www.google.com/maps/search/+" + realtimeLatitude + ",+" + realtimeLongitude + "/ 입니다.");
                     smsManager.sendMultipartTextMessage(people_array[0], null, partMessage, null, null);
                     smsManager.sendMultipartTextMessage(people_array[1], null, partMessage, null, null);
-                    Toast.makeText(getApplicationContext(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+                    if (flag2 == true) {
+                        Toast.makeText(getApplicationContext(), "자동으로 문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+                        Log.d("문자 자동 전송", String.valueOf(1));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+                        Log.d("문자 수동 전송", String.valueOf(1));
+                    }
                 }
             });
-            AlertDialog alertDialog = builder.create();
+            alertDialog = builder.create();
             alertDialog.show();
         }
         relativeLayout.addView(tmapview);

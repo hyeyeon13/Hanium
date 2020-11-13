@@ -104,6 +104,7 @@ public class select_path extends AppCompatActivity {
         MarkerIntent.putExtra("totalDistance", totalDistance);
         Log.d(" intent totalDistance", String.valueOf(MarkerIntent));
         MarkerIntent.putExtra("pathInfo", result.toString());
+        MarkerIntent.putExtra("subPath", subPath.toString());
         startActivity(MarkerIntent);
         Log.d("Activity 시작", String.valueOf(MarkerIntent));
     }
