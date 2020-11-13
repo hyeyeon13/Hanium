@@ -369,11 +369,11 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "문자 전송 완료.",
+                    Toast.makeText(getApplicationContext(), "문자 전송 권한 승인",
                             Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "문자전송 실패", Toast.LENGTH_LONG).show();
+                            "문자 전송 권한 필요", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
