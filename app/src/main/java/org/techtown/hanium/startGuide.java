@@ -96,7 +96,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     public void setMap(int subPathIdx) {
         try {
             if (subPath.getJSONObject(subPathIdx).getInt("trafficType") == 3) {
-                destTime.setText("도보로 " + subPath.getJSONObject(subPathIdx).getInt("distance") + "m 만큼 이동");
+                destTime.setText("도보로 " + subPath.getJSONObject(subPathIdx).getInt("distance") + "m 이동");
             } else if (subPath.getJSONObject(subPathIdx).getInt("trafficType") == 2) {
                 String startName = subPath.getJSONObject(subPathIdx).getString("startName");
                 String busNo = subPath.getJSONObject(subPathIdx).getJSONArray("lane").getJSONObject(0).getString("busNo");
