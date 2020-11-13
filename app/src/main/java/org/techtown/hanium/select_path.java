@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -77,6 +79,7 @@ public class select_path extends AppCompatActivity {
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     final int DIALOG_TIME = 2;
     Intent MarkerIntent;
+    private ProgressDialog dialog;
 
     public void startActivity(int length) {
         for (int i = 0; i < length; i++) {
@@ -347,7 +350,12 @@ public class select_path extends AppCompatActivity {
                         "0", "0", "0", OnResultCallbackListener);
                 //Place this where you no longer need to have the processor running
                 //wakeLock.release();
+                dialog = new ProgressDialog(select_path.this);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.setMessage("경로 탐색중");
+                dialog.show();
             }
+
         });
         if (checkLocationServicesStatus()) {
             checkRunTimePermission();
@@ -409,6 +417,10 @@ public class select_path extends AppCompatActivity {
             }
         });
         //if (destaltitude != null) dest.setText(destLatitude + ", " + destLongitude);
+
+
+
+
     }
 
     /*
