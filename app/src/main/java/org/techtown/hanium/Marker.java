@@ -122,7 +122,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 pathData.add(tempData.get(j));
             }
         }
-        //tmapview.setLocationPoint(longitude, latitude);
+        tmapview.setLocationPoint(longitude, latitude);
         tmapview.setSKTMapApiKey("l7xxa9511b15f91f4c3e97455a7a1ac155d2");
         tmapview.setZoomLevel(10);
         tmapview.setMapPosition(TMapView.POSITION_DEFAULT);
