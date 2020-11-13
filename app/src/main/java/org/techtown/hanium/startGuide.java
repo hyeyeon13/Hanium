@@ -92,6 +92,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
     int SubPathIdx = 0;
     TextView destTime;
     boolean detect = false;
+    TextView destAltitude;
 
     public void setMap(int subPathIdx) {
         try {
@@ -110,7 +111,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
                 String laneNo = subPath.getJSONObject(subPathIdx).getJSONArray("lane").getJSONObject(0).getString("name");
                 String stationCount = String.valueOf(subPath.getJSONObject(subPathIdx).getInt("stationCount"));
                 String endName = subPath.getJSONObject(subPathIdx).getString("endName");
-                String text = startName + " 역에서 " + laneNo + " 탑승 후 " + stationCount + " 정류장 이동 후 " + endName + " 역에서 하차";
+                String text = startName + "역에서 " + laneNo + " 탑승 후 " + stationCount + " 개 역 이동 후 " + endName + "역에서 하차";
                 destTime.setText(text);
                 Log.d("지하철경로 안내", text);
             }
@@ -171,7 +172,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //polyLine은 지나온 경로
             TMapPolyLine polyLine2 = new TMapPolyLine();
             //poliyLine2 는 현재 subPath
-            polyLine.setLineColor(Color.GRAY);
+            polyLine.setLineColor(Color.LTGRAY);
             polyLine2.setLineColor(Color.BLUE);
             polyLine.setLineWidth(8);
             polyLine2.setLineWidth(8);
@@ -213,7 +214,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //현재 경로
             TMapPolyLine polyLine3 = new TMapPolyLine();
             //다음~마지막 경로
-            polyLine.setLineColor(Color.GRAY);
+            polyLine.setLineColor(Color.LTGRAY);
             polyLine2.setLineColor(Color.BLUE);
             polyLine3.setLineColor(Color.GREEN);
             polyLine.setLineWidth(8);
@@ -379,6 +380,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             Log.d("현재 내 위치 ", realtimeLongitude + ", " + realtimeLatitude);
             //Toast.makeText(getApplicationContext(), "현재 내 위치 : " + realtimeLongitude + ", " + realtimeLatitude, Toast.LENGTH_SHORT).show();
             double altitude = location.getAltitude();   //고도
+            destAltitude.setText("현재 고도 : " + altitude + "m");
             float accuracy = location.getAccuracy();    //정확도
             String provider = location.getProvider();   //위치제공자
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
@@ -386,6 +388,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
             latitude = location.getLatitude();
             longitude = location.getLongitude();
+            tmapview.setLocationPoint(longitude, latitude);
             TMapPoint tp = new TMapPoint(latitude, longitude);
             Log.d("테스트", tp.toString());
             Location locationA = new Location("point a");
@@ -518,7 +521,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         tmapview.setSightVisible(true);
         destTime = (TextView) findViewById(R.id.destTime);
         TextView totalDistance = (TextView) findViewById(R.id.totalDistance);
-        TextView destAltitude = (TextView) findViewById(R.id.myAltitude);
+        destAltitude = (TextView) findViewById(R.id.myAltitude);
         final int destT = intent.getExtras().getInt("destT");
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH시 mm분");
@@ -532,7 +535,7 @@ public class startGuide extends AppCompatActivity implements TMapGpsManager.onLo
         Double remain = totalDist_km - moved_dist;
         //totalDistance.setText("남은 거리 : " + remain / 1000.0 + "km");
         altitude = intent.getExtras().getDouble("altitude");
-        destAltitude.setText("현재 고도 : " + altitude);
+        destAltitude.setText("현재 고도 : " + altitude + "m");
         login_id = intent.getExtras().getString("login_id");
         TMapMarkerItem myMarker = new TMapMarkerItem();
         TMapMarkerItem destMarker = new TMapMarkerItem();

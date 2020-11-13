@@ -135,7 +135,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
         tmapgps.setMinTime(1000);
         tmapgps.setProvider(tmapgps.NETWORK_PROVIDER);
         tmapgps.OpenGps();
-        //tmapview.setTrackingMode(true);
+        tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
 
         TextView destTime = (TextView) findViewById(R.id.destTime);
@@ -257,7 +257,7 @@ public class Marker extends AppCompatActivity implements TMapGpsManager.onLocati
                 Log.d("테스트", tp.toString());
                 TextView myAltitude = (TextView) findViewById(R.id.myAltitude);
                 altitude = location.getAltitude();
-                myAltitude.setText("현재 고도 : " + altitude);
+                myAltitude.setText("현재 고도 : " + altitude + "m");
                 Log.d("현재 고도", String.valueOf(altitude));
                 Location locationA = new Location("point a");
                 locationA.setLatitude(latitude);
